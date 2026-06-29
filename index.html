@@ -1,1 +1,840 @@
-<html><body><h1>EBP Reporte - Cargando...</h1><p>El reporte se actualiza automaticamente cada manana.</p></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>EBP · Reporte Performance · 29 jun 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{
+  --blue:#378ADD;--green:#639922;--orange:#D85A30;--purple:#8B44B8;--gray:#888780;
+  --bg:#fff;--bg2:#f7f6f3;--border:#e8e6e0;--border2:#d4d1c9;
+  --text:#1a1916;--text2:#73726c;--success:#1D9E75;--danger:#E24B4A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f3ef;color:var(--text);padding:20px;max-width:1280px;margin:0 auto}
+.header{background:var(--text);color:#fff;border-radius:12px;padding:24px 28px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px}
+.header h1{font-size:18px;font-weight:700;margin-bottom:4px}
+.header p{font-size:12px;color:rgba(255,255,255,.55)}
+.hm{text-align:right;font-size:11px;color:rgba(255,255,255,.5);line-height:1.8}
+.hm strong{color:rgba(255,255,255,.9);display:block;font-size:13px}
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.filter-bar span{font-size:11px;color:var(--text2);font-weight:500;margin-right:4px}
+.fbtn{padding:7px 16px;border-radius:6px;border:1.5px solid var(--border2);background:#fff;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.fbtn.active{background:var(--text);color:#fff;border-color:var(--text)}
+.period-label{font-size:11px;color:var(--text2);background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-style:italic}
+.card{background:#fff;border-radius:10px;padding:20px 22px;margin-bottom:16px;border:1px solid var(--border)}
+.ct{font-size:10.5px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ct::after{content:'';flex:1;height:1px;background:var(--border)}
+.ks{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;margin-bottom:16px}
+.k{background:var(--bg2);border-radius:8px;padding:12px 14px;border:1px solid var(--border)}
+.kl{font-size:10px;color:var(--text2);font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.kv{font-size:20px;font-weight:700;letter-spacing:-.02em}
+.ks2{font-size:10.5px;color:var(--text2);margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{font-size:10px;font-weight:600;color:var(--text2);text-align:right;padding:7px 8px;border-bottom:1.5px solid var(--border2);white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+th:first-child{text-align:left}
+td{padding:7px 8px;text-align:right;border-bottom:.5px solid var(--border);vertical-align:middle}
+td:first-child{text-align:left;font-size:11px}
+tr:hover td{background:var(--bg2)}
+tr.tot td{font-weight:700;border-top:1.5px solid var(--border2);border-bottom:none;background:var(--bg2)}
+tr.grp td{font-weight:700;background:var(--bg2);border-top:1.5px solid var(--border2);font-size:11px}
+tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11px;border-top:.5px solid var(--border)}
+.chip{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;white-space:nowrap}
+.c1{background:#E6F1FB;color:#0C447C}.c2{background:#EAF3DE;color:#27500A}.c3{background:#FAECE7;color:#712B13}
+.bp-ft{background:#E6F1FB;color:#0C447C}.bp-uf{background:#EAF3DE;color:#27500A}.bp-cs{background:#F3EAF8;color:#4A1272}
+.act{background:#D6F5E9;color:#0C6B42}.pau{background:#f0ede6;color:#73726c}
+.best{color:var(--success);font-weight:700}.worst{color:var(--danger);font-weight:700}
+.cw{position:relative;width:100%;height:320px}
+.leg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px;font-size:11.5px;color:var(--text2);align-items:center}
+.lb{width:10px;height:10px;border-radius:2px;display:inline-block;vertical-align:middle;margin-right:4px}
+.ins{background:#f7f6f3;border-left:3px solid var(--text);border-radius:0 8px 8px 0;padding:12px 16px;margin-top:14px;font-size:11.5px;line-height:1.7;color:var(--text2)}
+.ins strong{color:var(--text)}
+.sn{font-size:9.5px;color:var(--text2);font-style:italic;margin-top:6px;text-align:right}
+.footer{text-align:center;font-size:10.5px;color:var(--text2);padding:16px 0 4px;line-height:1.8}
+.gap-warn{color:var(--danger);font-size:10px;font-weight:600}
+.gap-ok{color:var(--success);font-size:10px;font-weight:600}
+.funnels-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:20px}
+.funnel-wrap{background:var(--bg2);border-radius:8px;border:1px solid var(--border);padding:14px 10px}
+.funnel-title{font-size:11px;font-weight:700;color:var(--text);text-align:center;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.funnel-svg{display:block;width:100%;height:auto}
+.section-block{background:#fff;border-radius:12px;padding:24px 26px;margin-bottom:20px;border:1px solid var(--border)}
+.section-title{font-size:20px;font-weight:700;letter-spacing:-.02em;color:var(--text);margin-bottom:2px}
+.section-sub{font-size:12px;color:var(--text2);font-weight:500;margin-bottom:20px}
+.filter-block{background:#fff;border-radius:10px;padding:14px 18px;margin-bottom:16px;border:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.inner-sep{height:1px;background:var(--border);margin:22px 0}
+</style>
+</head>
+<body>
+<div class="header">
+  <div><h1>El Barrio Propiedades</h1><p>Reporte de Performance · Meta Ads + GHL</p></div>
+  <div class="hm"><strong id="hdr-period">—</strong>Cuenta: EL BARRIO CP<br>Generado: 29 jun 2026</div>
+</div>
+<div class="filter-block">
+  <span style="font-size:11px;color:var(--text2);font-weight:500;margin-right:4px">Ver período:</span>
+  <button class="fbtn" onclick="setView('28d')">Últimos 28 días</button>
+  <button class="fbtn" onclick="setView('14d')">Últimos 14 días</button>
+  <button class="fbtn" onclick="setView('ayer')">Ayer</button>
+  <span class="period-label" id="period-label">Selecciona un período</span>
+</div>
+<div class="section-block">
+  <div class="section-title">CONTENIDO ORGÁNICO</div>
+  <div class="section-sub">Objetivo: Creación de audiencia</div>
+
+  <!-- KPIs -->
+  <div class="ks" id="kstrip-org" style="margin-bottom:20px"></div>
+
+  <!-- TABLA engagement — arriba de los funnels -->
+  <div class="ct" id="ct-eng">Engagement por Buyer Persona</div>
+  <table><thead><tr>
+    <th style="text-align:left">Campaña</th>
+    <th>Impr.</th><th>Alcance</th><th>Clicks</th><th>CTR</th><th>CPM</th><th>CPC</th>
+    <th>V50</th><th>Hook Rate</th><th>%V50/Alc</th><th>Costo/V50</th><th>Inversión</th>
+  </tr></thead><tbody id="t2"></tbody></table>
+  <div class="ins" id="ins-eng"></div>
+
+  <div class="inner-sep"></div>
+
+  <!-- Funnels orgánico -->
+  <div class="ct" id="ct-org-funnels">Embudo de video · Por Buyer Persona</div>
+  <div class="funnels-grid" id="org-funnels-container"></div>
+
+  <div class="inner-sep"></div>
+
+  <!-- Video performance HR + V50 -->
+  <div class="ct">Video performance diaria · Orgánico · Hook Rate + % V50 + Personas V50</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#0C447C;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">Familia Transición</div>
+      <div style="position:relative;height:180px"><canvas id="vch-ft"></canvas></div>
+      
+    </div>
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#27500A;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">Upgrader Familiar</div>
+      <div style="position:relative;height:180px"><canvas id="vch-uf"></canvas></div>
+      
+    </div>
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#4A1272;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">Consolidado Silencioso</div>
+      <div style="position:relative;height:180px"><canvas id="vch-cs"></canvas></div>
+      
+    </div>
+
+  </div>
+
+  <div class="inner-sep"></div>
+
+  <!-- Gráficos Gasto diario + Costo/V50 por buyer (punto 5) -->
+  <div class="ct" id="ct-org-spend">Inversión diaria + Costo/V50 · Por Buyer Persona</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#0C447C;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">Familia Transición</div>
+      <div style="position:relative;height:180px"><canvas id="org-spend-ft"></canvas></div>
+    </div>
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#27500A;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">Upgrader Familiar</div>
+      <div style="position:relative;height:180px"><canvas id="org-spend-uf"></canvas></div>
+    </div>
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#4A1272;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">Consolidado Silencioso</div>
+      <div style="position:relative;height:180px"><canvas id="org-spend-cs"></canvas></div>
+    </div>
+
+  </div>
+</div>
+<div class="section-block">
+  <div class="section-title">LEAD MAGNETS</div>
+  <div class="section-sub">Objetivo: Captura de Leads</div>
+<div class="ks" id="kstrip"></div>
+<div class="card">
+  <div class="ct" id="ct-lm">Lead Magnets</div>
+  <table><thead><tr>
+    <th style="text-align:left">Campaña</th>
+    <th>Impr.</th><th>Alcance</th><th>Clicks</th><th>CTR</th><th>CPM</th><th>CPC</th>
+    <th>Leads Meta</th><th>CPL</th><th>Leads GHL</th><th>Gap</th><th>Inversión</th>
+  </tr></thead><tbody id="t1"></tbody></table>
+  <div class="sn">Gap = Leads Meta − Leads GHL · GHL: contactos por tag + dateAdded · fuente: Meta Ads API + GHL</div>
+  <div class="ins" id="ins-lm"></div>
+  <div class="ct" style="margin-top:20px" id="ct-funnel">Embudo de video por Lead Magnet</div>
+  <div class="funnels-grid" id="funnels-container"></div>
+</div>
+
+<!-- GRÁFICOS VIDEO LM — card independiente igual que los de engagement -->
+<div class="card">
+  <div class="ct" id="ct-vch-lm">Video performance diaria · Lead Magnets · Hook Rate + % V50 + Descargas</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#0C447C;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">LM1 · Familia Transición</div>
+      <div style="position:relative;height:180px"><canvas id="vch-lm1"></canvas></div>
+      
+    </div>
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#27500A;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">LM2 · Upgrader Familiar</div>
+      <div style="position:relative;height:180px"><canvas id="vch-lm2"></canvas></div>
+      
+    </div>
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#4A1272;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">LM3 · Consolidado Silencioso</div>
+      <div style="position:relative;height:180px"><canvas id="vch-lm3"></canvas></div>
+      
+    </div>
+
+  </div>
+</div>
+
+<div class="card">
+  <div class="ct" id="ct-cpl">Inversión diaria + CPL · Por Buyer Persona</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#0C447C;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">LM1 · Familia Transición</div>
+      <div style="position:relative;height:180px"><canvas id="cpl-lm1"></canvas></div>
+    </div>
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#27500A;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">LM2 · Upgrader Familiar</div>
+      <div style="position:relative;height:180px"><canvas id="cpl-lm2"></canvas></div>
+    </div>
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#4A1272;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">LM3 · Consolidado Silencioso</div>
+      <div style="position:relative;height:180px"><canvas id="cpl-lm3"></canvas></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div class="card">
+  <div class="ct" id="ct-ghl">Pipeline Compradores · GHL</div>
+  <div class="leg" id="leg-ghl"></div>
+  <div class="cw"><canvas id="ch2"></canvas></div>
+  <div class="ins" id="ins-ghl"></div>
+</div>
+<div class="footer">El Barrio Propiedades · Reporte generado el 29 jun 2026 · Meta Ads API + GHL MCP · Datos: 26 may – 28 jun 2026</div>
+
+<script>
+// ── DATOS REALES — 0 valores hardcodeados ──
+// Todos los datos vienen de Meta Ads API (adset level, time_increment=1) y GHL MCP
+// Fechas: HOY=29/jun/2026, AYER=28/jun, DESDE_28=26/may, DESDE_14=15/jun
+
+const LABELS28=["26/05","27/05","28/05","29/05","30/05","31/05","01/06","02/06","03/06","04/06","05/06","06/06","07/06","08/06","09/06","10/06","11/06","12/06","13/06","14/06","15/06","16/06","17/06","18/06","19/06","20/06","21/06","22/06","23/06","24/06","25/06","26/06","27/06","28/06"];
+const L1=[0,0,0,0,0,0,0,0,0,0,2,0,2,0,3,2,4,6,2,5,5,5,4,4,1,4,2,2,4,0,4,4,8,5];
+const L2=[0,0,0,0,0,0,0,0,0,0,4,1,5,2,2,3,3,2,3,1,2,2,2,2,1,0,0,4,6,4,3,1,0,2];
+const L3=[0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,1,2,1,1,2,0,2,0,1,1,2,0,2,1,2,3,2,1,2];
+const S1=[0,0,0,0,0,0,0,0,0,0,3.67,3.2,6.49,3.16,2.68,4.79,6.78,6.51,4.57,6.39,5.47,8.37,9.42,8.8,8.51,9.78,10.31,13.83,14.84,14.19,14.59,15.94,11.69,16.92];
+const S2=[0,0,0,0,0,0,0,0,0,0,4.25,2.6,7.77,3.75,3.93,5.28,5.16,4.89,4.2,6.02,4.96,4.81,5.23,4.41,4.77,4.5,5.18,6.36,7.58,7.46,7.53,7.61,6.55,8.82];
+const S3=[0,0,0,0,0,0,0,0,0,0,3.16,3.68,7.1,3.75,3.47,6.17,5.45,5.37,3.64,5.64,5.37,6.26,5.92,4.48,4.47,3.21,5.62,6.63,6.79,7.06,9.86,8.29,5.46,9.67];
+const IDX14=20; // index de 15/jun en arrays de 34 días — 14 puntos: 15jun–28jun
+
+const GHL_SRC_COLORS={'Portal Inmobiliario':'#378ADD','META-LM':'#639922','Instagram DM':'#8B44B8','Directo':'#D85A30'};
+const GHL28={
+  labels:LABELS28,
+  src:[
+    {label:'Portal Inmobiliario',color:'#378ADD',data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,2,2,2,0,0,1,2,5,2,1,1,0,0,0,0,0]},
+    {label:'META-LM',            color:'#639922',data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0]},
+    {label:'Instagram DM',       color:'#8B44B8',data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]},
+    {label:'Directo',            color:'#D85A30',data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0]},
+  ]
+};
+
+const PERIODOS = {
+  '28d': {
+    label: '26 may – 28 jun 2026 (34 días)',
+    lms: [
+      {name:'Guía Paso a Paso',    cls:'c1',bp:'Familia Transición',   color:'#378ADD',
+       impr:17364,reach:11138,clicks:713,spend:196.31,ctr:4.11,cpm:11.30,cpc:0.28,
+       leads:74,ghlLeads:null,v3s:5732,v50:1431,v75:817},
+      {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',    color:'#639922',
+       impr:13244,reach:8495,clicks:434,spend:126.09,ctr:3.28,cpm:9.52,cpc:0.29,
+       leads:52,ghlLeads:null,v3s:4266,v50:1567,v75:1030},
+      {name:'VSL Operación Espejo', cls:'c3',bp:'Upgrader Familiar',   color:'#8B44B8',
+       impr:10892,reach:6541,clicks:551,spend:126.66,ctr:5.06,cpm:11.63,cpc:0.23,
+       leads:26,ghlLeads:null,v3s:3126,v50:500,v75:363},
+    ],
+    dailyLabels:LABELS28, dailyL1:L1,dailyL2:L2,dailyL3:L3,dailyS1:S1,dailyS2:S2,dailyS3:S3,
+    ghlDays:LABELS28, ghlSrc:GHL28.src,
+  },
+  '14d': {
+    label: '15 jun – 28 jun 2026 (14 días)',
+    lms: [
+      {name:'Guía Paso a Paso',    cls:'c1',bp:'Familia Transición',   color:'#378ADD',
+       impr:14385,reach:8969,clicks:548,spend:175.31,ctr:3.81,cpm:12.19,cpc:0.32,
+       leads:59,ghlLeads:null,v3s:4862,v50:1228,v75:698},
+      {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',    color:'#639922',
+       impr:10195,reach:6338,clicks:320,spend:95.93,ctr:3.14,cpm:9.41,cpc:0.30,
+       leads:33,ghlLeads:null,v3s:3290,v50:1197,v75:786},
+      {name:'VSL Operación Espejo', cls:'c3',bp:'Upgrader Familiar',   color:'#8B44B8',
+       impr:8349,reach:4836,clicks:420,spend:100.84,ctr:5.03,cpm:12.08,cpc:0.24,
+       leads:22,ghlLeads:null,v3s:2354,v50:380,v75:279},
+    ],
+    dailyLabels:LABELS28.slice(IDX14),
+    dailyL1:L1.slice(IDX14),dailyL2:L2.slice(IDX14),dailyL3:L3.slice(IDX14),
+    dailyS1:S1.slice(IDX14),dailyS2:S2.slice(IDX14),dailyS3:S3.slice(IDX14),
+    ghlDays:LABELS28.slice(IDX14),
+    ghlSrc:GHL28.src.map(s=>({...s,data:s.data.slice(IDX14)})),
+  },
+  'ayer': {
+    label: '28 jun 2026 (Ayer)',
+    lms: [
+      {name:'Guía Paso a Paso',    cls:'c1',bp:'Familia Transición',   color:'#378ADD',
+       impr:1218,reach:1119,clicks:32,spend:16.92,ctr:2.63,cpm:13.89,cpc:0.53,
+       leads:5,ghlLeads:2,v3s:373,v50:76,v75:42},
+      {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',    color:'#639922',
+       impr:1063,reach:937,clicks:32,spend:8.82,ctr:3.01,cpm:8.30,cpc:0.28,
+       leads:2,ghlLeads:2,v3s:329,v50:98,v75:67},
+      {name:'VSL Operación Espejo', cls:'c3',bp:'Upgrader Familiar',   color:'#8B44B8',
+       impr:793, reach:653,clicks:46,spend:9.67, ctr:5.80,cpm:12.19,cpc:0.21,
+       leads:2,ghlLeads:2,v3s:188,v50:18,v75:15},
+    ],
+    dailyLabels:['28/06'],
+    dailyL1:[5],dailyL2:[2],dailyL3:[2],dailyS1:[16.92],dailyS2:[8.82],dailyS3:[9.67],
+    ghlDays:['28/06'],
+    ghlSrc:GHL28.src.map(s=>({...s,data:[s.data[s.data.length-1]]})),
+  },
+};
+
+// ── DATOS ENGAGEMENT POR PERÍODO ────────────────────────────────────────────
+// Ayer: solo campañas con gasto > 0 el 28/jun (todas las Rell = $0, inactive)
+const ENG_AYER=[
+  {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
+    {name:'[DC] Familia Transición · activa',status:'ACTIVE',impr:4921,reach:4818,clicks:225,spend:10.34,v50:401,v3s:1478},
+  ]},
+  {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[
+    {name:'[DC] Upgrader Familiar · activa',status:'ACTIVE',impr:7075,reach:5748,clicks:130,spend:10.45,v50:120,v3s:764},
+  ]},
+  {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
+    {name:'[DC] Consolidado Silencioso · activa',status:'ACTIVE',impr:6151,reach:5474,clicks:179,spend:11.14,v50:102,v3s:706},
+  ]},
+];
+// 14d: solo campañas activas en el período (DC campaigns arrancaron 16/jun, Rell pausadas desde ~16/jun)
+const ENG_14D=[
+  {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
+    {name:'[DC] Familia Transición · activa',status:'ACTIVE',impr:47445,reach:34031,clicks:1388,spend:76.22,v50:2452,v3s:9826},
+  ]},
+  {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[
+    {name:'[DC] Upgrader Familiar · activa',status:'ACTIVE',impr:36609,reach:28727,clicks:978,spend:76.14,v50:1530,v3s:8245},
+  ]},
+  {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
+    {name:'[DC] Consolidado Silencioso · activa',status:'ACTIVE',impr:46336,reach:34823,clicks:974,spend:79.17,v50:1185,v3s:6293},
+  ]},
+];
+
+const ENG=[
+  {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
+    {name:'[DC] Familia Transición · activa',status:'ACTIVE',impr:51291,reach:37054,clicks:1463,spend:81.71,v50:2576,v3s:10424},
+    {name:'Rell1-FT · Seguir arrendando · adm',status:'PAUSED',impr:5066,reach:3929,clicks:296,spend:23.11,v50:175,v3s:1175},
+    {name:'Rell4-FT · La seguridad · adm',status:'PAUSED',impr:8701,reach:5757,clicks:183,spend:13.67,v50:171,v3s:1044},
+    {name:'Rell1-FT · btn',status:'PAUSED',impr:3981,reach:3161,clicks:66,spend:22.87,v50:89,v3s:914},
+  ]},
+  {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[
+    {name:'[DC] Upgrader Familiar · activa',status:'ACTIVE',impr:38933,reach:30592,clicks:1072,spend:80.27,v50:1624,v3s:8935},
+    {name:'Rell5-UF · Tu casa no está mal · adm',status:'PAUSED',impr:2660,reach:2164,clicks:103,spend:7.41,v50:265,v3s:913},
+    {name:'Rell2-UF · ¿Ya te quedó chica? · adm',status:'PAUSED',impr:5046,reach:3955,clicks:378,spend:23.19,v50:155,v3s:1707},
+    {name:'Rell2-UF · btn',status:'PAUSED',impr:3988,reach:3273,clicks:111,spend:22.72,v50:121,v3s:1458},
+  ]},
+  {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
+    {name:'[DC] Consolidado Silencioso · activa',status:'ACTIVE',impr:48966,reach:37099,clicks:1023,spend:82.70,v50:1250,v3s:6802},
+    {name:'Rell3-CS · 19.000 UF · adm',status:'PAUSED',impr:10329,reach:6691,clicks:176,spend:13.57,v50:199,v3s:1280},
+    {name:'Rell6-CS · Chicureo y Piedra Roja · adm',status:'PAUSED',impr:2198,reach:1818,clicks:83,spend:7.05,v50:151,v3s:561},
+  ]},
+];
+
+const fmt=n=>n>=1000?(n/1000).toFixed(1).replace(/\.0$/,'')+'K':String(n);
+
+function gapCell(meta,ghl){
+  const g=meta-ghl;
+  if(g===0)return`<span class="gap-ok">0</span>`;
+  const p=meta>0?Math.round(g/meta*100):0;
+  return`<span class="${p>=50?'gap-warn':''}">${g>0?'+':''}${g} (${p}%)</span>`;
+}
+
+let ch2=null;
+
+function renderFunnels(lms){
+  const C=document.getElementById('funnels-container');C.innerHTML='';
+  const VW=200,rowH=36,rowGap=4,n=5,VH=rowH*n+rowGap*(n-1),STEP=0.13,minW=0.42;
+  const LEVELS=[
+    {label:'Impresiones',key:'impr', pctBase:null},
+    {label:'3s Hook',    key:'v3s',  pctBase:'impr'},
+    {label:'Video >50%', key:'v50',  pctBase:'impr'},
+    {label:'Video >75%', key:'v75',  pctBase:'impr'},
+    {label:'Descarga LM',key:'leads',pctBase:'impr'},
+  ];
+  lms.forEach(lm=>{
+    const wrap=document.createElement('div');wrap.className='funnel-wrap';
+    const tit=document.createElement('div');tit.className='funnel-title';tit.textContent=lm.name;wrap.appendChild(tit);
+    let svg='';
+    LEVELS.forEach((lvl,i)=>{
+      const val=lm[lvl.key]||0;
+      const pctStr=lvl.pctBase?(val/lm[lvl.pctBase]*100).toFixed(1)+'%':null;
+      const tf=Math.max(minW,1-i*STEP),bf=Math.max(minW-STEP,1-(i+1)*STEP);
+      const tw=VW*tf,bw=VW*bf,tx=(VW-tw)/2,bx=(VW-bw)/2;
+      const y=i*(rowH+rowGap);
+      const r=parseInt(lm.color.slice(1,3),16),g=parseInt(lm.color.slice(3,5),16),b=parseInt(lm.color.slice(5,7),16);
+      const fill=`rgba(${r},${g},${b},${(1-i*0.13).toFixed(2)})`;
+      svg+=`<polygon points="${tx.toFixed(1)},${y} ${(tx+tw).toFixed(1)},${y} ${(bx+bw).toFixed(1)},${y+rowH} ${bx.toFixed(1)},${y+rowH}" fill="${fill}"/>
+<text x="${(VW/2).toFixed(1)}" y="${(y+rowH/2-5).toFixed(1)}" text-anchor="middle" font-size="8" fill="white" font-weight="500" font-family="-apple-system,sans-serif">${lvl.label}</text>
+<text x="${(VW/2).toFixed(1)}" y="${(y+rowH/2+7).toFixed(1)}" text-anchor="middle" font-size="11" fill="white" font-weight="500" font-family="-apple-system,sans-serif">${fmt(val)}${pctStr?' · '+pctStr:''}</text>`;
+    });
+    wrap.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${VW} ${VH}" width="100%" preserveAspectRatio="xMidYMid meet" class="funnel-svg">${svg}</svg>`);
+    C.appendChild(wrap);
+  });
+}
+
+function setView(key){
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.fbtn[onclick="setView('${key}')"]`).classList.add('active');
+  const d=PERIODOS[key];
+  document.getElementById('hdr-period').textContent=d.label;
+  document.getElementById('period-label').textContent=d.label;
+  document.getElementById('ct-lm').childNodes[0].textContent=`Lead Magnets · ${d.label} `;
+
+  document.getElementById('ct-ghl').childNodes[0].textContent=`Pipeline Compradores · GHL · ${d.label} `;
+  renderKPIs(d);renderLMs(d);renderFunnels(d.lms);renderGHL(d,key);renderVch(key);renderVchLM(key);renderEng(key);renderCPL(key);renderOrgKPIs(key);renderOrgFunnels(key);renderOrgSpend(key);
+}
+
+function renderKPIs(d){
+  const ts=d.lms.reduce((a,c)=>a+c.spend,0);
+  const tl=d.lms.reduce((a,c)=>a+c.leads,0);
+  const tg=d.lms.reduce((a,c)=>c.ghlLeads!==null?a+c.ghlLeads:a,0);
+  const anyNullGhl=d.lms.some(c=>c.ghlLeads===null);
+  const cpl=tl>0?ts/tl:0;
+  const tI=d.lms.reduce((a,c)=>a+c.impr,0);
+  const tH=d.lms.reduce((a,c)=>a+c.v3s,0);
+  const hook=tI>0?tH/tI*100:0;
+  const gap=tl-tg,gapPct=tl>0?Math.round(gap/tl*100):0;
+  document.getElementById('kstrip').innerHTML=`
+    <div class="k"><div class="kl">Inversión LMs</div><div class="kv">$${ts.toFixed(2)}</div><div class="ks2">USD total</div></div>
+    <div class="k"><div class="kl">Leads Meta</div><div class="kv">${tl}</div><div class="ks2">LM1+LM2+LM3</div></div>
+    <div class="k"><div class="kl">CPL Promedio</div><div class="kv">$${cpl.toFixed(2)}</div><div class="ks2">USD · Meta</div></div>
+    <div class="k"><div class="kl">Leads GHL</div><div class="kv">${tg}</div><div class="ks2">por tag + dateAdded</div></div>
+    <div class="k"><div class="kl">Gap Meta/GHL</div><div class="kv"><span style="color:${gapPct>=50?'var(--danger)':gap===0?'var(--success)':'var(--text)'}">${gap} (${gapPct}%)</span></div><div class="ks2">sin llegar a CRM</div></div>
+    <div class="k"><div class="kl">Hook Rate</div><div class="kv">${hook.toFixed(1)}%</div><div class="ks2">3s / impresiones</div></div>`;
+}
+
+function renderLMs(d){
+  const tb=document.getElementById('t1');tb.innerHTML='';
+  let gI=0,gR=0,gC=0,gS=0,gL=0,gG=0; let hasNullGhlLM=false;
+  const cpls=d.lms.map(c=>c.leads>0?c.spend/c.leads:Infinity);
+  const minCPL=Math.min(...cpls.filter(v=>v<Infinity));
+  const maxCPL=Math.max(...cpls.filter(v=>v<Infinity));
+  d.lms.forEach((c,i)=>{
+    const cpl=c.leads>0?c.spend/c.leads:0;
+    const bC=cpls[i]===minCPL,wC=cpls[i]===maxCPL&&c.leads>0;
+    gI+=c.impr;gR+=c.reach;gC+=c.clicks;gS+=c.spend;gL+=c.leads;if(c.ghlLeads!==null){gG+=c.ghlLeads;}else{hasNullGhlLM=true;}
+    tb.insertAdjacentHTML('beforeend',`<tr>
+      <td><span class="chip ${c.cls}">${c.bp}</span> ${c.name}</td>
+      <td>${fmt(c.impr)}</td><td>${fmt(c.reach)}</td><td>${fmt(c.clicks)}</td>
+      <td>${c.ctr.toFixed(2)}%</td><td>$${c.cpm.toFixed(2)}</td><td>$${c.cpc.toFixed(2)}</td>
+      <td>${c.leads}</td><td class="${bC?'best':wC?'worst':''}">${cpl>0?'$'+cpl.toFixed(2):'—'}</td>
+      <td>${c.ghlLeads!==null?c.ghlLeads:'<span class="gap-warn">—</span>'}</td><td>${c.ghlLeads!==null?gapCell(c.leads,c.ghlLeads):'<span class="gap-warn">—</span>'}</td>
+      <td>$${c.spend.toFixed(2)}</td></tr>`);
+  });
+  const gCPL=gL>0?gS/gL:0;
+  tb.insertAdjacentHTML('beforeend',`<tr class="tot">
+    <td>TOTAL</td><td>${fmt(gI)}</td><td>${fmt(gR)}</td><td>${fmt(gC)}</td>
+    <td>${(gC/gI*100).toFixed(2)}%</td><td>$${(gS/gI*1000).toFixed(2)}</td><td>$${(gS/gC).toFixed(2)}</td>
+    <td>${gL}</td><td>$${gCPL.toFixed(2)}</td><td>${hasNullGhlLM?'<span class="gap-warn">—</span>':gG}</td><td>${hasNullGhlLM?'<span class="gap-warn">—</span>':gapCell(gL,gG)}</td>
+    <td>$${gS.toFixed(2)}</td></tr>`);
+  const best=d.lms.reduce((a,c)=>c.leads>0&&c.spend/c.leads<(a.leads>0?a.spend/a.leads:Infinity)?c:a,d.lms[0]);
+  // Handle null ghlLeads for display
+  const hasNullGhl = d.lms.some(c=>c.ghlLeads===null);
+  const ghlNote = hasNullGhl ? ' <strong>⚠️ Leads GHL de LM1, LM2, LM3 sin confirmar — GHL MCP no respondió. Verificar manualmente antes de usar este dato.</strong> Gap omitido.' : '';
+  document.getElementById('ins-lm').innerHTML=`<strong>${best.name}</strong> lidera con el mejor CPL ($${(best.spend/best.leads).toFixed(2)} USD). Total: <strong>${gL} leads Meta</strong>.${ghlNote} <strong>⚠️ Bug GHL LM4 activo</strong> — leads Meta LM3 entran a pipeline LM4 sin crear oportunidades.`;
+}
+
+
+function renderEng(key){
+  const engData = key==='ayer' ? ENG_AYER : key==='14d' ? ENG_14D : ENG;
+  const periodLabel = key==='ayer' ? 'Ayer' : key==='14d' ? '14 días' : '28 días';
+  const ctEl=document.getElementById('ct-eng');
+  if(ctEl) ctEl.childNodes[0].textContent=`Engagement por Buyer Persona · ${periodLabel} `;
+  const tb2=document.getElementById('t2');tb2.innerHTML='';
+  let gI2=0,gR2=0,gC2=0,gS2=0,gV2=0;
+  const allCV=engData.flatMap(g=>g.camps.filter(c=>c.v50>0).map(c=>c.spend/c.v50));
+  const minCV=allCV.length?Math.min(...allCV):0,maxCV=allCV.length?Math.max(...allCV):0;
+  engData.forEach(g=>{
+    const sI=g.camps.reduce((a,c)=>a+c.impr,0),sR=g.camps.reduce((a,c)=>a+c.reach,0),
+          sC=g.camps.reduce((a,c)=>a+c.clicks,0),sS=g.camps.reduce((a,c)=>a+c.spend,0),
+          sV=g.camps.reduce((a,c)=>a+c.v50,0);
+    gI2+=sI;gR2+=sR;gC2+=sC;gS2+=sS;gV2+=sV;
+    const sPct=sV/sI*100,sCV=sS/sV;
+    const sHR=g.camps.reduce((a,c)=>a+c.v3s,0)/sI*100;
+    tb2.insertAdjacentHTML('beforeend',`<tr class="grp"><td colspan="12"><span class="chip ${g.cls}">${g.buyer}</span>&nbsp;<span style="font-weight:500;font-size:10px;color:var(--text2)">${g.camps.length} camps · Alcance: ${fmt(sR)} · ${fmt(sV)} V50 · ${sPct.toFixed(1)}% · $${sCV.toFixed(3)}/V50</span></td></tr>`);
+    g.camps.forEach(c=>{
+      const cv50=c.spend/c.v50,pctV=c.v50/c.impr*100,hr=c.v3s/c.impr*100;
+      const bC=cv50===minCV,wC=cv50===maxCV;
+      tb2.insertAdjacentHTML('beforeend',`<tr>
+        <td>${c.name} <span class="chip ${c.status==='ACTIVE'?'act':'pau'}">${c.status==='ACTIVE'?'Activa':'Pausada'}</span></td>
+        <td>${fmt(c.impr)}</td><td>${fmt(c.reach)}</td><td>${fmt(c.clicks)}</td>
+        <td>${(c.clicks/c.impr*100).toFixed(2)}%</td><td>$${(c.spend/c.impr*1000).toFixed(2)}</td><td>$${(c.spend/c.clicks).toFixed(2)}</td>
+        <td>${fmt(c.v50)}</td><td>${hr.toFixed(1)}%</td><td>${pctV.toFixed(1)}%</td>
+        <td class="${bC?'best':wC?'worst':''}">$${cv50.toFixed(3)}</td>
+        <td>$${c.spend.toFixed(2)}</td></tr>`);
+    });
+    tb2.insertAdjacentHTML('beforeend',`<tr class="sub"><td>Subtotal ${g.buyer}</td><td>${fmt(sI)}</td><td>${fmt(sR)}</td><td>${fmt(sC)}</td><td>${(sC/sI*100).toFixed(2)}%</td><td>$${(sS/sI*1000).toFixed(2)}</td><td>$${(sS/sC).toFixed(2)}</td><td>${fmt(sV)}</td><td>${sHR.toFixed(1)}%</td><td>${sPct.toFixed(1)}%</td><td>$${sCV.toFixed(3)}</td><td>$${sS.toFixed(2)}</td></tr>`);
+  });
+  const gPct2=gV2/gI2*100,gCV2=gS2/gV2,gV3_2=engData.reduce((a,g)=>a+g.camps.reduce((b,c)=>b+c.v3s,0),0),gHR2=gV3_2/gI2*100;
+  const nC=engData.reduce((a,g)=>a+g.camps.length,0);
+  tb2.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL (${nC} camps · ${periodLabel})</td><td>${fmt(gI2)}</td><td>${fmt(gR2)}</td><td>${fmt(gC2)}</td><td>${(gC2/gI2*100).toFixed(2)}%</td><td>$${(gS2/gI2*1000).toFixed(2)}</td><td>$${(gS2/gC2).toFixed(2)}</td><td>${fmt(gV2)}</td><td>${gHR2.toFixed(1)}%</td><td>${gPct2.toFixed(1)}%</td><td>$${gCV2.toFixed(3)}</td><td>$${gS2.toFixed(2)}</td></tr>`);
+  document.getElementById('ins-eng').innerHTML=`<strong>Familia Transición</strong> lidera en alcance total (${fmt(engData[0].camps.reduce((a,c)=>a+c.reach,0))}). <strong>Upgrader Familiar DC</strong> tiene el mejor Costo/V50 en campaña activa. Campañas con botón siguen siendo las menos eficientes en retención de video.`;
+}
+
+function renderGHL(d,key){
+  if(ch2){ch2.destroy();ch2=null;}
+  const legEl=document.getElementById('leg-ghl');legEl.innerHTML='';
+  d.ghlSrc.forEach(s=>legEl.insertAdjacentHTML('beforeend',`<span><span class="lb" style="background:${s.color}"></span>${s.label}</span>`));
+  const totals={};d.ghlSrc.forEach(s=>{totals[s.label]=s.data.reduce((a,b)=>a+b,0);});
+  const grand=Object.values(totals).reduce((a,b)=>a+b,0);
+  ch2=new Chart(document.getElementById('ch2'),{type:'bar',data:{labels:d.ghlDays,datasets:d.ghlSrc.map(s=>({label:s.label,data:s.data,backgroundColor:s.color,stack:'s',borderRadius:2,borderSkipped:false}))},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label(ctx){return ctx.parsed.y>0?` ${ctx.dataset.label}: ${ctx.parsed.y}`:null;},footer(items){const t=items.reduce((a,i)=>a+i.parsed.y,0);return t>0?`Total: ${t}`:''}}}},
+    scales:{x:{stacked:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:9.5},color:'#73726c',autoSkip:true,maxTicksLimit:15,maxRotation:45}},y:{stacked:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10.5},color:'#73726c',stepSize:1,precision:0},title:{display:true,text:'Oportunidades',font:{size:10.5},color:'#73726c'},min:0}}}});
+  const p=totals['Portal Inmobiliario']||0,m=totals['META-LM']||0,ig=totals['Instagram DM']||0,dir=totals['Directo']||0;
+  document.getElementById('ins-ghl').innerHTML=`<strong>Total período: ${grand} oportunidades</strong>. Portal Inmobiliario: <strong>${p} (${grand>0?Math.round(p/grand*100):0}%)</strong>. META-LM: <strong>${m}</strong>. Instagram DM: <strong>${ig}</strong>. Directo: <strong>${dir}</strong>.`;
+}
+
+// ── GRÁFICOS VIDEO POR BUYER PERSONA ─────────────────────────────────
+// Datos diarios reales — Meta Ads API time_increment=1, 26/may–23/jun (29 puntos)
+// Hook Rate = 3_second_video_plays / impressions × 100
+// % V50     = video_p50_watched_actions / impressions × 100  (mismo criterio que Hook Rate)
+// Registros = video_p50_watched_actions (conteo absoluto)
+// null = sin actividad ese día (spanGaps une la línea)
+
+const VCH_LABELS=["26/05","27/05","28/05","29/05","30/05","31/05","01/06","02/06","03/06","04/06","05/06","06/06","07/06","08/06","09/06","10/06","11/06","12/06","13/06","14/06","15/06","16/06","17/06","18/06","19/06","20/06","21/06","22/06","23/06","24/06","25/06","26/06","27/06","28/06"];
+
+// LM1 — Familia Transición
+const LM1_HOOK=[null,null,null,null,null,null,null,null,null,null,30.2,36.7,41.6,38.1,35.8,43.3,32.8,36.3,38.6,37.0,39.6,34.3,36.4,36.4,29.4,32.3,26.5,28.0,32.1,29.1,28.9,29.5,33.2,30.6];
+const LM1_V50P=[null,null,null,null,null,null,null,null,null,null,10.15,10.49,12.07,10.07,8.14,9.79,9.71,9.53,9.72,9.67,11.29,9.93,7.48,7.66,7.65,8.46,7.01,5.91,8.51,7.0,6.03,6.91,8.17,6.24];
+const LM1_V50R=[0,0,0,0,0,0,0,0,0,0,33,28,81,27,25,43,77,63,41,56,69,59,69,49,52,55,59,83,115,87,81,98,86,76];
+
+// LM2 — Upgrader Familiar
+const LM2_HOOK=[null,null,null,null,null,null,null,null,null,null,25.9,35.8,34.0,33.0,38.0,37.4,37.5,34.6,38.3,35.4,34.6,33.1,31.9,27.5,31.5,28.1,30.9,28.3,33.0,29.9,29.2,30.6,29.0,31.0];
+const LM2_V50P=[null,null,null,null,null,null,null,null,null,null,8.62,10.55,13.43,11.85,15.01,15.56,16.1,14.98,19.01,13.19,14.05,12.12,10.16,11.03,9.63,11.69,12.05,10.47,10.0,9.3,9.53,11.28,10.58,9.22];
+const LM2_V50R=[0,0,0,0,0,0,0,0,0,0,25,23,85,32,53,91,94,74,73,69,67,56,64,59,55,52,64,80,84,93,95,105,70,98];
+
+// LM3 — Consolidado Silencioso
+const LM3_HOOK=[null,null,null,null,null,null,null,null,null,null,22.2,28.6,34.6,36.7,34.3,35.4,36.2,33.1,35.5,36.1,38.6,34.0,32.1,29.8,22.7,24.1,16.6,21.4,23.8,22.3,25.0,26.4,31.9,23.7];
+const LM3_V50P=[null,null,null,null,null,null,null,null,null,null,2.75,4.76,5.6,3.23,5.48,4.06,3.56,4.19,2.05,3.64,5.76,3.3,5.57,5.44,5.67,7.91,4.2,5.16,6.03,5.7,4.51,4.73,5.20,2.27];
+const LM3_V50R=[0,0,0,0,0,0,0,0,0,0,11,18,33,8,19,23,22,22,7,13,24,10,16,19,20,25,26,32,38,42,36,31,22,18];
+
+// IDX14=14 definido arriba (línea LABELS28)
+
+// Slices por período
+const VCH_DATA = {
+  '28d': { labels:VCH_LABELS,
+    ft:{hook:LM1_HOOK, v50p:LM1_V50P, v50r:LM1_V50R, bars:L1},
+    uf:{hook:LM2_HOOK, v50p:LM2_V50P, v50r:LM2_V50R, bars:L2},
+    cs:{hook:LM3_HOOK, v50p:LM3_V50P, v50r:LM3_V50R, bars:L3} },
+  '14d': { labels:VCH_LABELS.slice(IDX14),
+    ft:{hook:LM1_HOOK.slice(IDX14), v50p:LM1_V50P.slice(IDX14), v50r:LM1_V50R.slice(IDX14), bars:L1.slice(IDX14)},
+    uf:{hook:LM2_HOOK.slice(IDX14), v50p:LM2_V50P.slice(IDX14), v50r:LM2_V50R.slice(IDX14), bars:L2.slice(IDX14)},
+    cs:{hook:LM3_HOOK.slice(IDX14), v50p:LM3_V50P.slice(IDX14), v50r:LM3_V50R.slice(IDX14), bars:L3.slice(IDX14)} },
+  'ayer': { labels:['28/06'],
+    ft:{hook:[30.6], v50p:[6.24], v50r:[76], bars:[5]},
+    uf:{hook:[31.0], v50p:[9.22], v50r:[98],  bars:[2]},
+    cs:{hook:[23.7], v50p:[2.27], v50r:[18],  bars:[2]} },
+};
+
+// ── DATOS DIARIOS ORGÁNICO POR BUYER PERSONA ─────────────────────────────────
+// Datos reales de API (Meta Ads time_increment=1, 26may–23jun)
+// FT = [DC][ABO][INTERACCION][TRAFICO-INSTA][Familia Transición] (16/jun–) + Rell1-FT-adm + Rell1-FT-btn + Rell4-FT (hasta 16/jun)
+// UF = [DC][ABO][INTERACCION][TRAFICO-INSTA][Upgrader Familiar] (16/jun–) + Rell2-UF-adm + Rell2-UF-btn + Rell5-UF (hasta 16/jun)
+// CS = [DC][ABO][INTERACCION][TRAFICO-INSTA][Consolidado Silencioso] (16/jun–) + Rell3-CS + Rell6-CS (hasta 16/jun)
+// null = sin actividad ese día | Último punto (23/jun) verificado contra CSV de Meta Ads Manager
+const ENG_FT_HOOK=[null,null,null,null,null,null,null,null,null,null,17.7,23.1,19.6,24.0,25.7,13.4,13.2,14.6,14.7,14.2,15.4,15.9,12.1,9.6,9.4,10.3,10.3,10.5,28.2,27.2,26.8,28.1,29.7,30.0];
+const ENG_FT_V50P=[null,null,null,null,null,null,null,null,null,null,2.0,2.8,2.3,3.1,3.8,2.9,2.4,2.7,2.7,2.5,2.2,2.0,1.8,1.7,2.0,1.8,1.3,1.5,7.35,7.33,7.81,8.05,7.49,8.15];
+const ENG_FT_V50R=[0,0,0,0,0,0,0,0,0,0,14,26,30,32,40,56,62,72,61,48,48,38,46,48,55,32,56,197,496,402,384,364,299,401];
+const ENG_UF_HOOK=[null,null,null,null,null,null,null,null,null,null,28.6,33.2,34.5,30.9,33.6,30.9,33.1,32.8,33.8,36.5,36.6,33.7,28.5,29.9,30.4,29.5,32.9,28.6,23.8,25.7,25.5,19.6,13.9,10.8];
+const ENG_UF_V50P=[null,null,null,null,null,null,null,null,null,null,3.3,3.7,5.0,3.7,4.9,6.0,5.7,5.8,5.3,6.2,6.9,5.5,5.6,6.8,7.6,5.2,7.6,5.7,4.23,4.91,4.93,3.08,2.13,1.7];
+const ENG_UF_V50R=[0,0,0,0,0,0,0,0,0,0,21,26,54,29,51,78,74,84,73,83,117,86,87,98,91,84,99,167,206,225,211,145,126,120];
+const ENG_CS_HOOK=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,13.7,11.6,10.4,13.3,15.1,14.2,13.7,18.0,19.0,17.8,14.5,16.3,16.4,14.9,13.1,13.1,11.9,13.2,13.2,11.5];
+const ENG_CS_V50P=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.9,1.6,1.3,2.8,3.3,3.0,2.9,4.1,3.6,4.0,3.2,3.8,4.0,3.2,2.56,1.92,1.95,2.10,1.83,1.66];
+const ENG_CS_V50R=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,25,19,51,69,73,84,47,57,54,79,71,75,113,161,133,138,136,98,102];
+const ENG_DATA={
+  '28d':{labels:VCH_LABELS, ft:{hook:ENG_FT_HOOK,v50p:ENG_FT_V50P,v50r:ENG_FT_V50R}, uf:{hook:ENG_UF_HOOK,v50p:ENG_UF_V50P,v50r:ENG_UF_V50R}, cs:{hook:ENG_CS_HOOK,v50p:ENG_CS_V50P,v50r:ENG_CS_V50R}},
+  '14d':{labels:VCH_LABELS.slice(IDX14), ft:{hook:ENG_FT_HOOK.slice(IDX14),v50p:ENG_FT_V50P.slice(IDX14),v50r:ENG_FT_V50R.slice(IDX14)}, uf:{hook:ENG_UF_HOOK.slice(IDX14),v50p:ENG_UF_V50P.slice(IDX14),v50r:ENG_UF_V50R.slice(IDX14)}, cs:{hook:ENG_CS_HOOK.slice(IDX14),v50p:ENG_CS_V50P.slice(IDX14),v50r:ENG_CS_V50R.slice(IDX14)}},
+  'ayer':{labels:['28/06'], ft:{hook:[30.0],v50p:[8.15],v50r:[401]}, uf:{hook:[10.8],v50p:[1.70],v50r:[120]}, cs:{hook:[11.5],v50p:[1.66],v50r:[102]}},
+};
+
+// ── INSTANCIAS LM CHARTS ──────────────────────────────────────────────────────
+let vchLM1=null,vchLM2=null,vchLM3=null;
+let vchFT=null,vchUF=null,vchCS=null;
+
+function buildVchChart(canvasId,labels,src,color,colorV50,colorBar,key,useBars){
+  // useBars=true: barras = src.bars (leads/personas V50 según sección)
+  // useBars=false: barras = src.v50r (personas V50, para orgánico)
+  const el=document.getElementById(canvasId);
+  if(!el) return null;
+  const barData = (useBars && src.bars) ? src.bars : src.v50r;
+  const barLabel = (useBars && src.bars) ? 'Descargas LM' : 'Personas >V50';
+  const maxR=Math.max(...barData.filter(v=>v!=null&&v>0),1);
+  const yRMax=Math.ceil(maxR*1.35/10)*10;
+  return new Chart(el,{
+    type:'bar',
+    data:{labels,datasets:[
+      {type:'bar',  label:barLabel, data:barData, backgroundColor:colorBar, borderColor:color, borderWidth:1, borderRadius:2, yAxisID:'yR', order:3},
+      {type:'line', label:'Hook Rate (%)', data:src.hook, borderColor:color, backgroundColor:'transparent', borderWidth:2, pointRadius:key==='ayer'?6:2, tension:0.35, spanGaps:true, yAxisID:'yL', order:1},
+      {type:'line', label:'% V50/Impr.',  data:src.v50p, borderColor:colorV50, backgroundColor:'transparent', borderWidth:2, pointRadius:key==='ayer'?6:2, tension:0.35, spanGaps:true, borderDash:[5,3], yAxisID:'yL', order:2}
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:true,position:'bottom',labels:{color:'#73726c',font:{size:9},boxWidth:10,padding:8}},
+        tooltip:{callbacks:{label:ctx=>ctx.dataset.yAxisID==='yR'?`  ${ctx.dataset.label}: ${(ctx.parsed.y||0).toLocaleString('es-CL')}`:` ${ctx.dataset.label}: ${ctx.parsed.y!==null?ctx.parsed.y.toFixed(1)+'%':'—'}`}}
+      },
+      scales:{
+        x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#73726c',font:{size:9},maxTicksLimit:key==='ayer'?1:12,autoSkip:true,maxRotation:45}},
+        yL:{position:'left',grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#73726c',font:{size:9},callback:v=>v+'%'},min:0,max:60,title:{display:true,text:'%',color:'#73726c',font:{size:9}}},
+        yR:{position:'right',grid:{display:false},ticks:{color:'#aaa9a3',font:{size:9},callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v},min:0,max:yRMax,title:{display:true,text:'',color:'#aaa9a3',font:{size:9}}}
+      }
+    }
+  });
+}
+
+function renderVchLM(key){
+  if(vchLM1){vchLM1.destroy();vchLM1=null;}
+  if(vchLM2){vchLM2.destroy();vchLM2=null;}
+  if(vchLM3){vchLM3.destroy();vchLM3=null;}
+  const pd=VCH_DATA[key];
+  vchLM1=buildVchChart('vch-lm1',pd.labels,pd.ft,'#378ADD','#7fb8ee','rgba(55,138,221,0.3)',key,true);
+  vchLM2=buildVchChart('vch-lm2',pd.labels,pd.uf,'#639922','#96c45a','rgba(99,153,34,0.3)',key,true);
+  vchLM3=buildVchChart('vch-lm3',pd.labels,pd.cs,'#8B44B8','#b97dd4','rgba(139,68,184,0.3)',key,true);
+}
+
+
+
+function renderVch(key){
+  if(vchFT){vchFT.destroy();vchFT=null;}
+  if(vchUF){vchUF.destroy();vchUF=null;}
+  if(vchCS){vchCS.destroy();vchCS=null;}
+  const pd=ENG_DATA[key];
+  vchFT=buildVchChart('vch-ft',pd.labels,pd.ft,'#378ADD','#7fb8ee','rgba(55,138,221,0.3)',key,false);
+  vchUF=buildVchChart('vch-uf',pd.labels,pd.uf,'#639922','#96c45a','rgba(99,153,34,0.3)',key,false);
+  vchCS=buildVchChart('vch-cs',pd.labels,pd.cs,'#8B44B8','#b97dd4','rgba(139,68,184,0.3)',key,false);
+}
+
+
+let cplLM1=null,cplLM2=null,cplLM3=null;
+
+function buildCplChart(canvasId,labels,spendArr,leadsArr,color,key){
+  const el=document.getElementById(canvasId);
+  if(!el) return null;
+  const cplArr=spendArr.map((s,i)=>leadsArr[i]>0?parseFloat((s/leadsArr[i]).toFixed(2)):null);
+  return new Chart(el,{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Inversión (USD)',data:spendArr.map(v=>v>0?parseFloat(v.toFixed(2)):null),
+       borderColor:color,backgroundColor:'transparent',borderWidth:2,
+       pointRadius:key==='ayer'?6:2,tension:0.3,spanGaps:true,yAxisID:'yS',order:1},
+      {label:'CPL (USD)',data:cplArr,
+       borderColor:color+'99',backgroundColor:'transparent',borderWidth:2,
+       pointRadius:key==='ayer'?6:2,tension:0.3,spanGaps:true,borderDash:[5,3],yAxisID:'yC',order:2}
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:true,position:'bottom',labels:{color:'#73726c',font:{size:9},boxWidth:10,padding:8}},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: $${ctx.parsed.y!==null?ctx.parsed.y.toFixed(2):'—'}`}}
+      },
+      scales:{
+        x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#73726c',font:{size:9},maxTicksLimit:key==='ayer'?1:12,autoSkip:true,maxRotation:45}},
+        yS:{position:'left',grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#73726c',font:{size:9},callback:v=>'$'+v.toFixed(0)},title:{display:true,text:'Inversión USD',color:'#73726c',font:{size:9}},min:0},
+        yC:{position:'right',grid:{display:false},ticks:{color:'#aaa9a3',font:{size:9},callback:v=>'$'+v.toFixed(0)},title:{display:true,text:'CPL USD',color:'#aaa9a3',font:{size:9}},min:0,suggestedMax:15}
+      }
+    }
+  });
+}
+
+function renderCPL(key){
+  if(cplLM1){cplLM1.destroy();cplLM1=null;}
+  if(cplLM2){cplLM2.destroy();cplLM2=null;}
+  if(cplLM3){cplLM3.destroy();cplLM3=null;}
+  const d=PERIODOS[key];
+  const ctEl=document.getElementById('ct-cpl');
+  if(ctEl) ctEl.childNodes[0].textContent=`Inversión diaria + CPL · Por Buyer Persona · ${d.label} `;
+  cplLM1=buildCplChart('cpl-lm1',d.dailyLabels,d.dailyS1,d.dailyL1,'#378ADD',key);
+  cplLM2=buildCplChart('cpl-lm2',d.dailyLabels,d.dailyS2,d.dailyL2,'#639922',key);
+  cplLM3=buildCplChart('cpl-lm3',d.dailyLabels,d.dailyS3,d.dailyL3,'#8B44B8',key);
+}
+
+
+// ── DATOS ORGÁNICO KPIs + FUNNELS POR PERÍODO ────────────────────────────────
+const ORG_PERIODOS = {
+  '28d': {
+    spend:397.77,
+    v50_ft:3243, v50_uf:2258, v50_cs:1600,
+    costo_v50:0.056, hook_rate:19.5,
+    funnels:[
+      {buyer:'Familia Transición', cls:'c1', color:'#378ADD',
+       i:69039, v3:14317, hr:20.7, v50:3243, v50p:4.70},
+      {buyer:'Upgrader Familiar',  cls:'c2', color:'#639922',
+       i:50527, v3:12613, hr:25.0, v50:2258, v50p:4.47},
+      {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8',
+       i:62362, v3:8564, hr:13.7, v50:1600, v50p:2.57},
+    ]
+  },
+  '14d': {
+    spend:231.53,
+    v50_ft:2452, v50_uf:1530, v50_cs:1185,
+    costo_v50:0.045, hook_rate:18.7,
+    funnels:[
+      {buyer:'Familia Transición', cls:'c1', color:'#378ADD',
+       i:47445, v3:9826, hr:20.7, v50:2452, v50p:5.17},
+      {buyer:'Upgrader Familiar',  cls:'c2', color:'#639922',
+       i:36609, v3:8245, hr:22.5, v50:1530, v50p:4.18},
+      {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8',
+       i:46336, v3:6293, hr:13.6, v50:1185,  v50p:2.56},
+    ]
+  },
+  'ayer': {
+    spend:31.93,
+    v50_ft:401, v50_uf:120, v50_cs:102,
+    costo_v50:0.051, hook_rate:16.2,
+    funnels:[
+      {buyer:'Familia Transición', cls:'c1', color:'#378ADD',
+       i:4921, v3:1478, hr:30.0, v50:401, v50p:8.15},
+      {buyer:'Upgrader Familiar',  cls:'c2', color:'#639922',
+       i:7075, v3:764, hr:10.8, v50:120, v50p:1.70},
+      {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8',
+       i:6151, v3:706,  hr:11.5, v50:102, v50p:1.66},
+    ]
+  },
+};
+
+function renderOrgKPIs(key){
+  const d=ORG_PERIODOS[key];
+  document.getElementById('kstrip-org').innerHTML=`
+    <div class="k"><div class="kl">Inversión Orgánico</div><div class="kv">$${d.spend.toFixed(2)}</div><div class="ks2">USD total</div></div>
+    <div class="k"><div class="kl">V50 · Fam. Transición</div><div class="kv" style="color:var(--blue)">${d.v50_ft.toLocaleString('es-CL')}</div><div class="ks2">personas &gt;50% video</div></div>
+    <div class="k"><div class="kl">V50 · Upgrader Fam.</div><div class="kv" style="color:var(--green)">${d.v50_uf.toLocaleString('es-CL')}</div><div class="ks2">personas &gt;50% video</div></div>
+    <div class="k"><div class="kl">V50 · Consol. Silenc.</div><div class="kv" style="color:var(--purple)">${d.v50_cs.toLocaleString('es-CL')}</div><div class="ks2">personas &gt;50% video</div></div>
+    <div class="k"><div class="kl">Costo / V50</div><div class="kv">$${d.costo_v50.toFixed(3)}</div><div class="ks2">promedio 3 buyers</div></div>
+    <div class="k"><div class="kl">Hook Rate</div><div class="kv">${d.hook_rate.toFixed(1)}%</div><div class="ks2">ponderado 3 buyers</div></div>`;
+}
+
+function renderOrgFunnels(key){
+  const C=document.getElementById('org-funnels-container');
+  if(!C) return;
+  C.innerHTML='';
+  const d=ORG_PERIODOS[key];
+  const VW=200, VH=196;
+  // 3 niveles: Impresiones | 3s + HR | V50 + %V50
+  d.funnels.forEach(f=>{
+    const wrap=document.createElement('div');wrap.className='funnel-wrap';
+    const tit=document.createElement('div');tit.className='funnel-title';
+    tit.innerHTML=`<span class="chip ${f.cls}">${f.buyer}</span>`;
+    wrap.appendChild(tit);
+    const r=parseInt(f.color.slice(1,3),16),g=parseInt(f.color.slice(3,5),16),b=parseInt(f.color.slice(5,7),16);
+    const levels=[
+      {val:fmt(f.i),   sub:null,           label:'Impresiones',   w:1.00, opacity:1.0},
+      {val:fmt(f.v3),  sub:f.hr.toFixed(1)+'% HR',   label:'3 seg. Hook',   w:0.76, opacity:0.75},
+      {val:fmt(f.v50), sub:f.v50p.toFixed(2)+'% V50', label:'Video >50%',    w:0.52, opacity:0.55},
+    ];
+    const rowH=56, rowGap=4, n=3;
+    let svg='';
+    levels.forEach((lvl,i)=>{
+      const tw=VW*lvl.w, bw=i<n-1?VW*levels[i+1].w:VW*0.42;
+      const tx=(VW-tw)/2, bx=(VW-bw)/2;
+      const y=i*(rowH+rowGap);
+      const fill=`rgba(${r},${g},${b},${lvl.opacity})`;
+      svg+=`<polygon points="${tx.toFixed(1)},${y} ${(tx+tw).toFixed(1)},${y} ${(bx+bw).toFixed(1)},${y+rowH} ${bx.toFixed(1)},${y+rowH}" fill="${fill}"/>`;
+      // Label línea 1
+      svg+=`<text x="${(VW/2).toFixed(1)}" y="${(y+rowH/2-10).toFixed(1)}" text-anchor="middle" font-size="9" fill="white" font-weight="500" font-family="-apple-system,sans-serif" opacity=".8">${lvl.label}</text>`;
+      // Valor principal
+      svg+=`<text x="${(VW/2).toFixed(1)}" y="${(y+rowH/2+5).toFixed(1)}" text-anchor="middle" font-size="13" fill="white" font-weight="700" font-family="-apple-system,sans-serif">${lvl.val}</text>`;
+      // Sub (HR o %V50)
+      if(lvl.sub) svg+=`<text x="${(VW/2).toFixed(1)}" y="${(y+rowH/2+18).toFixed(1)}" text-anchor="middle" font-size="9" fill="white" font-weight="500" font-family="-apple-system,sans-serif" opacity=".85">${lvl.sub}</text>`;
+    });
+    wrap.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${VW} ${VH}" width="100%" preserveAspectRatio="xMidYMid meet" class="funnel-svg">${svg}</svg>`);
+    C.appendChild(wrap);
+  });
+}
+
+
+// ── DATOS DIARIOS ORGÁNICO POR BUYER (Spend + V50) ───────────────────────────
+// Spend por día: FT = Rell1-adm + Rell4-FT + Rell1-btn + DC(desde 16/jun)
+// UF = Rell2-adm + Rell5-UF + Rell2-btn + DC(desde 16/jun)
+// CS = Rell3-CS + Rell6-CS + DC(desde 16/jun)
+// null = sin gasto ese día | 29 puntos: 26/may – 23/jun
+const ORG_FT_S=[null,null,null,null,null,null,null,null,null,null,4.08,3.99,4.59,4.32,5.49,5.96,6.21,5.90,6.33,8.75,7.82,7.33,5.27,6.21,5.77,7.34,7.83,17.49,12.17,null,7.77,8.15,8.13,10.34];
+const ORG_UF_S=[null,null,null,null,null,null,null,null,null,null,4.00,4.09,4.86,4.22,5.98,5.25,4.07,5.24,4.84,8.97,8.27,6.56,5.24,7.50,6.21,7.28,7.62,16.62,9.85,null,9.40,9.32,9.49,10.45];
+const ORG_CS_S=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.41,1.96,1.80,1.81,1.85,4.62,2.06,2.77,3.47,3.46,4.30,3.75,4.42,9.39,10.05,null,9.48,10.00,8.87,11.14];
+
+// V50 absoluto diario por buyer (de los arrays ENG_FT/UF/CS_V50R ya definidos)
+// Los mismos arrays que usan los gráficos de video orgánico
+
+let orgSpendFT=null,orgSpendUF=null,orgSpendCS=null;
+
+function buildOrgSpendChart(canvasId,labels,spendArr,v50Arr,color,key){
+  const el=document.getElementById(canvasId);
+  if(!el) return null;
+  // Costo/V50 diario = spend[i]/v50[i] cuando v50>0
+  const cv50Arr=spendArr.map((s,i)=>{
+    const v=v50Arr[i];
+    return (s!=null&&v&&v>0)?parseFloat((s/v).toFixed(3)):null;
+  });
+  const spendClean=spendArr.map(v=>v!=null?parseFloat(v.toFixed(2)):null);
+  return new Chart(el,{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Inversión (USD)',data:spendClean,
+       borderColor:color,backgroundColor:'transparent',borderWidth:2,
+       pointRadius:key==='ayer'?6:2,tension:0.3,spanGaps:true,yAxisID:'yS'},
+      {label:'Costo/V50 (USD)',data:cv50Arr,
+       borderColor:color+'99',backgroundColor:'transparent',borderWidth:2,
+       pointRadius:key==='ayer'?6:2,tension:0.3,spanGaps:true,borderDash:[5,3],yAxisID:'yC'}
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:true,position:'bottom',labels:{color:'#73726c',font:{size:9},boxWidth:10,padding:8}},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y!=null?'$'+ctx.parsed.y.toFixed(ctx.dataset.yAxisID==='yS'?2:3):'—'}`}}
+      },
+      scales:{
+        x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#73726c',font:{size:9},maxTicksLimit:key==='ayer'?1:12,autoSkip:true,maxRotation:45}},
+        yS:{position:'left',grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#73726c',font:{size:9},callback:v=>'$'+v.toFixed(0)},title:{display:true,text:'Inversión USD',color:'#73726c',font:{size:9}},min:0},
+        yC:{position:'right',grid:{display:false},ticks:{color:'#aaa9a3',font:{size:9},callback:v=>'$'+v.toFixed(2)},title:{display:true,text:'Costo/V50',color:'#aaa9a3',font:{size:9}},min:0}
+      }
+    }
+  });
+}
+
+function renderOrgSpend(key){
+  if(orgSpendFT){orgSpendFT.destroy();orgSpendFT=null;}
+  if(orgSpendUF){orgSpendUF.destroy();orgSpendUF=null;}
+  if(orgSpendCS){orgSpendCS.destroy();orgSpendCS=null;}
+  let labels,sFT,sUF,sCS,vFT,vUF,vCS;
+  if(key==='28d'){
+    labels=LABELS28; sFT=ORG_FT_S; sUF=ORG_UF_S; sCS=ORG_CS_S;
+    vFT=ENG_FT_V50R; vUF=ENG_UF_V50R; vCS=ENG_CS_V50R;
+  } else if(key==='14d'){
+    labels=LABELS28.slice(IDX14); sFT=ORG_FT_S.slice(IDX14); sUF=ORG_UF_S.slice(IDX14); sCS=ORG_CS_S.slice(IDX14);
+    vFT=ENG_FT_V50R.slice(IDX14); vUF=ENG_UF_V50R.slice(IDX14); vCS=ENG_CS_V50R.slice(IDX14);
+  } else {
+    labels=['28/06']; sFT=[10.34]; sUF=[10.45]; sCS=[11.14];
+    vFT=[401]; vUF=[120]; vCS=[102];
+  }
+  const ctEl=document.getElementById('ct-org-spend');
+  if(ctEl) ctEl.childNodes[0].textContent=`Inversión diaria + Costo/V50 · Por Buyer Persona · ${PERIODOS[key]?.label||key} `;
+  orgSpendFT=buildOrgSpendChart('org-spend-ft',labels,sFT,vFT,'#378ADD',key);
+  orgSpendUF=buildOrgSpendChart('org-spend-uf',labels,sUF,vUF,'#639922',key);
+  orgSpendCS=buildOrgSpendChart('org-spend-cs',labels,sCS,vCS,'#8B44B8',key);
+}
+
+setView('28d');
+</script>
+</body>
+</html>
