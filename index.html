@@ -418,8 +418,8 @@ function renderKPIs(d){
     <div class="k"><div class="kl">Inversión LMs</div><div class="kv">$${ts.toFixed(2)}</div><div class="ks2">USD total</div></div>
     <div class="k"><div class="kl">Leads Meta</div><div class="kv">${tl}</div><div class="ks2">LM1+LM2+LM3</div></div>
     <div class="k"><div class="kl">CPL Promedio</div><div class="kv">$${cpl.toFixed(2)}</div><div class="ks2">USD · Meta</div></div>
-    <div class="k"><div class="kl">Leads GHL</div><div class="kv">${tg}</div><div class="ks2">por tag + dateAdded</div></div>
-    <div class="k"><div class="kl">Gap Meta/GHL</div><div class="kv"><span style="color:${gapPct>=50?'var(--danger)':gap===0?'var(--success)':'var(--text)'}">${gap} (${gapPct}%)</span></div><div class="ks2">sin llegar a CRM</div></div>
+    <div class="k"><div class="kl">Leads GHL</div><div class="kv">${anyNullGhl?'<span class="gap-warn">—</span>':tg}</div><div class="ks2">${anyNullGhl?'sin confirmar (pipeline transitorio)':'por tag + dateAdded'}</div></div>
+    <div class="k"><div class="kl">Gap Meta/GHL</div><div class="kv">${anyNullGhl?'<span class="gap-warn">—</span>':`<span style="color:${gapPct>=50?'var(--danger)':gap===0?'var(--success)':'var(--text)'}">${gap} (${gapPct}%)</span>`}</div><div class="ks2">sin llegar a CRM</div></div>
     <div class="k"><div class="kl">Hook Rate</div><div class="kv">${hook.toFixed(1)}%</div><div class="ks2">3s / impresiones</div></div>`;
 }
 
