@@ -223,8 +223,9 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
   <div class="ct" id="ct-vtas">Rendimiento por Buyer Persona</div>
   <table><thead><tr>
     <th style="text-align:left">Campaña</th>
-    <th>Impr.</th><th>Alcance</th><th>Clicks</th><th>CTR</th><th>CPM</th><th>CPC</th>
-    <th>V50</th><th>Hook Rate</th><th>%V50/Alc</th><th>Costo/V50</th><th>Inversión</th>
+    <th>Impresiones</th><th>Alcance</th><th>Clicks</th><th>CTR</th><th>CPM</th>
+    <th>Hook Rate</th><th>%V50/Alc</th><th>Conv. Mensajes<br>(META)</th><th>Conv. Oport.<br>(GHL)</th>
+    <th>Costo/Mensaje</th><th>Costo/Contacto</th>
   </tr></thead><tbody id="t-vtas"></tbody></table>
   <div class="ins" id="ins-vtas"></div>
 
@@ -445,7 +446,7 @@ const VTAS_CS_S   =[null,null,null,null,null,null,null,null,null,null,null,null,
 // idéntica en 28d/14d/ayer porque toda su historia cabe dentro de esas 3 ventanas.
 const VTAS_AYER=[
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
-    {name:'CASA-PAULA',status:'ACTIVE',impr:916,reach:599,clicks:32,spend:5.91,v50:68,v3s:309,msgs:1},
+    {name:'CASA-PAULA',status:'ACTIVE',impr:916,reach:599,clicks:32,spend:5.91,v50:68,v3s:309,msgs:1,ghlOpps:0},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[]},
@@ -497,38 +498,42 @@ function renderVtasKPIs(key){
 function renderVtasTable(key){
   const vtasData = key==='ayer'?VTAS_AYER:key==='14d'?VTAS_14D:VTAS_28D;
   const tb=document.getElementById('t-vtas');tb.innerHTML='';
-  let gI=0,gR=0,gC=0,gS=0,gV=0,gV3=0,nCamps=0;
+  let gI=0,gR=0,gC=0,gS=0,gV=0,gV3=0,gMsg=0,gGhl=0,nCamps=0;
   vtasData.forEach(g=>{
     const sI=g.camps.reduce((a,c)=>a+c.impr,0),sR=g.camps.reduce((a,c)=>a+c.reach,0),
           sC=g.camps.reduce((a,c)=>a+c.clicks,0),sS=g.camps.reduce((a,c)=>a+c.spend,0),
-          sV=g.camps.reduce((a,c)=>a+c.v50,0), sV3=g.camps.reduce((a,c)=>a+c.v3s,0);
-    gI+=sI;gR+=sR;gC+=sC;gS+=sS;gV+=sV;gV3+=sV3;nCamps+=g.camps.length;
-    const sPct=sI>0?sV/sI*100:0,sCV=sV>0?sS/sV:0,sHR=sI>0?sV3/sI*100:0;
-    tb.insertAdjacentHTML('beforeend',`<tr class="grp"><td colspan="12"><span class="chip ${g.cls}">${g.buyer}</span>&nbsp;<span style="font-weight:500;font-size:10px;color:var(--text2)">${g.camps.length} camps · Alcance: ${fmt(sR)} · ${fmt(sV)} V50 · ${sPct.toFixed(1)}%</span></td></tr>`);
+          sV=g.camps.reduce((a,c)=>a+c.v50,0), sV3=g.camps.reduce((a,c)=>a+c.v3s,0),
+          sMsg=g.camps.reduce((a,c)=>a+(c.msgs||0),0), sGhl=g.camps.reduce((a,c)=>a+(c.ghlOpps||0),0);
+    gI+=sI;gR+=sR;gC+=sC;gS+=sS;gV+=sV;gV3+=sV3;gMsg+=sMsg;gGhl+=sGhl;nCamps+=g.camps.length;
+    const sPct=sI>0?sV/sI*100:0,sHR=sI>0?sV3/sI*100:0;
+    const sCostoMsg=sMsg>0?sS/sMsg:null, sCostoContacto=sGhl>0?sS/sGhl:null;
+    tb.insertAdjacentHTML('beforeend',`<tr class="grp"><td colspan="12"><span class="chip ${g.cls}">${g.buyer}</span>&nbsp;<span style="font-weight:500;font-size:10px;color:var(--text2)">${g.camps.length} camps · Alcance: ${fmt(sR)} · ${sMsg} mensaje${sMsg===1?'':'s'} · ${sGhl} oport. GHL</span></td></tr>`);
     if(g.camps.length===0){
       tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td colspan="12" style="font-style:italic;font-weight:500;color:var(--text2)">Sin campañas de contenido de ventas activas todavía para este buyer.</td></tr>`);
       return;
     }
     g.camps.forEach(c=>{
-      const cv50=c.v50>0?c.spend/c.v50:0,pctV=c.impr>0?c.v50/c.impr*100:0,hr=c.impr>0?c.v3s/c.impr*100:0;
+      const ctr=c.impr>0?c.clicks/c.impr*100:0, cpm=c.impr>0?c.spend/c.impr*1000:0,
+            hr=c.impr>0?c.v3s/c.impr*100:0, pctV=c.impr>0?c.v50/c.impr*100:0,
+            msgs=c.msgs||0, ghl=c.ghlOpps||0,
+            costoMsg=msgs>0?c.spend/msgs:null, costoContacto=ghl>0?c.spend/ghl:null;
       tb.insertAdjacentHTML('beforeend',`<tr>
         <td>${c.name} <span class="chip act">${c.status==='ACTIVE'?'Activa':'Pausada'}</span></td>
         <td>${fmt(c.impr)}</td><td>${fmt(c.reach)}</td><td>${fmt(c.clicks)}</td>
-        <td>${(c.impr>0?c.clicks/c.impr*100:0).toFixed(2)}%</td><td>$${(c.impr>0?c.spend/c.impr*1000:0).toFixed(2)}</td><td>$${(c.clicks>0?c.spend/c.clicks:0).toFixed(2)}</td>
-        <td>${fmt(c.v50)}</td><td>${hr.toFixed(1)}%</td><td>${pctV.toFixed(1)}%</td>
-        <td>${cv50>0?'$'+cv50.toFixed(3):'—'}</td>
-        <td>$${c.spend.toFixed(2)}</td></tr>`);
+        <td>${ctr.toFixed(2)}%</td><td>$${cpm.toFixed(2)}</td>
+        <td>${hr.toFixed(1)}%</td><td>${pctV.toFixed(1)}%</td>
+        <td>${msgs}</td><td>${ghl}</td>
+        <td>${costoMsg!=null?'$'+costoMsg.toFixed(2):'—'}</td>
+        <td>${costoContacto!=null?'$'+costoContacto.toFixed(2):'—'}</td></tr>`);
     });
-    tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td>Subtotal ${g.buyer}</td><td>${fmt(sI)}</td><td>${fmt(sR)}</td><td>${fmt(sC)}</td><td>${(sI>0?sC/sI*100:0).toFixed(2)}%</td><td>$${(sI>0?sS/sI*1000:0).toFixed(2)}</td><td>$${(sC>0?sS/sC:0).toFixed(2)}</td><td>${fmt(sV)}</td><td>${sHR.toFixed(1)}%</td><td>${sPct.toFixed(1)}%</td><td>${sCV>0?'$'+sCV.toFixed(3):'—'}</td><td>$${sS.toFixed(2)}</td></tr>`);
+    tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td>Subtotal ${g.buyer}</td><td>${fmt(sI)}</td><td>${fmt(sR)}</td><td>${fmt(sC)}</td><td>${(sI>0?sC/sI*100:0).toFixed(2)}%</td><td>$${(sI>0?sS/sI*1000:0).toFixed(2)}</td><td>${sHR.toFixed(1)}%</td><td>${sPct.toFixed(1)}%</td><td>${sMsg}</td><td>${sGhl}</td><td>${sCostoMsg!=null?'$'+sCostoMsg.toFixed(2):'—'}</td><td>${sCostoContacto!=null?'$'+sCostoContacto.toFixed(2):'—'}</td></tr>`);
   });
-  const gPct=gI>0?gV/gI*100:0,gCV=gV>0?gS/gV:0,gHR=gI>0?gV3/gI*100:0;
-  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL (${nCamps} camp${nCamps===1?'':'s'})</td><td>${fmt(gI)}</td><td>${fmt(gR)}</td><td>${fmt(gC)}</td><td>${(gI>0?gC/gI*100:0).toFixed(2)}%</td><td>$${(gI>0?gS/gI*1000:0).toFixed(2)}</td><td>$${(gC>0?gS/gC:0).toFixed(2)}</td><td>${fmt(gV)}</td><td>${gHR.toFixed(1)}%</td><td>${gPct.toFixed(1)}%</td><td>${gCV>0?'$'+gCV.toFixed(3):'—'}</td><td>$${gS.toFixed(2)}</td></tr>`);
-  const ftGroup=vtasData[0];
-  const ftMsgs=ftGroup.camps.reduce((a,c)=>a+(c.msgs||0),0);
-  const ftSpend=ftGroup.camps.reduce((a,c)=>a+c.spend,0);
+  const gPct=gI>0?gV/gI*100:0,gHR=gI>0?gV3/gI*100:0;
+  const gCostoMsg=gMsg>0?gS/gMsg:null, gCostoContacto=gGhl>0?gS/gGhl:null;
+  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL (${nCamps} camp${nCamps===1?'':'s'})</td><td>${fmt(gI)}</td><td>${fmt(gR)}</td><td>${fmt(gC)}</td><td>${(gI>0?gC/gI*100:0).toFixed(2)}%</td><td>$${(gI>0?gS/gI*1000:0).toFixed(2)}</td><td>${gHR.toFixed(1)}%</td><td>${gPct.toFixed(1)}%</td><td>${gMsg}</td><td>${gGhl}</td><td>${gCostoMsg!=null?'$'+gCostoMsg.toFixed(2):'—'}</td><td>${gCostoContacto!=null?'$'+gCostoContacto.toFixed(2):'—'}</td></tr>`);
   const activeBuyers=vtasData.filter(g=>g.camps.length>0).map(g=>g.buyer);
   const emptyBuyers=vtasData.filter(g=>g.camps.length===0).map(g=>g.buyer);
-  document.getElementById('ins-vtas').innerHTML = `${activeBuyers.length?`<strong>${activeBuyers.join(', ')}</strong> con contenido de ventas activo.`:'Sin campañas de contenido de ventas activas en este período.'}${ftMsgs>0?` <strong>${ftMsgs} mensaje${ftMsgs===1?'':'s'}</strong> a $${(ftSpend/ftMsgs).toFixed(2)} USD c/u.`:''}${emptyBuyers.length?` ${emptyBuyers.join(' y ')} todavía sin campaña TOUR — el bloque queda listo para sumarlas apenas se activen.`:''} Los gráficos de tendencia diaria se muestran recién cuando un buyer acumula ${VTAS_MIN_DAYS_TREND}+ días de datos.`;
+  document.getElementById('ins-vtas').innerHTML = `${activeBuyers.length?`<strong>${activeBuyers.join(', ')}</strong> con contenido de ventas activo.`:'Sin campañas de contenido de ventas activas en este período.'}${gMsg>0?` <strong>${gMsg} mensaje${gMsg===1?'':'s'}</strong> a $${gCostoMsg.toFixed(2)} USD c/u.`:''}${gGhl===0?` Conv. Oport. (GHL) en 0 — no se detectaron oportunidades con Fuente "META-TOUR" en Compradores/Arrendatarios todavía (campaña recién arrancó); Costo/Contacto no calculable hasta que exista al menos 1.`:` <strong>${gGhl} oportunidad${gGhl===1?'':'es'}</strong> GHL a $${gCostoContacto.toFixed(2)} USD c/u.`}${emptyBuyers.length?` ${emptyBuyers.join(' y ')} todavía sin campaña TOUR.`:''} Tendencias diarias se muestran al acumular ${VTAS_MIN_DAYS_TREND}+ días de historia.`;
 }
 
 function renderVtasFunnels(key){
