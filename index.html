@@ -214,6 +214,70 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
 </div>
 </div>
 
+<div class="section-block">
+  <div class="section-title">CONTENIDO DE VENTAS</div>
+  <div class="section-sub">Objetivo: Conversaciones de venta (Mensajes) · Campañas identificadas por "TOUR" + Buyer Persona en el nombre</div>
+
+  <div class="ks" id="ks-ventas" style="margin-bottom:20px"></div>
+
+  <div class="ct" id="ct-vtas">Rendimiento por Buyer Persona</div>
+  <table><thead><tr>
+    <th style="text-align:left">Campaña</th>
+    <th>Impr.</th><th>Alcance</th><th>Clicks</th><th>CTR</th><th>CPM</th><th>CPC</th>
+    <th>V50</th><th>Hook Rate</th><th>%V50/Alc</th><th>Costo/V50</th><th>Inversión</th>
+  </tr></thead><tbody id="t-vtas"></tbody></table>
+  <div class="ins" id="ins-vtas"></div>
+
+  <div class="inner-sep"></div>
+
+  <div class="ct" id="ct-vtas-funnels">Embudo de video · Por Buyer Persona</div>
+  <div class="funnels-grid" id="vtas-funnels-container"></div>
+
+  <div class="inner-sep"></div>
+
+  <div class="ct" id="ct-vtas-perf">Video performance diaria · Hook Rate + % V50 + Mensajes</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#0C447C;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">Familia Transición</div>
+      <div style="position:relative;height:180px" id="vtas-perf-ft-wrap"><canvas id="vtas-perf-ft"></canvas></div>
+    </div>
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#27500A;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">Upgrader Familiar</div>
+      <div style="position:relative;height:180px" id="vtas-perf-uf-wrap"><canvas id="vtas-perf-uf"></canvas></div>
+    </div>
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#4A1272;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">Consolidado Silencioso</div>
+      <div style="position:relative;height:180px" id="vtas-perf-cs-wrap"><canvas id="vtas-perf-cs"></canvas></div>
+    </div>
+
+  </div>
+
+  <div class="inner-sep"></div>
+
+  <div class="ct" id="ct-vtas-cost">Inversión diaria + Costo/Mensaje · Por Buyer Persona</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#0C447C;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">Familia Transición</div>
+      <div style="position:relative;height:180px" id="vtas-cost-ft-wrap"><canvas id="vtas-cost-ft"></canvas></div>
+    </div>
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#27500A;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">Upgrader Familiar</div>
+      <div style="position:relative;height:180px" id="vtas-cost-uf-wrap"><canvas id="vtas-cost-uf"></canvas></div>
+    </div>
+
+    <div style="background:var(--bg2);border-radius:8px;padding:14px 10px;border:1px solid var(--border)">
+      <div style="font-size:10.5px;font-weight:700;color:#4A1272;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center">Consolidado Silencioso</div>
+      <div style="position:relative;height:180px" id="vtas-cost-cs-wrap"><canvas id="vtas-cost-cs"></canvas></div>
+    </div>
+
+  </div>
+</div>
+
 <div class="card">
   <div class="ct" id="ct-ghl">Pipeline Compradores · GHL</div>
   <div class="leg" id="leg-ghl"></div>
@@ -352,6 +416,251 @@ const ENG=[
   ]},
 ];
 
+// ── CONTENIDO DE VENTAS ──────────────────────────────────────────────────────
+// Campañas identificadas por "TOUR" + Buyer Persona en el nombre. Objetivo Meta:
+// conversaciones de venta (Mensajes) — se usa el campo `results`/`cost_per_result`
+// de Meta (resuelve al optimization_goal real de la campaña, hoy "Messaging
+// conversations started"), nunca un campo inventado.
+// Arrays diarios alineados con LABELS28 (mismo largo, mismo criterio de relleno:
+// null en tasas/spend sin actividad, 0 en conteos). Hoy solo existe 1 campaña
+// TOUR activa (Familia Transición, CASA-PAULA, arrancó 01/jul sin impresiones,
+// datos reales desde 02/jul) — Upgrader Familiar y Consolidado Silencioso
+// quedan en 0 hasta que tengan su propia campaña TOUR.
+const VTAS_FT_HOOK=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,33.7];
+const VTAS_FT_V50P=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,7.42];
+const VTAS_FT_MSG =[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1];
+const VTAS_FT_S   =[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,5.91];
+
+const VTAS_UF_HOOK=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+const VTAS_UF_V50P=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+const VTAS_UF_MSG =[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+const VTAS_UF_S   =[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+
+const VTAS_CS_HOOK=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+const VTAS_CS_V50P=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+const VTAS_CS_MSG =[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+const VTAS_CS_S   =[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+
+// Tabla por período (mismas columnas que Contenido Orgánico) — 1 campaña real hoy,
+// idéntica en 28d/14d/ayer porque toda su historia cabe dentro de esas 3 ventanas.
+const VTAS_AYER=[
+  {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
+    {name:'CASA-PAULA',status:'ACTIVE',impr:916,reach:599,clicks:32,spend:5.91,v50:68,v3s:309,msgs:1},
+  ]},
+  {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[]},
+  {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[]},
+];
+const VTAS_14D=VTAS_AYER;
+const VTAS_28D=VTAS_AYER;
+
+// KPIs + funnels por período (mismo patrón que ORG_PERIODOS)
+const VTAS_PERIODOS = {
+  '28d': {
+    spend:5.91, msgs_ft:1, msgs_uf:0, msgs_cs:0, costo_msg:5.91, hook_rate:33.7,
+    funnels:[
+      {buyer:'Familia Transición', cls:'c1', color:'#378ADD', i:916, v3:309, hr:33.73, v50:68, v50p:7.42},
+      {buyer:'Upgrader Familiar',  cls:'c2', color:'#639922', i:0, v3:0, hr:0, v50:0, v50p:0},
+      {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8', i:0, v3:0, hr:0, v50:0, v50p:0},
+    ]
+  },
+  '14d': {
+    spend:5.91, msgs_ft:1, msgs_uf:0, msgs_cs:0, costo_msg:5.91, hook_rate:33.7,
+    funnels:[
+      {buyer:'Familia Transición', cls:'c1', color:'#378ADD', i:916, v3:309, hr:33.73, v50:68, v50p:7.42},
+      {buyer:'Upgrader Familiar',  cls:'c2', color:'#639922', i:0, v3:0, hr:0, v50:0, v50p:0},
+      {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8', i:0, v3:0, hr:0, v50:0, v50p:0},
+    ]
+  },
+  'ayer': {
+    spend:5.91, msgs_ft:1, msgs_uf:0, msgs_cs:0, costo_msg:5.91, hook_rate:33.7,
+    funnels:[
+      {buyer:'Familia Transición', cls:'c1', color:'#378ADD', i:916, v3:309, hr:33.73, v50:68, v50p:7.42},
+      {buyer:'Upgrader Familiar',  cls:'c2', color:'#639922', i:0, v3:0, hr:0, v50:0, v50p:0},
+      {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8', i:0, v3:0, hr:0, v50:0, v50p:0},
+    ]
+  },
+};
+
+const VTAS_MIN_DAYS_TREND = 3; // umbral confirmado por Gianfranco: ocultar gráfico de tendencia hasta tener >=3 días de historia real
+
+function renderVtasKPIs(key){
+  const d=VTAS_PERIODOS[key];
+  document.getElementById('ks-ventas').innerHTML = `
+    <div class="k"><div class="kl">Inversión Ventas</div><div class="kv">$${d.spend.toFixed(2)}</div><div class="ks2">USD total</div></div>
+    <div class="k"><div class="kl">Mensajes · Fam. Transición</div><div class="kv" style="color:var(--blue)">${d.msgs_ft}</div><div class="ks2">conversaciones iniciadas</div></div>
+    <div class="k"><div class="kl">Mensajes · Upgrader Fam.</div><div class="kv" style="color:var(--green)">${d.msgs_uf}</div><div class="ks2">conversaciones iniciadas</div></div>
+    <div class="k"><div class="kl">Mensajes · Consol. Silenc.</div><div class="kv" style="color:var(--purple)">${d.msgs_cs}</div><div class="ks2">conversaciones iniciadas</div></div>
+    <div class="k"><div class="kl">Costo / Mensaje</div><div class="kv">${(d.msgs_ft+d.msgs_uf+d.msgs_cs)>0?'$'+d.costo_msg.toFixed(2):'—'}</div><div class="ks2">USD · Meta</div></div>
+    <div class="k"><div class="kl">Hook Rate</div><div class="kv">${d.hook_rate.toFixed(1)}%</div><div class="ks2">ponderado 3 buyers</div></div>`;
+}
+
+function renderVtasTable(key){
+  const vtasData = key==='ayer'?VTAS_AYER:key==='14d'?VTAS_14D:VTAS_28D;
+  const tb=document.getElementById('t-vtas');tb.innerHTML='';
+  let gI=0,gR=0,gC=0,gS=0,gV=0,gV3=0,nCamps=0;
+  vtasData.forEach(g=>{
+    const sI=g.camps.reduce((a,c)=>a+c.impr,0),sR=g.camps.reduce((a,c)=>a+c.reach,0),
+          sC=g.camps.reduce((a,c)=>a+c.clicks,0),sS=g.camps.reduce((a,c)=>a+c.spend,0),
+          sV=g.camps.reduce((a,c)=>a+c.v50,0), sV3=g.camps.reduce((a,c)=>a+c.v3s,0);
+    gI+=sI;gR+=sR;gC+=sC;gS+=sS;gV+=sV;gV3+=sV3;nCamps+=g.camps.length;
+    const sPct=sI>0?sV/sI*100:0,sCV=sV>0?sS/sV:0,sHR=sI>0?sV3/sI*100:0;
+    tb.insertAdjacentHTML('beforeend',`<tr class="grp"><td colspan="12"><span class="chip ${g.cls}">${g.buyer}</span>&nbsp;<span style="font-weight:500;font-size:10px;color:var(--text2)">${g.camps.length} camps · Alcance: ${fmt(sR)} · ${fmt(sV)} V50 · ${sPct.toFixed(1)}%</span></td></tr>`);
+    if(g.camps.length===0){
+      tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td colspan="12" style="font-style:italic;font-weight:500;color:var(--text2)">Sin campañas de contenido de ventas activas todavía para este buyer.</td></tr>`);
+      return;
+    }
+    g.camps.forEach(c=>{
+      const cv50=c.v50>0?c.spend/c.v50:0,pctV=c.impr>0?c.v50/c.impr*100:0,hr=c.impr>0?c.v3s/c.impr*100:0;
+      tb.insertAdjacentHTML('beforeend',`<tr>
+        <td>${c.name} <span class="chip act">${c.status==='ACTIVE'?'Activa':'Pausada'}</span></td>
+        <td>${fmt(c.impr)}</td><td>${fmt(c.reach)}</td><td>${fmt(c.clicks)}</td>
+        <td>${(c.impr>0?c.clicks/c.impr*100:0).toFixed(2)}%</td><td>$${(c.impr>0?c.spend/c.impr*1000:0).toFixed(2)}</td><td>$${(c.clicks>0?c.spend/c.clicks:0).toFixed(2)}</td>
+        <td>${fmt(c.v50)}</td><td>${hr.toFixed(1)}%</td><td>${pctV.toFixed(1)}%</td>
+        <td>${cv50>0?'$'+cv50.toFixed(3):'—'}</td>
+        <td>$${c.spend.toFixed(2)}</td></tr>`);
+    });
+    tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td>Subtotal ${g.buyer}</td><td>${fmt(sI)}</td><td>${fmt(sR)}</td><td>${fmt(sC)}</td><td>${(sI>0?sC/sI*100:0).toFixed(2)}%</td><td>$${(sI>0?sS/sI*1000:0).toFixed(2)}</td><td>$${(sC>0?sS/sC:0).toFixed(2)}</td><td>${fmt(sV)}</td><td>${sHR.toFixed(1)}%</td><td>${sPct.toFixed(1)}%</td><td>${sCV>0?'$'+sCV.toFixed(3):'—'}</td><td>$${sS.toFixed(2)}</td></tr>`);
+  });
+  const gPct=gI>0?gV/gI*100:0,gCV=gV>0?gS/gV:0,gHR=gI>0?gV3/gI*100:0;
+  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL (${nCamps} camp${nCamps===1?'':'s'})</td><td>${fmt(gI)}</td><td>${fmt(gR)}</td><td>${fmt(gC)}</td><td>${(gI>0?gC/gI*100:0).toFixed(2)}%</td><td>$${(gI>0?gS/gI*1000:0).toFixed(2)}</td><td>$${(gC>0?gS/gC:0).toFixed(2)}</td><td>${fmt(gV)}</td><td>${gHR.toFixed(1)}%</td><td>${gPct.toFixed(1)}%</td><td>${gCV>0?'$'+gCV.toFixed(3):'—'}</td><td>$${gS.toFixed(2)}</td></tr>`);
+  const ftGroup=vtasData[0];
+  const ftMsgs=ftGroup.camps.reduce((a,c)=>a+(c.msgs||0),0);
+  const ftSpend=ftGroup.camps.reduce((a,c)=>a+c.spend,0);
+  const activeBuyers=vtasData.filter(g=>g.camps.length>0).map(g=>g.buyer);
+  const emptyBuyers=vtasData.filter(g=>g.camps.length===0).map(g=>g.buyer);
+  document.getElementById('ins-vtas').innerHTML = `${activeBuyers.length?`<strong>${activeBuyers.join(', ')}</strong> con contenido de ventas activo.`:'Sin campañas de contenido de ventas activas en este período.'}${ftMsgs>0?` <strong>${ftMsgs} mensaje${ftMsgs===1?'':'s'}</strong> a $${(ftSpend/ftMsgs).toFixed(2)} USD c/u.`:''}${emptyBuyers.length?` ${emptyBuyers.join(' y ')} todavía sin campaña TOUR — el bloque queda listo para sumarlas apenas se activen.`:''} Los gráficos de tendencia diaria se muestran recién cuando un buyer acumula ${VTAS_MIN_DAYS_TREND}+ días de datos.`;
+}
+
+function renderVtasFunnels(key){
+  const C=document.getElementById('vtas-funnels-container');
+  if(!C) return;
+  C.innerHTML='';
+  const d=VTAS_PERIODOS[key];
+  const VW=200, VH=196;
+  d.funnels.forEach(f=>{
+    const wrap=document.createElement('div');wrap.className='funnel-wrap';
+    if(f.i===0){
+      wrap.innerHTML=`<div class="funnel-title"><span class="chip ${f.cls}">${f.buyer}</span></div><div style="font-size:10.5px;color:var(--text2);font-style:italic;text-align:center;padding-top:8px">Sin datos aún</div>`;
+      C.appendChild(wrap); return;
+    }
+    const tit=document.createElement('div');tit.className='funnel-title';
+    tit.innerHTML=`<span class="chip ${f.cls}">${f.buyer}</span>`;
+    wrap.appendChild(tit);
+    const r=parseInt(f.color.slice(1,3),16),g=parseInt(f.color.slice(3,5),16),b=parseInt(f.color.slice(5,7),16);
+    const levels=[
+      {val:fmt(f.i),   sub:null,           label:'Impresiones',   w:1.00, opacity:1.0},
+      {val:fmt(f.v3),  sub:f.hr.toFixed(1)+'% HR',   label:'3 seg. Hook',   w:0.76, opacity:0.75},
+      {val:fmt(f.v50), sub:f.v50p.toFixed(2)+'% V50', label:'Video >50%',    w:0.52, opacity:0.55},
+    ];
+    const rowH=56, rowGap=4, n=3;
+    let svg='';
+    levels.forEach((lvl,i)=>{
+      const tw=VW*lvl.w, bw=i<n-1?VW*levels[i+1].w:VW*0.42;
+      const tx=(VW-tw)/2, bx=(VW-bw)/2;
+      const y=i*(rowH+rowGap);
+      const fill=`rgba(${r},${g},${b},${lvl.opacity})`;
+      svg+=`<polygon points="${tx.toFixed(1)},${y} ${(tx+tw).toFixed(1)},${y} ${(bx+bw).toFixed(1)},${y+rowH} ${bx.toFixed(1)},${y+rowH}" fill="${fill}"/>`;
+      svg+=`<text x="${(VW/2).toFixed(1)}" y="${(y+rowH/2-10).toFixed(1)}" text-anchor="middle" font-size="9" fill="white" font-weight="500" font-family="-apple-system,sans-serif" opacity=".8">${lvl.label}</text>`;
+      svg+=`<text x="${(VW/2).toFixed(1)}" y="${(y+rowH/2+5).toFixed(1)}" text-anchor="middle" font-size="13" fill="white" font-weight="700" font-family="-apple-system,sans-serif">${lvl.val}</text>`;
+      if(lvl.sub) svg+=`<text x="${(VW/2).toFixed(1)}" y="${(y+rowH/2+18).toFixed(1)}" text-anchor="middle" font-size="9" fill="white" font-weight="500" font-family="-apple-system,sans-serif" opacity=".85">${lvl.sub}</text>`;
+    });
+    wrap.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${VW} ${VH}" width="100%" preserveAspectRatio="xMidYMid meet" class="funnel-svg">${svg}</svg>`);
+    C.appendChild(wrap);
+  });
+}
+
+let vtasPerfFT=null,vtasPerfUF=null,vtasPerfCS=null;
+let vtasCostFT=null,vtasCostUF=null,vtasCostCS=null;
+
+function renderVtasPerf(key){
+  if(vtasPerfFT){vtasPerfFT.destroy();vtasPerfFT=null;}
+  if(vtasPerfUF){vtasPerfUF.destroy();vtasPerfUF=null;}
+  if(vtasPerfCS){vtasPerfCS.destroy();vtasPerfCS=null;}
+  const idx = key==='28d'?IDX28:key==='14d'?IDX14:LABELS28.length-1;
+  const buyers=[
+    {wrapId:'vtas-perf-ft-wrap',canvasId:'vtas-perf-ft',hook:VTAS_FT_HOOK,v50p:VTAS_FT_V50P,msg:VTAS_FT_MSG,spend:VTAS_FT_S,color:'#378ADD',colorV50:'#7fb8ee',bar:'rgba(55,138,221,0.3)'},
+    {wrapId:'vtas-perf-uf-wrap',canvasId:'vtas-perf-uf',hook:VTAS_UF_HOOK,v50p:VTAS_UF_V50P,msg:VTAS_UF_MSG,spend:VTAS_UF_S,color:'#639922',colorV50:'#96c45a',bar:'rgba(99,153,34,0.3)'},
+    {wrapId:'vtas-perf-cs-wrap',canvasId:'vtas-perf-cs',hook:VTAS_CS_HOOK,v50p:VTAS_CS_V50P,msg:VTAS_CS_MSG,spend:VTAS_CS_S,color:'#8B44B8',colorV50:'#b97dd4',bar:'rgba(139,68,184,0.3)'},
+  ];
+  const insts=[];
+  buyers.forEach(b=>{
+    const daysActive=b.spend.filter(v=>v!==null).length;
+    const wrapEl=document.getElementById(b.wrapId);
+    if(daysActive<VTAS_MIN_DAYS_TREND){
+      const msgs=key==='ayer'?b.msg[b.msg.length-1]:b.msg.slice(idx).reduce((a,v)=>a+v,0);
+      const spend=(key==='ayer'?[b.spend[b.spend.length-1]]:b.spend.slice(idx)).reduce((a,v)=>a+(v||0),0);
+      wrapEl.innerHTML = daysActive===0
+        ? `<div style="font-size:10.5px;color:var(--text2);font-style:italic;text-align:center;padding-top:60px">Sin campaña TOUR activa</div>`
+        : `<div style="font-size:10.5px;color:var(--text2);font-style:italic;text-align:center;padding:0 8px;padding-top:40px">Datos desde hace ${daysActive} día${daysActive===1?'':'s'} — se grafica desde ${VTAS_MIN_DAYS_TREND} días de historia.<br>Hoy: ${msgs} mensaje${msgs===1?'':'s'}, $${spend.toFixed(2)} invertido.</div>`;
+      insts.push(null); return;
+    }
+    wrapEl.innerHTML = `<canvas id="${b.canvasId}"></canvas>`;
+    const el=document.getElementById(b.canvasId);
+    const labels = key==='ayer'?LABELS28.slice(-1):LABELS28.slice(idx);
+    const hookArr = key==='ayer'?b.hook.slice(-1):b.hook.slice(idx);
+    const v50pArr = key==='ayer'?b.v50p.slice(-1):b.v50p.slice(idx);
+    const msgArr = key==='ayer'?b.msg.slice(-1):b.msg.slice(idx);
+    const chart=new Chart(el,{type:'bar',data:{labels,datasets:[
+      {type:'bar',  label:'Mensajes', data:msgArr, backgroundColor:b.bar, borderColor:b.color, borderWidth:1, borderRadius:2, yAxisID:'yR', order:3},
+      {type:'line', label:'Hook Rate (%)', data:hookArr, borderColor:b.color, backgroundColor:'transparent', borderWidth:2, pointRadius:key==='ayer'?6:2, tension:0.35, spanGaps:true, yAxisID:'yL', order:1},
+      {type:'line', label:'% V50/Impr.',  data:v50pArr, borderColor:b.colorV50, backgroundColor:'transparent', borderWidth:2, pointRadius:key==='ayer'?6:2, tension:0.35, spanGaps:true, borderDash:[5,3], yAxisID:'yL', order:2}
+    ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:true,position:'bottom',labels:{color:'#73726c',font:{size:9},boxWidth:10,padding:8}},
+        tooltip:{callbacks:{label:ctx=>ctx.dataset.yAxisID==='yR'?`  ${ctx.dataset.label}: ${(ctx.parsed.y||0).toLocaleString('es-CL')}`:` ${ctx.dataset.label}: ${ctx.parsed.y!==null?ctx.parsed.y.toFixed(1)+'%':'—'}`}}},
+      scales:{x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#73726c',font:{size:9},maxTicksLimit:key==='ayer'?1:12,autoSkip:true,maxRotation:45}},
+        yL:{position:'left',grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#73726c',font:{size:9},callback:v=>v+'%'},min:0,max:60,title:{display:true,text:'%',color:'#73726c',font:{size:9}}},
+        yR:{position:'right',grid:{display:false},ticks:{color:'#aaa9a3',font:{size:9},stepSize:1,precision:0},min:0,title:{display:true,text:'',color:'#aaa9a3',font:{size:9}}}}}});
+    insts.push(chart);
+  });
+  vtasPerfFT=insts[0];vtasPerfUF=insts[1];vtasPerfCS=insts[2];
+}
+
+function renderVtasCost(key){
+  if(vtasCostFT){vtasCostFT.destroy();vtasCostFT=null;}
+  if(vtasCostUF){vtasCostUF.destroy();vtasCostUF=null;}
+  if(vtasCostCS){vtasCostCS.destroy();vtasCostCS=null;}
+  const idx = key==='28d'?IDX28:key==='14d'?IDX14:LABELS28.length-1;
+  const buyers=[
+    {wrapId:'vtas-cost-ft-wrap',canvasId:'vtas-cost-ft',spend:VTAS_FT_S,msg:VTAS_FT_MSG,color:'#378ADD'},
+    {wrapId:'vtas-cost-uf-wrap',canvasId:'vtas-cost-uf',spend:VTAS_UF_S,msg:VTAS_UF_MSG,color:'#639922'},
+    {wrapId:'vtas-cost-cs-wrap',canvasId:'vtas-cost-cs',spend:VTAS_CS_S,msg:VTAS_CS_MSG,color:'#8B44B8'},
+  ];
+  const insts=[];
+  buyers.forEach(b=>{
+    const daysActive=b.spend.filter(v=>v!==null).length;
+    const wrapEl=document.getElementById(b.wrapId);
+    if(daysActive<VTAS_MIN_DAYS_TREND){
+      const msgs=key==='ayer'?b.msg[b.msg.length-1]:b.msg.slice(idx).reduce((a,v)=>a+v,0);
+      const spend=(key==='ayer'?[b.spend[b.spend.length-1]]:b.spend.slice(idx)).reduce((a,v)=>a+(v||0),0);
+      wrapEl.innerHTML = daysActive===0
+        ? `<div style="font-size:10.5px;color:var(--text2);font-style:italic;text-align:center;padding-top:60px">Sin campaña TOUR activa</div>`
+        : `<div style="font-size:10.5px;color:var(--text2);font-style:italic;text-align:center;padding:0 8px;padding-top:40px">Datos desde hace ${daysActive} día${daysActive===1?'':'s'} — se grafica desde ${VTAS_MIN_DAYS_TREND} días de historia.<br>Hoy: $${spend.toFixed(2)} invertido, ${msgs} mensaje${msgs===1?'':'s'}.</div>`;
+      insts.push(null); return;
+    }
+    wrapEl.innerHTML = `<canvas id="${b.canvasId}"></canvas>`;
+    const el=document.getElementById(b.canvasId);
+    const labels = key==='ayer'?LABELS28.slice(-1):LABELS28.slice(idx);
+    const spendArr = (key==='ayer'?b.spend.slice(-1):b.spend.slice(idx)).map(v=>v!=null?parseFloat(v.toFixed(2)):null);
+    const msgArr = key==='ayer'?b.msg.slice(-1):b.msg.slice(idx);
+    const costArr = spendArr.map((s,i)=>(msgArr[i]>0 && s!=null)?parseFloat((s/msgArr[i]).toFixed(2)):null);
+    const chart=new Chart(el,{type:'line',data:{labels,datasets:[
+      {label:'Inversión (USD)',data:spendArr,
+       borderColor:b.color,backgroundColor:'transparent',borderWidth:2,
+       pointRadius:key==='ayer'?6:2,tension:0.3,spanGaps:true,yAxisID:'yS',order:1},
+      {label:'Costo/Mensaje (USD)',data:costArr,
+       borderColor:b.color+'99',backgroundColor:'transparent',borderWidth:2,
+       pointRadius:key==='ayer'?6:2,tension:0.3,spanGaps:true,borderDash:[5,3],yAxisID:'yC',order:2}
+    ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:true,position:'bottom',labels:{color:'#73726c',font:{size:9},boxWidth:10,padding:8}},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: $${ctx.parsed.y!==null?ctx.parsed.y.toFixed(2):'—'}`}}},
+      scales:{x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#73726c',font:{size:9},maxTicksLimit:key==='ayer'?1:12,autoSkip:true,maxRotation:45}},
+        yS:{position:'left',grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#73726c',font:{size:9},callback:v=>'$'+v.toFixed(0)},title:{display:true,text:'Inversión USD',color:'#73726c',font:{size:9}},min:0},
+        yC:{position:'right',grid:{display:false},ticks:{color:'#aaa9a3',font:{size:9},callback:v=>'$'+v.toFixed(0)},title:{display:true,text:'Costo/Mensaje USD',color:'#aaa9a3',font:{size:9}},min:0}}}});
+    insts.push(chart);
+  });
+  vtasCostFT=insts[0];vtasCostUF=insts[1];vtasCostCS=insts[2];
+}
+
 const fmt=n=>n>=1000?(n/1000).toFixed(1).replace(/\.0$/,'')+'K':String(n);
 
 function gapCell(meta,ghl){
@@ -403,7 +712,7 @@ function setView(key){
   document.getElementById('ct-lm').childNodes[0].textContent=`Lead Magnets · ${d.label} `;
 
   document.getElementById('ct-ghl').childNodes[0].textContent=`Pipeline Compradores · GHL · ${d.label} `;
-  renderKPIs(d);renderLMs(d);renderFunnels(d.lms);renderGHL(d,key);renderVch(key);renderVchLM(key);renderEng(key);renderCPL(key);renderOrgKPIs(key);renderOrgFunnels(key);renderOrgSpend(key);
+  renderKPIs(d);renderLMs(d);renderFunnels(d.lms);renderGHL(d,key);renderVch(key);renderVchLM(key);renderEng(key);renderCPL(key);renderOrgKPIs(key);renderOrgFunnels(key);renderOrgSpend(key);renderVtasKPIs(key);renderVtasTable(key);renderVtasFunnels(key);renderVtasPerf(key);renderVtasCost(key);
 }
 
 function renderKPIs(d){
