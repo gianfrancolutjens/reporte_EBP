@@ -235,6 +235,7 @@ const S1=[0,0,0,0,0,0,0,0,0,0,3.67,3.2,6.49,3.16,2.68,4.79,6.78,6.51,4.57,6.39,5
 const S2=[0,0,0,0,0,0,0,0,0,0,4.25,2.6,7.77,3.75,3.93,5.28,5.16,4.89,4.2,6.02,4.96,4.81,5.23,4.41,4.77,4.5,5.18,6.36,7.58,7.46,7.53,7.61,6.55,8.82,10.74,10.41,10.09];
 const S3=[0,0,0,0,0,0,0,0,0,0,3.16,3.68,7.1,3.75,3.47,6.17,5.45,5.37,3.64,5.64,5.37,6.26,5.92,4.48,4.47,3.21,5.62,6.63,6.79,7.06,9.86,8.29,5.46,9.68,9.48,9.08,10.18];
 const IDX14=23; // index de 18/jun en arrays de 37 días — 14 puntos: 18jun–01jul
+const IDX28=LABELS28.length-28; // index de 04/jun en arrays de 37 días — 28 puntos: 04jun–01jul
 
 const GHL_SRC_COLORS={'Portal Inmobiliario':'#378ADD','META-LM':'#639922','Instagram DM':'#8B44B8','Directo':'#D85A30','Importación':'#888780'};
 const GHL28={
@@ -250,20 +251,21 @@ const GHL28={
 
 const PERIODOS = {
   '28d': {
-    label: '26 may – 01 jul 2026 (37 días)',
+    label: '04 jun – 01 jul 2026 (28 días)',
     lms: [
       {name:'Guía Paso a Paso',    cls:'c1',bp:'Familia Transición',   color:'#378ADD',
-       impr:24349,reach:13261,clicks:934,spend:266.12,ctr:3.84,cpm:10.93,cpc:0.28,
-       leads:95,ghlLeads:60,v3s:7793,v50:1858,v75:1048},
+       impr:24361,reach:13261,clicks:934,spend:266.22,ctr:3.83,cpm:10.93,cpc:0.29,
+       leads:95,ghlLeads:60,v3s:7798,v50:1858,v75:1048},
       {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',    color:'#639922',
-       impr:18130,reach:9545,clicks:539,spend:164.86,ctr:2.97,cpm:9.09,cpc:0.31,
-       leads:59,ghlLeads:27,v3s:5712,v50:2037,v75:1323},
+       impr:18138,reach:9550,clicks:539,spend:164.98,ctr:2.97,cpm:9.10,cpc:0.31,
+       leads:59,ghlLeads:27,v3s:5713,v50:2037,v75:1323},
       {name:'VSL Operación Espejo', cls:'c3',bp:'Upgrader Familiar',   color:'#8B44B8',
-       impr:14357,reach:7033,clicks:713,spend:165.27,ctr:4.97,cpm:11.51,cpc:0.23,
-       leads:32,ghlLeads:18,v3s:3974,v50:619,v75:450},
+       impr:14368,reach:7033,clicks:714,spend:165.41,ctr:4.97,cpm:11.51,cpc:0.23,
+       leads:32,ghlLeads:18,v3s:3976,v50:620,v75:450},
     ],
-    dailyLabels:LABELS28, dailyL1:L1,dailyL2:L2,dailyL3:L3,dailyS1:S1,dailyS2:S2,dailyS3:S3,
-    ghlDays:LABELS28, ghlSrc:GHL28.src,
+    dailyLabels:LABELS28.slice(IDX28), dailyL1:L1.slice(IDX28),dailyL2:L2.slice(IDX28),dailyL3:L3.slice(IDX28),
+    dailyS1:S1.slice(IDX28),dailyS2:S2.slice(IDX28),dailyS3:S3.slice(IDX28),
+    ghlDays:LABELS28.slice(IDX28), ghlSrc:GHL28.src.map(s=>({...s,data:s.data.slice(IDX28)})),
   },
   '14d': {
     label: '18 jun – 01 jul 2026 (14 días)',
@@ -332,19 +334,19 @@ const ENG_14D=[
 
 const ENG=[
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
-    {name:'[DC] Familia Transición · activa',status:'ACTIVE',impr:67358,reach:39798,clicks:2315,spend:118.55,v50:3888,v3s:15397},
+    {name:'[DC] Familia Transición · activa',status:'ACTIVE',impr:67359,reach:39798,clicks:2315,spend:118.55,v50:3888,v3s:15397},
     {name:'Rell1-FT · Seguir arrendando · adm',status:'PAUSED',impr:5066,reach:3929,clicks:296,spend:23.11,v50:175,v3s:1175},
-    {name:'Rell4-FT · La seguridad · adm',status:'PAUSED',impr:8701,reach:5757,clicks:183,spend:13.67,v50:171,v3s:1044},
     {name:'Rell1-FT · btn',status:'PAUSED',impr:3981,reach:3161,clicks:66,spend:22.87,v50:89,v3s:914},
+    {name:'Rell4-FT · La seguridad · adm',status:'PAUSED',impr:8701,reach:5757,clicks:183,spend:13.67,v50:171,v3s:1044},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[
-    {name:'[DC] Upgrader Familiar · activa',status:'ACTIVE',impr:61043,reach:31350,clicks:1524,spend:117.52,v50:2113,v3s:11569},
+    {name:'[DC] Upgrader Familiar · activa',status:'ACTIVE',impr:61047,reach:31350,clicks:1524,spend:117.53,v50:2115,v3s:11575},
     {name:'Rell5-UF · Tu casa no está mal · adm',status:'PAUSED',impr:2660,reach:2164,clicks:103,spend:7.41,v50:265,v3s:913},
     {name:'Rell2-UF · ¿Ya te quedó chica? · adm',status:'PAUSED',impr:5046,reach:3955,clicks:378,spend:23.19,v50:155,v3s:1707},
     {name:'Rell2-UF · btn',status:'PAUSED',impr:3988,reach:3273,clicks:111,spend:22.72,v50:121,v3s:1458},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
-    {name:'[DC] Consolidado Silencioso · activa',status:'ACTIVE',impr:69025,reach:32046,clicks:1534,spend:117.43,v50:1522,v3s:9005},
+    {name:'[DC] Consolidado Silencioso · activa',status:'ACTIVE',impr:69029,reach:32046,clicks:1534,spend:117.43,v50:1523,v3s:9006},
     {name:'Rell3-CS · 19.000 UF · adm',status:'PAUSED',impr:10329,reach:6691,clicks:176,spend:13.57,v50:199,v3s:1280},
     {name:'Rell6-CS · Chicureo y Piedra Roja · adm',status:'PAUSED',impr:2198,reach:1818,clicks:83,spend:7.05,v50:151,v3s:561},
   ]},
@@ -545,10 +547,10 @@ const LM3_V50R=[0,0,0,0,0,0,0,0,0,0,11,18,33,8,19,23,22,22,7,13,24,10,16,19,20,2
 
 // Slices por período
 const VCH_DATA = {
-  '28d': { labels:VCH_LABELS,
-    ft:{hook:LM1_HOOK, v50p:LM1_V50P, v50r:LM1_V50R, bars:L1},
-    uf:{hook:LM2_HOOK, v50p:LM2_V50P, v50r:LM2_V50R, bars:L2},
-    cs:{hook:LM3_HOOK, v50p:LM3_V50P, v50r:LM3_V50R, bars:L3} },
+  '28d': { labels:VCH_LABELS.slice(IDX28),
+    ft:{hook:LM1_HOOK.slice(IDX28), v50p:LM1_V50P.slice(IDX28), v50r:LM1_V50R.slice(IDX28), bars:L1.slice(IDX28)},
+    uf:{hook:LM2_HOOK.slice(IDX28), v50p:LM2_V50P.slice(IDX28), v50r:LM2_V50R.slice(IDX28), bars:L2.slice(IDX28)},
+    cs:{hook:LM3_HOOK.slice(IDX28), v50p:LM3_V50P.slice(IDX28), v50r:LM3_V50R.slice(IDX28), bars:L3.slice(IDX28)} },
   '14d': { labels:VCH_LABELS.slice(IDX14),
     ft:{hook:LM1_HOOK.slice(IDX14), v50p:LM1_V50P.slice(IDX14), v50r:LM1_V50R.slice(IDX14), bars:L1.slice(IDX14)},
     uf:{hook:LM2_HOOK.slice(IDX14), v50p:LM2_V50P.slice(IDX14), v50r:LM2_V50R.slice(IDX14), bars:L2.slice(IDX14)},
@@ -565,17 +567,17 @@ const VCH_DATA = {
 // UF = [DC][ABO][INTERACCION][TRAFICO-INSTA][Upgrader Familiar] (16/jun–) + Rell2-UF-adm + Rell2-UF-btn + Rell5-UF (hasta 16/jun)
 // CS = [DC][ABO][INTERACCION][TRAFICO-INSTA][Consolidado Silencioso] (16/jun–) + Rell3-CS + Rell6-CS (hasta 16/jun)
 // null = sin actividad ese día | Último punto (23/jun) verificado contra CSV de Meta Ads Manager
-const ENG_FT_HOOK=[null,null,null,null,null,null,null,null,null,null,17.7,23.1,19.6,24,25.7,13.4,13.2,14.6,14.7,14.2,15.4,15.9,12.1,9.6,9.4,10.3,10.3,10.5,28.2,27.2,26.8,28.1,29.7,30,29.4,29.6,27.6];
-const ENG_FT_V50P=[null,null,null,null,null,null,null,null,null,null,2,2.8,2.3,3.1,3.8,2.9,2.4,2.7,2.7,2.5,2.2,2,1.8,1.7,2,1.8,1.3,1.5,7.35,7.33,7.81,8.05,7.49,8.15,7.83,7.91,7.23];
-const ENG_FT_V50R=[0,0,0,0,0,0,0,0,0,0,14,26,30,32,40,56,62,72,61,48,48,38,46,48,55,32,56,197,496,402,384,364,299,401,394,376,309];
-const ENG_UF_HOOK=[null,null,null,null,null,null,null,null,null,null,28.6,33.2,34.5,30.9,33.6,30.9,33.1,32.8,33.8,36.5,36.6,33.7,28.5,29.9,30.4,29.5,32.9,28.6,23.8,25.7,25.5,19.6,13.9,10.8,11.6,11.4,14.9];
-const ENG_UF_V50P=[null,null,null,null,null,null,null,null,null,null,3.3,3.7,5,3.7,4.9,6,5.7,5.8,5.3,6.2,6.9,5.5,5.6,6.8,7.6,5.2,7.6,5.7,4.23,4.91,4.93,3.08,2.13,1.7,1.99,2.25,2.47];
-const ENG_UF_V50R=[0,0,0,0,0,0,0,0,0,0,21,26,54,29,51,78,74,84,73,83,117,86,87,98,91,84,99,167,206,225,211,145,126,120,128,138,129];
-const ENG_CS_HOOK=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,13.7,11.6,10.4,13.3,15.1,14.2,13.7,18,19,17.8,14.5,16.3,16.4,14.9,13.1,13.1,11.9,13.2,13.2,11.5,12.8,11.3,10.5];
-const ENG_CS_V50P=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.9,1.6,1.3,2.8,3.3,3,2.9,4.1,3.6,4,3.2,3.8,4,3.2,2.56,1.92,1.95,2.1,1.83,1.66,1.62,1.62,1.79];
-const ENG_CS_V50R=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,25,19,51,69,73,84,47,57,54,79,71,75,113,161,133,138,136,98,102,83,89,97];
+const ENG_FT_HOOK=[null,null,null,null,null,null,null,null,null,14.8,18.9,26.8,20.4,23.7,18.5,18.1,15.6,15.7,17.5,15.4,15.9,12.1,9.6,9.4,10.3,10.3,10.5,15.6,28.3,27.2,26.8,28.1,29.7,30,29.4,29.6,27.6];
+const ENG_FT_V50P=[null,null,null,null,null,null,null,null,null,0,1.71,2.65,2.11,3.6,2.43,3.23,2.53,2.83,1.85,2.21,1.98,1.81,1.69,2.01,1.83,1.29,1.51,2.84,7.35,7.33,7.81,8.05,7.48,8.15,7.82,7.91,7.23];
+const ENG_FT_V50R=[0,0,0,0,0,0,0,0,0,0,15,19,20,33,40,67,62,63,23,48,38,36,46,48,55,32,56,197,496,402,384,364,299,401,394,376,309];
+const ENG_UF_HOOK=[null,null,null,null,null,null,null,null,null,9.7,30.5,36.3,32.3,33.2,36,37.7,38.2,34,35.9,36.6,33.7,28.5,29.9,30.4,29.5,32.9,28.6,27.3,23.9,25.7,25.5,19.6,13.9,10.8,11.6,11.4,15];
+const ENG_UF_V50P=[null,null,null,null,null,null,null,null,null,0,1.27,2.01,3.27,2.97,2.7,3.83,4.73,5.03,7.18,6.85,5.53,5.61,6.78,7.56,5.21,7.55,5.74,4.74,4.22,4.9,4.93,3.1,2.13,1.7,1.99,2.25,2.51];
+const ENG_UF_V50R=[0,0,0,0,0,0,0,0,0,0,13,14,32,22,21,28,37,52,81,117,86,87,98,91,84,99,96,167,206,225,211,146,126,120,128,138,131];
+const ENG_CS_HOOK=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,14.2,11.6,10.3,14.1,18.3,13.7,18,19,17.8,14.5,16.3,16.4,14.9,14.7,13.2,13.2,11.9,13.2,13.2,11.5,12.8,11.3,10.6];
+const ENG_CS_V50P=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.92,1.57,1.24,2.89,3.65,2.85,4.14,3.59,3.97,3.18,3.78,3.99,3.23,2.54,2.57,1.95,1.95,2.1,1.83,1.66,1.62,1.62,1.8];
+const ENG_CS_V50R=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,25,19,51,69,73,84,47,57,54,79,71,75,113,162,135,138,136,98,102,83,89,98];
 const ENG_DATA={
-  '28d':{labels:VCH_LABELS, ft:{hook:ENG_FT_HOOK,v50p:ENG_FT_V50P,v50r:ENG_FT_V50R}, uf:{hook:ENG_UF_HOOK,v50p:ENG_UF_V50P,v50r:ENG_UF_V50R}, cs:{hook:ENG_CS_HOOK,v50p:ENG_CS_V50P,v50r:ENG_CS_V50R}},
+  '28d':{labels:VCH_LABELS.slice(IDX28), ft:{hook:ENG_FT_HOOK.slice(IDX28),v50p:ENG_FT_V50P.slice(IDX28),v50r:ENG_FT_V50R.slice(IDX28)}, uf:{hook:ENG_UF_HOOK.slice(IDX28),v50p:ENG_UF_V50P.slice(IDX28),v50r:ENG_UF_V50R.slice(IDX28)}, cs:{hook:ENG_CS_HOOK.slice(IDX28),v50p:ENG_CS_V50P.slice(IDX28),v50r:ENG_CS_V50R.slice(IDX28)}},
   '14d':{labels:VCH_LABELS.slice(IDX14), ft:{hook:ENG_FT_HOOK.slice(IDX14),v50p:ENG_FT_V50P.slice(IDX14),v50r:ENG_FT_V50R.slice(IDX14)}, uf:{hook:ENG_UF_HOOK.slice(IDX14),v50p:ENG_UF_V50P.slice(IDX14),v50r:ENG_UF_V50R.slice(IDX14)}, cs:{hook:ENG_CS_HOOK.slice(IDX14),v50p:ENG_CS_V50P.slice(IDX14),v50r:ENG_CS_V50R.slice(IDX14)}},
   'ayer':{labels:['01/07'], ft:{hook:[27.6],v50p:[7.23],v50r:[309]}, uf:{hook:[14.9],v50p:[2.47],v50r:[129]}, cs:{hook:[10.5],v50p:[1.79],v50r:[97]}},
 };
@@ -687,16 +689,16 @@ function renderCPL(key){
 // ── DATOS ORGÁNICO KPIs + FUNNELS POR PERÍODO ────────────────────────────────
 const ORG_PERIODOS = {
   '28d': {
-    spend:487.09,
-    v50_ft:4323, v50_uf:2654, v50_cs:1872,
+    spend:487.10,
+    v50_ft:4323, v50_uf:2656, v50_cs:1873,
     costo_v50:0.055, hook_rate:18.8,
     funnels:[
       {buyer:'Familia Transición', cls:'c1', color:'#378ADD',
-       i:85106, v3:18530, hr:21.8, v50:4323, v50p:5.08},
+       i:85107, v3:18530, hr:21.77, v50:4323, v50p:5.08},
       {buyer:'Upgrader Familiar',  cls:'c2', color:'#639922',
-       i:72737, v3:15647, hr:21.5, v50:2654, v50p:3.65},
+       i:72741, v3:15653, hr:21.52, v50:2656, v50p:3.65},
       {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8',
-       i:81552, v3:10846, hr:13.3, v50:1872, v50p:2.30},
+       i:81556, v3:10847, hr:13.30, v50:1873, v50p:2.30},
     ]
   },
   '14d': {
@@ -782,9 +784,9 @@ function renderOrgFunnels(key){
 // UF = Rell2-adm + Rell5-UF + Rell2-btn + DC(desde 16/jun)
 // CS = Rell3-CS + Rell6-CS + DC(desde 16/jun)
 // null = sin gasto ese día | 29 puntos: 26/may – 23/jun
-const ORG_FT_S=[null,null,null,null,null,null,null,null,null,null,4.08,3.99,4.59,4.32,5.49,5.96,6.21,5.9,6.33,8.75,7.82,7.33,5.27,6.21,5.77,7.34,7.83,17.49,12.17,null,7.77,8.15,8.13,10.34,9.9,10.96,9.94];
-const ORG_UF_S=[null,null,null,null,null,null,null,null,null,null,4,4.09,4.86,4.22,5.98,5.25,4.07,5.24,4.84,8.97,8.27,6.56,5.24,7.5,6.21,7.28,7.62,16.62,9.85,null,9.4,9.32,9.49,10.45,10.25,10.41,9.53];
-const ORG_CS_S=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.41,1.96,1.8,1.81,1.85,4.62,2.06,2.77,3.47,3.46,4.3,3.75,4.42,9.39,10.05,null,9.48,10,8.87,11.14,9.22,11.08,8.92];
+const ORG_FT_S=[null,null,null,null,null,null,null,null,null,0.08,4.08,3.99,4.59,4.32,5.49,5.96,6.21,5.9,4.3,7.26,5.92,3.87,3.92,3.43,3.97,3.67,4.79,9.75,12.17,9.34,7.77,8.15,8.13,10.34,9.9,10.96,9.94];
+const ORG_UF_S=[null,null,null,null,null,null,null,null,null,0.06,4,4.09,4.86,4,4.17,3.55,4.07,4.78,4.84,6.96,5.9,4.35,3.93,3.36,4.14,3.58,4.04,7.31,9.89,10.1,9.41,9.32,9.49,10.45,10.25,10.41,9.54];
+const ORG_CS_S=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.41,1.96,1.8,2.32,3.71,4.62,4.02,3.12,3.47,3.46,4.3,3.75,4.42,7.02,10.05,9.9,9.49,10,8.87,11.14,9.22,11.08,8.92];
 
 // V50 absoluto diario por buyer (de los arrays ENG_FT/UF/CS_V50R ya definidos)
 // Los mismos arrays que usan los gráficos de video orgánico
@@ -832,8 +834,8 @@ function renderOrgSpend(key){
   if(orgSpendCS){orgSpendCS.destroy();orgSpendCS=null;}
   let labels,sFT,sUF,sCS,vFT,vUF,vCS;
   if(key==='28d'){
-    labels=LABELS28; sFT=ORG_FT_S; sUF=ORG_UF_S; sCS=ORG_CS_S;
-    vFT=ENG_FT_V50R; vUF=ENG_UF_V50R; vCS=ENG_CS_V50R;
+    labels=LABELS28.slice(IDX28); sFT=ORG_FT_S.slice(IDX28); sUF=ORG_UF_S.slice(IDX28); sCS=ORG_CS_S.slice(IDX28);
+    vFT=ENG_FT_V50R.slice(IDX28); vUF=ENG_UF_V50R.slice(IDX28); vCS=ENG_CS_V50R.slice(IDX28);
   } else if(key==='14d'){
     labels=LABELS28.slice(IDX14); sFT=ORG_FT_S.slice(IDX14); sUF=ORG_UF_S.slice(IDX14); sCS=ORG_CS_S.slice(IDX14);
     vFT=ENG_FT_V50R.slice(IDX14); vUF=ENG_UF_V50R.slice(IDX14); vCS=ENG_CS_V50R.slice(IDX14);
