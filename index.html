@@ -63,11 +63,9 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
 .section-sub{font-size:12px;color:var(--text2);font-weight:500;margin-bottom:20px}
 .filter-block{background:#fff;border-radius:10px;padding:14px 18px;margin-bottom:16px;border:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .inner-sep{height:1px;background:var(--border);margin:22px 0}
-.acc-toolbar{display:flex;gap:8px;margin-bottom:16px}
-.acc-toolbar button{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border2);background:#fff;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
-.acc-toolbar button:hover{background:var(--bg2)}
 .acc-header{cursor:pointer;user-select:none}
-.acc-chevron{display:inline-block;transition:transform .25s ease;font-size:13px;color:var(--text2);line-height:1}
+.acc-toggle{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border2);font-size:13px;font-weight:700;color:var(--text2);line-height:1;flex-shrink:0}
+.acc-header:hover .acc-toggle{background:var(--bg2);border-color:var(--text2)}
 .acc-wrap{display:grid;grid-template-rows:1fr;transition:grid-template-rows .3s ease}
 .acc-wrap .acc-inner{overflow:hidden;min-height:0}
 </style>
@@ -84,13 +82,9 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
   <button class="fbtn" onclick="setView('ayer')">Ayer</button>
   <span class="period-label" id="period-label">Selecciona un período</span>
 </div>
-<div class="acc-toolbar">
-  <button onclick="expandAllAcc()">Expandir todo</button>
-  <button onclick="collapseAllAcc()">Colapsar todo</button>
-</div>
 <div class="section-block acc-item">
   <div class="acc-header" onclick="toggleAcc(this)" style="display:flex;align-items:center;gap:10px">
-    <span class="acc-chevron">▾</span>
+    <span class="acc-toggle">−</span>
     <div class="section-title" style="margin-bottom:0">CONTENIDO ORGÁNICO</div>
   </div>
   <div class="section-sub">Objetivo: Creación de audiencia</div>
@@ -166,7 +160,7 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
 </div>
 <div class="section-block acc-item">
   <div class="acc-header" onclick="toggleAcc(this)" style="display:flex;align-items:center;gap:10px">
-    <span class="acc-chevron">▾</span>
+    <span class="acc-toggle">−</span>
     <div class="section-title" style="margin-bottom:0">LEAD MAGNETS</div>
   </div>
   <div class="section-sub">Objetivo: Captura de Leads</div>
@@ -237,7 +231,7 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
 
 <div class="section-block acc-item">
   <div class="acc-header" onclick="toggleAcc(this)" style="display:flex;align-items:center;gap:10px">
-    <span class="acc-chevron">▾</span>
+    <span class="acc-toggle">−</span>
     <div class="section-title" style="margin-bottom:0">CONTENIDO DE VENTAS</div>
   </div>
   <div class="section-sub">Objetivo: Conversaciones de venta (Mensajes) · Campañas identificadas por "TOUR" + Buyer Persona en el nombre</div>
@@ -307,7 +301,7 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
 
 <div class="card acc-item">
   <div class="acc-header" onclick="toggleAcc(this)" style="display:flex;align-items:center;gap:10px">
-    <span class="acc-chevron">▾</span>
+    <span class="acc-toggle">−</span>
     <div class="ct" id="ct-ghl" style="flex:1;margin-bottom:0">Pipeline Compradores · GHL</div>
   </div>
   <div class="acc-wrap open"><div class="acc-inner">
@@ -1202,13 +1196,14 @@ function renderOrgSpend(key){
   orgSpendCS=buildOrgSpendChart('org-spend-cs',labels,sCS,vCS,'#8B44B8',key);
 }
 
-// ── ACORDEÓN — bloques colapsables (agregado 03/jul/2026) ──────────────────
+// ── ACORDEÓN — bloques colapsables e independientes por bloque (agregado 04/jul/2026) ──
+// Cada bloque tiene su propio control +/- ; no hay botón global de expandir/colapsar todo.
 function setAccItem(item,open){
   const wrap=item.querySelector('.acc-wrap');
-  const chevron=item.querySelector('.acc-chevron');
+  const toggle=item.querySelector('.acc-toggle');
   wrap.classList.toggle('open',open);
   wrap.style.gridTemplateRows=open?'1fr':'0fr';
-  if(chevron) chevron.style.transform=open?'rotate(0deg)':'rotate(-90deg)';
+  if(toggle) toggle.textContent=open?'−':'+';
   setTimeout(()=>window.dispatchEvent(new Event('resize')),320);
 }
 function toggleAcc(header){
@@ -1216,8 +1211,6 @@ function toggleAcc(header){
   const wrap=item.querySelector('.acc-wrap');
   setAccItem(item,!wrap.classList.contains('open'));
 }
-function expandAllAcc(){document.querySelectorAll('.acc-item').forEach(item=>setAccItem(item,true));}
-function collapseAllAcc(){document.querySelectorAll('.acc-item').forEach(item=>setAccItem(item,false));}
 
 setView('28d');
 </script>
