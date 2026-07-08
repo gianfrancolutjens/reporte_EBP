@@ -302,12 +302,23 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
 <div class="card acc-item">
   <div class="acc-header" onclick="toggleAcc(this)" style="display:flex;align-items:center;gap:10px">
     <span class="acc-toggle">−</span>
-    <div class="ct" id="ct-ghl" style="flex:1;margin-bottom:0">Pipeline Compradores · GHL</div>
+    <div class="ct" style="flex:1;margin-bottom:0">Pipelines GHL</div>
   </div>
   <div class="acc-wrap open"><div class="acc-inner">
-  <div class="leg" id="leg-ghl"></div>
-  <div class="cw"><canvas id="ch2"></canvas></div>
-  <div class="ins" id="ins-ghl"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div>
+      <div class="ct" id="ct-ghl">Compradores</div>
+      <div class="leg" id="leg-ghl"></div>
+      <div class="cw" style="height:260px"><canvas id="ch2"></canvas></div>
+      <div class="ins" id="ins-ghl"></div>
+    </div>
+    <div>
+      <div class="ct" id="ct-ghl2">Arrendatarios</div>
+      <div class="leg" id="leg-ghl2"></div>
+      <div class="cw" style="height:260px"><canvas id="ch3"></canvas></div>
+      <div class="ins" id="ins-ghl2"></div>
+    </div>
+  </div>
   </div></div>
 </div>
 <div class="footer">El Barrio Propiedades · Reporte generado el 08 jul 2026 · Meta Ads API + GHL MCP · Datos: 26 may – 07 jul 2026</div>
@@ -339,6 +350,21 @@ const GHL28={
   ]
 };
 
+// Pipeline Arrendatarios (OT42JsJrwH9fUVzEBqpY) — agregado 08/jul/2026.
+// Mismas 5 fuentes que Compradores por consistencia de leyenda/colores, aunque
+// en la práctica esta pipeline sólo ha visto Portal Inmobiliario y Directo hasta ahora
+// (META-LM / Instagram DM / Importación en 0 durante todo el histórico 26/may-07/jul).
+const GHL_ARR={
+  labels:LABELS28,
+  src:[
+    {label:'Portal Inmobiliario',color:'#378ADD',data:[0,0,0,0,0,0,0,0,0,5,6,4,11,5,4,5,9,4,8,10,4,3,9,4,5,4,5,3,5,1,5,2,5,3,3,1,3,3,3,2,5,0,2]},
+    {label:'META-LM',            color:'#639922',data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+    {label:'Instagram DM',       color:'#8B44B8',data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+    {label:'Directo',            color:'#D85A30',data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0]},
+    {label:'Importación',        color:'#888780',data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+  ]
+};
+
 const PERIODOS = {
   '28d': {
     label: '10 jun – 07 jul 2026 (28 días)',
@@ -356,6 +382,7 @@ const PERIODOS = {
     dailyLabels:LABELS28.slice(IDX28), dailyL1:L1.slice(IDX28),dailyL2:L2.slice(IDX28),dailyL3:L3.slice(IDX28),
     dailyS1:S1.slice(IDX28),dailyS2:S2.slice(IDX28),dailyS3:S3.slice(IDX28),
     ghlDays:LABELS28.slice(IDX28), ghlSrc:GHL28.src.map(s=>({...s,data:s.data.slice(IDX28)})),
+    ghlSrc2:GHL_ARR.src.map(s=>({...s,data:s.data.slice(IDX28)})),
   },
   '14d': {
     label: '24 jun – 07 jul 2026 (14 días)',
@@ -375,6 +402,7 @@ const PERIODOS = {
     dailyS1:S1.slice(IDX14),dailyS2:S2.slice(IDX14),dailyS3:S3.slice(IDX14),
     ghlDays:LABELS28.slice(IDX14),
     ghlSrc:GHL28.src.map(s=>({...s,data:s.data.slice(IDX14)})),
+    ghlSrc2:GHL_ARR.src.map(s=>({...s,data:s.data.slice(IDX14)})),
   },
   'ayer': {
     label: '07 jul 2026 (Ayer)',
@@ -393,6 +421,7 @@ const PERIODOS = {
     dailyL1:[9],dailyL2:[2],dailyL3:[1],dailyS1:[17.13],dailyS2:[7.07],dailyS3:[10.38],
     ghlDays:['07/07'],
     ghlSrc:GHL28.src.map(s=>({...s,data:[s.data[s.data.length-1]]})),
+    ghlSrc2:GHL_ARR.src.map(s=>({...s,data:[s.data[s.data.length-1]]})),
   },
 };
 
@@ -708,6 +737,7 @@ function gapCell(meta,ghl){
 }
 
 let ch2=null;
+let ch3=null;
 
 function renderFunnels(lms){
   const C=document.getElementById('funnels-container');C.innerHTML='';
@@ -748,8 +778,9 @@ function setView(key){
   document.getElementById('period-label').textContent=d.label;
   document.getElementById('ct-lm').childNodes[0].textContent=`Lead Magnets · ${d.label} `;
 
-  document.getElementById('ct-ghl').childNodes[0].textContent=`Pipeline Compradores · GHL · ${d.label} `;
-  renderKPIs(d);renderLMs(d);renderFunnels(d.lms);renderGHL(d,key);renderVch(key);renderVchLM(key);renderEng(key);renderCPL(key);renderOrgKPIs(key);renderOrgFunnels(key);renderOrgSpend(key);renderVtasKPIs(key);renderVtasTable(key);renderVtasFunnels(key);renderVtasPerf(key);renderVtasCost(key);
+  document.getElementById('ct-ghl').childNodes[0].textContent=`Compradores · ${d.label} `;
+  document.getElementById('ct-ghl2').childNodes[0].textContent=`Arrendatarios · ${d.label} `;
+  renderKPIs(d);renderLMs(d);renderFunnels(d.lms);renderGHL(d,key);renderGHL2(d,key);renderVch(key);renderVchLM(key);renderEng(key);renderCPL(key);renderOrgKPIs(key);renderOrgFunnels(key);renderOrgSpend(key);renderVtasKPIs(key);renderVtasTable(key);renderVtasFunnels(key);renderVtasPerf(key);renderVtasCost(key);
 }
 
 function renderKPIs(d){
@@ -863,6 +894,19 @@ function renderGHL(d,key){
     scales:{x:{stacked:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:9.5},color:'#73726c',autoSkip:true,maxTicksLimit:15,maxRotation:45}},y:{stacked:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10.5},color:'#73726c',stepSize:1,precision:0},title:{display:true,text:'Oportunidades',font:{size:10.5},color:'#73726c'},min:0}}}});
   const p=totals['Portal Inmobiliario']||0,m=totals['META-LM']||0,ig=totals['Instagram DM']||0,dir=totals['Directo']||0,imp=totals['Importación']||0;
   document.getElementById('ins-ghl').innerHTML=`<strong>Total período: ${grand} oportunidades</strong>. Portal Inmobiliario: <strong>${p} (${grand>0?Math.round(p/grand*100):0}%)</strong>. META-LM: <strong>${m}</strong>. Instagram DM: <strong>${ig}</strong>. Directo: <strong>${dir}</strong>.${imp>0?` Importación: <strong>${imp}</strong>.`:''}`;
+}
+
+function renderGHL2(d,key){
+  if(ch3){ch3.destroy();ch3=null;}
+  const legEl=document.getElementById('leg-ghl2');legEl.innerHTML='';
+  d.ghlSrc2.forEach(s=>legEl.insertAdjacentHTML('beforeend',`<span><span class="lb" style="background:${s.color}"></span>${s.label}</span>`));
+  const totals={};d.ghlSrc2.forEach(s=>{totals[s.label]=s.data.reduce((a,b)=>a+b,0);});
+  const grand=Object.values(totals).reduce((a,b)=>a+b,0);
+  ch3=new Chart(document.getElementById('ch3'),{type:'bar',data:{labels:d.ghlDays,datasets:d.ghlSrc2.map(s=>({label:s.label,data:s.data,backgroundColor:s.color,stack:'s',borderRadius:2,borderSkipped:false}))},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label(ctx){return ctx.parsed.y>0?` ${ctx.dataset.label}: ${ctx.parsed.y}`:null;},footer(items){const t=items.reduce((a,i)=>a+i.parsed.y,0);return t>0?`Total: ${t}`:''}}}},
+    scales:{x:{stacked:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:9.5},color:'#73726c',autoSkip:true,maxTicksLimit:15,maxRotation:45}},y:{stacked:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10.5},color:'#73726c',stepSize:1,precision:0},title:{display:true,text:'Oportunidades',font:{size:10.5},color:'#73726c'},min:0}}}});
+  const p=totals['Portal Inmobiliario']||0,m=totals['META-LM']||0,ig=totals['Instagram DM']||0,dir=totals['Directo']||0,imp=totals['Importación']||0;
+  document.getElementById('ins-ghl2').innerHTML=`<strong>Total período: ${grand} oportunidades</strong>. Portal Inmobiliario: <strong>${p} (${grand>0?Math.round(p/grand*100):0}%)</strong>. META-LM: <strong>${m}</strong>. Instagram DM: <strong>${ig}</strong>. Directo: <strong>${dir}</strong>.${imp>0?` Importación: <strong>${imp}</strong>.`:''}`;
 }
 
 // ── GRÁFICOS VIDEO POR BUYER PERSONA ─────────────────────────────────
