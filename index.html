@@ -314,10 +314,13 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
       <div class="ins" id="ins-ghl"></div>
     </div>
     <div>
-      <div class="ct" id="ct-ghl2">Arrendatarios</div>
-      <div class="leg" id="leg-ghl2"></div>
-      <div class="cw" style="height:260px"><canvas id="ch3"></canvas></div>
-      <div class="ins" id="ins-ghl2"></div>
+      <div class="ct" id="ct-backoffice">Embudo Backoffice · Compradores</div>
+      <table><thead><tr>
+        <th style="text-align:left">Fuente</th>
+        <th>Creadas</th><th>Backoffice</th><th>%</th><th>Costo</th><th>Costo/Op</th>
+      </tr></thead><tbody id="t-backoffice"></tbody></table>
+      <div class="sn">Costo unificado en CLP · TC USD/CLP: 925,89 (16/jul/2026, XE, fijo) · Portalinmobiliario: $2.000.000 CLP/mes prorrateado a base 30 días · Campañas: gasto total de Meta Ads (todas las campañas de la cuenta, sin filtrar) convertido a CLP · Backoffice = oportunidades del pipeline Compradores actualmente en etapa "Ingresado Back Office"</div>
+      <div class="ins" id="ins-backoffice"></div>
     </div>
   </div>
   </div></div>
@@ -352,20 +355,6 @@ const GHL28={
   ]
 };
 
-// Pipeline Arrendatarios (OT42JsJrwH9fUVzEBqpY) — agregado 08/jul/2026.
-// Mismas 5 fuentes que Compradores por consistencia de leyenda/colores, aunque
-// en la práctica esta pipeline sólo ha visto Portal Inmobiliario y Directo hasta ahora
-// (META-LM / Instagram DM / Importación en 0 durante todo el histórico 26/may-07/jul).
-const GHL_ARR={
-  labels:LABELS28,
-  src:[
-    {label:'Portal Inmobiliario',color:'#378ADD',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 4, 11, 5, 4, 5, 9, 4, 8, 10, 4, 3, 9, 4, 5, 4, 5, 3, 5, 1, 5, 2, 5, 3, 3, 1, 3, 3, 3, 2, 5, 0, 2, 1, 4, 2, 4, 6, 2, 2, 0]},
-    {label:'META-LM',color:'#639922',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
-    {label:'Instagram DM',color:'#8B44B8',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
-    {label:'Directo',color:'#D85A30',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
-    {label:'Importación',color:'#888780',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
-  ]
-};
 
 const PERIODOS = {
   '60d': {
@@ -384,7 +373,6 @@ const PERIODOS = {
     dailyLabels:LABELS28.slice(IDX60), dailyL1:L1.slice(IDX60),dailyL2:L2.slice(IDX60),dailyL3:L3.slice(IDX60),
     dailyS1:S1.slice(IDX60),dailyS2:S2.slice(IDX60),dailyS3:S3.slice(IDX60),
     ghlDays:LABELS28.slice(IDX60), ghlSrc:GHL28.src.map(s=>({...s,data:s.data.slice(IDX60)})),
-    ghlSrc2:GHL_ARR.src.map(s=>({...s,data:s.data.slice(IDX60)})),
   },
   '30d': {
     label: '16 jun – 15 jul 2026 (30 días)',
@@ -402,7 +390,6 @@ const PERIODOS = {
     dailyLabels:LABELS28.slice(IDX30), dailyL1:L1.slice(IDX30),dailyL2:L2.slice(IDX30),dailyL3:L3.slice(IDX30),
     dailyS1:S1.slice(IDX30),dailyS2:S2.slice(IDX30),dailyS3:S3.slice(IDX30),
     ghlDays:LABELS28.slice(IDX30), ghlSrc:GHL28.src.map(s=>({...s,data:s.data.slice(IDX30)})),
-    ghlSrc2:GHL_ARR.src.map(s=>({...s,data:s.data.slice(IDX30)})),
   },
   '14d': {
     label: '02 jul – 15 jul 2026 (14 días)',
@@ -422,7 +409,6 @@ const PERIODOS = {
     dailyS1:S1.slice(IDX14),dailyS2:S2.slice(IDX14),dailyS3:S3.slice(IDX14),
     ghlDays:LABELS28.slice(IDX14),
     ghlSrc:GHL28.src.map(s=>({...s,data:s.data.slice(IDX14)})),
-    ghlSrc2:GHL_ARR.src.map(s=>({...s,data:s.data.slice(IDX14)})),
   },
   'ayer': {
     label: '15 jul 2026 (Ayer)',
@@ -441,7 +427,6 @@ const PERIODOS = {
     dailyL1:[8],dailyL2:[2],dailyL3:[1],dailyS1:[20.18],dailyS2:[10.10],dailyS3:[9.95],
     ghlDays:['15/07'],
     ghlSrc:GHL28.src.map(s=>({...s,data:[s.data[s.data.length-1]]})),
-    ghlSrc2:GHL_ARR.src.map(s=>({...s,data:[s.data[s.data.length-1]]})),
   },
 };
 
@@ -790,7 +775,6 @@ function gapCell(meta,ghl){
 }
 
 let ch2=null;
-let ch3=null;
 
 function renderFunnels(lms){
   const C=document.getElementById('funnels-container');C.innerHTML='';
@@ -832,8 +816,8 @@ function setView(key){
   document.getElementById('ct-lm').childNodes[0].textContent=`Lead Magnets · ${d.label} `;
 
   document.getElementById('ct-ghl').childNodes[0].textContent=`Compradores · ${d.label} `;
-  document.getElementById('ct-ghl2').childNodes[0].textContent=`Arrendatarios · ${d.label} `;
-  renderKPIs(d);renderLMs(d);renderFunnels(d.lms);renderGHL(d,key);renderGHL2(d,key);renderVch(key);renderVchLM(key);renderEng(key);renderCPL(key);renderOrgKPIs(key);renderOrgFunnels(key);renderOrgSpend(key);renderVtasKPIs(key);renderVtasTable(key);renderVtasFunnels(key);renderVtasPerf(key);renderVtasCost(key);
+  document.getElementById('ct-backoffice').childNodes[0].textContent=`Embudo Backoffice · Compradores · ${d.label} `;
+  renderKPIs(d);renderLMs(d);renderFunnels(d.lms);renderGHL(d,key);renderBackoffice(key);renderVch(key);renderVchLM(key);renderEng(key);renderCPL(key);renderOrgKPIs(key);renderOrgFunnels(key);renderOrgSpend(key);renderVtasKPIs(key);renderVtasTable(key);renderVtasFunnels(key);renderVtasPerf(key);renderVtasCost(key);
 }
 
 function renderKPIs(d){
@@ -960,17 +944,51 @@ function renderGHL(d,key){
   document.getElementById('ins-ghl').innerHTML=`<strong>Total período: ${grand} oportunidades</strong>. Portal Inmobiliario: <strong>${p} (${grand>0?Math.round(p/grand*100):0}%)</strong>. META-LM: <strong>${m}</strong>. Instagram DM: <strong>${ig}</strong>. Directo: <strong>${dir}</strong>.${imp>0?` Importación: <strong>${imp}</strong>.`:''}`;
 }
 
-function renderGHL2(d,key){
-  if(ch3){ch3.destroy();ch3=null;}
-  const legEl=document.getElementById('leg-ghl2');legEl.innerHTML='';
-  d.ghlSrc2.forEach(s=>legEl.insertAdjacentHTML('beforeend',`<span><span class="lb" style="background:${s.color}"></span>${s.label}</span>`));
-  const totals={};d.ghlSrc2.forEach(s=>{totals[s.label]=s.data.reduce((a,b)=>a+b,0);});
-  const grand=Object.values(totals).reduce((a,b)=>a+b,0);
-  ch3=new Chart(document.getElementById('ch3'),{type:'bar',data:{labels:d.ghlDays,datasets:d.ghlSrc2.map(s=>({label:s.label,data:s.data,backgroundColor:s.color,stack:'s',borderRadius:2,borderSkipped:false}))},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-    plugins:{legend:{display:false},tooltip:{callbacks:{label(ctx){return ctx.parsed.y>0?` ${ctx.dataset.label}: ${ctx.parsed.y}`:null;},footer(items){const t=items.reduce((a,i)=>a+i.parsed.y,0);return t>0?`Total: ${t}`:''}}}},
-    scales:{x:{stacked:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:9.5},color:'#73726c',autoSkip:true,maxTicksLimit:15,maxRotation:45}},y:{stacked:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10.5},color:'#73726c',stepSize:1,precision:0},title:{display:true,text:'Oportunidades',font:{size:10.5},color:'#73726c'},min:0}}}});
-  const p=totals['Portal Inmobiliario']||0,m=totals['META-LM']||0,ig=totals['Instagram DM']||0,dir=totals['Directo']||0,imp=totals['Importación']||0;
-  document.getElementById('ins-ghl2').innerHTML=`<strong>Total período: ${grand} oportunidades</strong>. Portal Inmobiliario: <strong>${p} (${grand>0?Math.round(p/grand*100):0}%)</strong>. META-LM: <strong>${m}</strong>. Instagram DM: <strong>${ig}</strong>. Directo: <strong>${dir}</strong>.${imp>0?` Importación: <strong>${imp}</strong>.`:''}`;
+// ── EMBUDO BACKOFFICE (Compradores) — reemplaza el panel Arrendatarios, 16/jul/2026 ──
+// Fuente: pipeline Compradores (WdFrVOSe9FhV1YMcPtHM) vía GHL MCP, status=all (todas las
+// oportunidades, cualquier estado). "Backoffice" = etapa actual "Ingresado Back Office"
+// (id 344bd9ef-09a7-49c6-bd5f-2fb31509751e). Todo en CLP para que Costo/Op sea comparable
+// entre Portalinmobiliario (costo fijo mensual) y Campañas (gasto Meta convertido).
+const CLP_USD_RATE = 925.89; // XE mid-market, 16/jul/2026 16:10 UTC — fijo, actualizar manualmente si se requiere.
+const PORTAL_MONTHLY_CLP = 2000000; // Costo fijo mensual Portalinmobiliario, prorrateado a base 30 días.
+const BACKOFFICE_PERIODOS = {
+  '60d': { days:60, metaSpendUSD:1728.69,
+    portal:{creadas:78, backoffice:25}, campanas:{creadas:57, backoffice:12} },
+  '30d': { days:30, metaSpendUSD:1440.15,
+    portal:{creadas:60, backoffice:16}, campanas:{creadas:54, backoffice:12} },
+  '14d': { days:14, metaSpendUSD:644.98,
+    portal:{creadas:31, backoffice:8}, campanas:{creadas:36, backoffice:6} },
+  'ayer': { days:1, metaSpendUSD:47.39,
+    portal:{creadas:3, backoffice:0}, campanas:{creadas:6, backoffice:0} },
+};
+const fmtCLP = n => '$'+Math.round(n).toLocaleString('es-CL');
+
+function renderBackoffice(key){
+  const d = BACKOFFICE_PERIODOS[key];
+  const tb = document.getElementById('t-backoffice');
+  tb.innerHTML='';
+  const portalCost = PORTAL_MONTHLY_CLP * d.days/30;
+  const campCost = d.metaSpendUSD * CLP_USD_RATE;
+  const rows=[
+    {label:'Portalinmobiliario', creadas:d.portal.creadas, bo:d.portal.backoffice, cost:portalCost},
+    {label:'Campañas', creadas:d.campanas.creadas, bo:d.campanas.backoffice, cost:campCost},
+  ];
+  rows.forEach(r=>{
+    const pct = r.creadas>0 ? r.bo/r.creadas*100 : 0;
+    const cpo = r.bo>0 ? r.cost/r.bo : null;
+    tb.insertAdjacentHTML('beforeend',`<tr>
+      <td>${r.label}</td>
+      <td>${r.creadas}</td><td>${r.bo}</td><td>${pct.toFixed(1)}%</td>
+      <td>${fmtCLP(r.cost)}</td><td>${cpo!=null?fmtCLP(cpo):'—'}</td></tr>`);
+  });
+  const totCreadas=rows.reduce((a,r)=>a+r.creadas,0), totBo=rows.reduce((a,r)=>a+r.bo,0), totCost=rows.reduce((a,r)=>a+r.cost,0);
+  const totPct=totCreadas>0?totBo/totCreadas*100:0, totCpo=totBo>0?totCost/totBo:null;
+  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL</td><td>${totCreadas}</td><td>${totBo}</td><td>${totPct.toFixed(1)}%</td><td>${fmtCLP(totCost)}</td><td>${totCpo!=null?fmtCLP(totCpo):'—'}</td></tr>`);
+  const withBo = rows.filter(r=>r.bo>0);
+  const best = withBo.length ? withBo.reduce((a,r)=>(r.cost/r.bo)<(a.cost/a.bo)?r:a) : null;
+  document.getElementById('ins-backoffice').innerHTML = best
+    ? `<strong>${best.label}</strong> tiene el mejor Costo/Op (${fmtCLP(best.cost/best.bo)}) en este período. Total: <strong>${totBo} de ${totCreadas}</strong> oportunidades en Back Office (${totPct.toFixed(1)}%).`
+    : `Sin oportunidades en etapa "Ingresado Back Office" todavía en este período.`;
 }
 
 // ── GRÁFICOS VIDEO POR BUYER PERSONA ─────────────────────────────────
