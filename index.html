@@ -539,38 +539,38 @@ const VTAS_CS_S=[null, null, null, null, null, null, null, null, null, null, nul
 // de toda la vida de la campaña (arrancó 01/jul), que cabe entera dentro de esas 2 ventanas.
 const VTAS_AYER=[
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
-    {name:'CASA-PAULA',status:'ACTIVE',impr:1128,reach:928,clicks:24,spend:6.49,v50:61,v3s:347,msgs:1,ghlOpps:null},
+    {name:'CASA-PAULA',status:'ACTIVE',impr:1128,reach:928,clicks:24,spend:6.49,v50:61,v3s:347,msgs:1,ghlOpps:0},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
-    {name:'CASA-PIEDRA',status:'ACTIVE',impr:1313,reach:1023,clicks:24,spend:6.14,v50:43,v3s:317,msgs:1,ghlOpps:null},
+    {name:'CASA-PIEDRA',status:'ACTIVE',impr:1313,reach:1023,clicks:24,spend:6.14,v50:43,v3s:317,msgs:1,ghlOpps:1},
   ]},
 ];
 const VTAS_14D=[
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
-    {name:'CASA-PAULA',status:'ACTIVE',impr:11164,reach:6047,clicks:247,spend:65.38,v50:598,v3s:3467,msgs:9,ghlOpps:null},
+    {name:'CASA-PAULA',status:'ACTIVE',impr:11164,reach:6047,clicks:247,spend:65.38,v50:598,v3s:3467,msgs:9,ghlOpps:0},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
-    {name:'CASA-PIEDRA',status:'ACTIVE',impr:3700,reach:2205,clicks:80,spend:20.10,v50:140,v3s:1070,msgs:1,ghlOpps:null},
+    {name:'CASA-PIEDRA',status:'ACTIVE',impr:3700,reach:2205,clicks:80,spend:20.10,v50:140,v3s:1070,msgs:1,ghlOpps:1},
   ]},
 ];
 const VTAS_30D=[
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
-    {name:'CASA-PAULA',status:'ACTIVE',impr:15048,reach:6901,clicks:343,spend:85.10,v50:828,v3s:4557,msgs:15,ghlOpps:null},
+    {name:'CASA-PAULA',status:'ACTIVE',impr:15048,reach:6901,clicks:343,spend:85.10,v50:828,v3s:4557,msgs:15,ghlOpps:0},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
-    {name:'CASA-PIEDRA',status:'ACTIVE',impr:3700,reach:2205,clicks:80,spend:20.10,v50:140,v3s:1070,msgs:1,ghlOpps:null},
+    {name:'CASA-PIEDRA',status:'ACTIVE',impr:3700,reach:2205,clicks:80,spend:20.10,v50:140,v3s:1070,msgs:1,ghlOpps:1},
   ]},
 ];
 const VTAS_60D=[
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
-    {name:'CASA-PAULA',status:'ACTIVE',impr:15048,reach:6901,clicks:343,spend:85.10,v50:828,v3s:4557,msgs:15,ghlOpps:null},
+    {name:'CASA-PAULA',status:'ACTIVE',impr:15048,reach:6901,clicks:343,spend:85.10,v50:828,v3s:4557,msgs:15,ghlOpps:0},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
-    {name:'CASA-PIEDRA',status:'ACTIVE',impr:3700,reach:2205,clicks:80,spend:20.10,v50:140,v3s:1070,msgs:1,ghlOpps:null},
+    {name:'CASA-PIEDRA',status:'ACTIVE',impr:3700,reach:2205,clicks:80,spend:20.10,v50:140,v3s:1070,msgs:1,ghlOpps:1},
   ]},
 ]; // CASA-PAULA (FT) arrancó 01/jul, CASA-PIEDRA (CS) arrancó 16/jul — ambas caben enteras en 30d/60d // CASA-PAULA (FT) arrancó 01/jul, CASA-PIEDRA (CS) arrancó 16/jul — ver comentarios por período en VTAS_PERIODOS // CASA-PAULA (FT) arrancó 01/jul, CASA-PIEDRA (CS) arrancó 16/jul — ver comentarios por período en VTAS_PERIODOS
 
@@ -610,9 +610,11 @@ const VTAS_PERIODOS = {
   },
   'ayer': {
     // 19/jul: ambas campañas TOUR activas (CASA-PAULA/FT, CASA-PIEDRA/CS). Primera oportunidad GHL
-    // source=META-TOUR de la historia se creó este día (contacto "Jaime") pero sin custom field
-    // `presupuesto` poblado — con 2 buyers TOUR activos simultáneos, la atribución queda bloqueada
-    // (ghlOpps=null en ambos, ver Paso 2D). Costo/Contacto no calculable para ninguno de los dos.
+    // source=META-TOUR de la historia se creó este día (contacto "Jaime"). CORREGIDO 20/jul: el campo
+    // de presupuesto/buyer NO vive en el custom field de la OPORTUNIDAD (ese siempre viene vacío) sino
+    // en el custom field "Presupuesto" del CONTACTO (id VjcVRlutN5Nkr9RPJH91, fieldKey
+    // contact.presupuesto) — Jaime tiene ahí el valor "CS +19K", así que se atribuye a Consolidado
+    // Silencioso (ghlOpps:1 en CASA-PIEDRA, ghlOpps:0 confirmado en CASA-PAULA/FT).
     spend:12.63, msgs_ft:1, msgs_uf:0, msgs_cs:1, costo_msg:6.32, hook_rate:27.20,
     funnels:[
       {buyer:'Familia Transición', cls:'c1', color:'#378ADD', i:1128, v3:347, hr:30.76, v50:61, v50p:5.41},
