@@ -81,6 +81,7 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
   <button class="fbtn" onclick="setView('14d')">Últimos 14 días</button>
   <button class="fbtn" onclick="setView('30d')">Últimos 30 días</button>
   <button class="fbtn" onclick="setView('60d')">Últimos 60 días</button>
+  <button class="fbtn" onclick="setView('90d')">Últimos 90 días</button>
   <span class="period-label" id="period-label">Selecciona un período</span>
 </div>
 <div class="section-block acc-item">
@@ -244,9 +245,10 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
   <table><thead><tr>
     <th style="text-align:left">Campaña</th>
     <th>Impresiones</th><th>Alcance</th><th>Clicks</th><th>CTR</th><th>CPM</th>
-    <th>Hook Rate</th><th>%V50/Alc</th><th>Conv. Mensajes<br>(META)</th><th>Conv. Oport.<br>(GHL)</th>
-    <th>Costo/Mensaje</th><th>Costo/Contacto</th>
+    <th>Hook Rate</th><th>%V50/Alc</th><th>Conv. Mensajes<br>(META)</th><th>Conv. Oport.<br>(GHL)</th><th>Leads B.O</th>
+    <th>Costo/Mensaje</th><th>Costo/Contacto</th><th>Costo/BO</th>
   </tr></thead><tbody id="t-vtas"></tbody></table>
+  <div class="sn">Leads B.O = oportunidades META-TOUR de esa campaña que llegaron a "Ingresado Back Office" (pipeline Compradores) · reparto por campaña proporcional a Conv. Mensajes dentro del buyer (GHL solo identifica Buyer Persona vía campo Presupuesto, no campaña individual — el total por buyer es exacto) · Costo/BO = Inversión ÷ Leads B.O (— si Leads B.O = 0)</div>
   <div class="ins" id="ins-vtas"></div>
 
   <div class="inner-sep"></div>
@@ -321,13 +323,16 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
     </div>
   </div>
   <div style="margin-top:20px">
-      <div class="ct" id="ct-backoffice">Embudo Backoffice · Compradores</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div class="ct" id="ct-backoffice" style="flex:1;margin-bottom:14px">Embudo Backoffice · Compradores</div>
+        <button class="fbtn" id="backoffice-all-btn" onclick="toggleBackofficeAll()" style="margin-bottom:14px">Ver histórico completo</button>
+      </div>
       <table><thead><tr>
         <th style="text-align:left">Fuente</th>
-        <th>Nuevo</th><th>Asignado Ejecutiva</th><th>Ingresado Back Office</th><th>Descartado</th><th>Ganado</th>
-        <th>Costo Total Publicitario</th><th>Costo/Oportunidad</th>
+        <th>Nuevo</th><th>Asignado Ejecutiva</th><th>Ingresado BO</th><th>Descartado</th><th>Ganado</th><th>TOTAL</th>
+        <th>Costo Total</th><th>Costo/Conv</th><th>Costo/BO</th>
       </tr></thead><tbody id="t-backoffice"></tbody></table>
-      <div class="sn">Costo unificado en CLP · TC USD/CLP: 925,89 (16/jul/2026, XE, fijo) · Portalinmobiliario: $2.000.000 CLP/mes prorrateado a base 30 días · Campañas: gasto total de Meta Ads (todas las campañas de la cuenta, sin filtrar) convertido a CLP · Cada oportunidad del pipeline Compradores se cuenta en su etapa ACTUAL (no histórica) · Costo/Oportunidad = costo total / oportunidades en etapa "Ingresado Back Office"</div>
+      <div class="sn">Costo unificado en CLP · TC USD/CLP: 925,89 (16/jul/2026, XE, fijo) · Portalinmobiliario: $2.000.000 CLP/mes prorrateado a base 30 días · Campañas: gasto total de Meta Ads (todas las campañas de la cuenta, sin filtrar) convertido a CLP · Solo oportunidades con status "open" (igual que el tablero Kanban de GHL — excluye las marcadas manualmente como ganadas/perdidas aunque sigan visualmente en una etapa) · Cada oportunidad se cuenta en su etapa ACTUAL (no histórica) · Los períodos ayer/14d/30d/60d filtran por fecha de creación; "Ver histórico completo" muestra el pipeline entero sin filtro de fecha, para calzar 1:1 con el tablero de GHL · TOTAL = suma de Nuevo+Asignado Ejecutiva+Ingresado BO+Descartado+Ganado · Costo/Conv = Costo Total ÷ TOTAL (costo por cada contacto) · Costo/BO = Costo Total ÷ Ingresado BO</div>
       <div class="ins" id="ins-backoffice"></div>
   </div>
   </div></div>
@@ -349,6 +354,10 @@ const S3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3.16, 3.
 const IDX14=LABELS28.length-14; // 14 puntos: 01jul–14jul
 const IDX30=LABELS28.length-30; // 30 puntos: 15jun–14jul
 const IDX60=LABELS28.length-60; // 60 puntos: 16may–14jul (16may-04jun sin actividad de cuenta)
+const IDX90=Math.max(0, LABELS28.length-90); // clamp a 0: hoy (10/ago/2026) la cuenta solo tiene 86 días
+  // de historial (desde 16/may/2026), así que "90 días" muestra todo el historial disponible por
+  // ahora — se ajustará solo (empezará a recortar de verdad) una vez el reporte acumule más de 90
+  // días de datos, sin necesidad de tocar este código.
 
 const GHL_SRC_COLORS={'Portal Inmobiliario':'#378ADD','META-LM':'#639922','Instagram DM':'#8B44B8','Directo':'#D85A30','Importación':'#888780'};
 const GHL28={
@@ -378,6 +387,21 @@ const GHL_ARR={
 
 
 const PERIODOS = {
+  '90d': {
+    // Agregado 10/ago/2026. Totales de lms[] vienen de un pull fresco de Meta (since=2026-01-01,
+    // captura toda la vida de la cuenta) + conteo GHL histórico completo (pipeline Lead Magnets,
+    // 333 oportunidades) — no de sumar arrays diarios. dailyLabels/ghlSrc usan IDX90, que hoy (86
+    // días de historial) clampea a 0 y muestra todo el historial disponible.
+    label: '12 may – 09 ago 2026 (90 días)',
+    lms: [
+      {name:'Guía Paso a Paso',cls:'c1',bp:'Familia Transición',color:'#378ADD',impr:68848,reach:31704,clicks:2300,spend:598.64,ctr:3.34,cpm:8.70,cpc:0.26,leads:178,ghlLeads:143,ghlBO:3,v3s:20749,v50:4697,v75:2461},
+      {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',color:'#639922',impr:84928,reach:34106,clicks:2968,spend:723.07,ctr:3.49,cpm:8.51,cpc:0.24,leads:173,ghlLeads:138,ghlBO:3,v3s:21636,v50:5904,v75:3887},
+      {name:'VSL Operación Espejo',cls:'c3',bp:'Upgrader Familiar',color:'#8B44B8',impr:34348,reach:13338,clicks:1747,spend:344.65,ctr:5.09,cpm:10.03,cpc:0.20,leads:65,ghlLeads:52,ghlBO:0,v3s:8205,v50:1218,v75:892}
+    ],
+    dailyLabels:LABELS28.slice(IDX90), dailyL1:L1.slice(IDX90),dailyL2:L2.slice(IDX90),dailyL3:L3.slice(IDX90),
+    dailyS1:S1.slice(IDX90),dailyS2:S2.slice(IDX90),dailyS3:S3.slice(IDX90),
+    ghlDays:LABELS28.slice(IDX90), ghlSrc:GHL28.src.map(s=>({...s,data:s.data.slice(IDX90)})), ghlSrc2:GHL_ARR.src.map(s=>({...s,data:s.data.slice(IDX90)}))
+  },
   '60d': {
     label: '11 jun – 09 ago 2026 (60 días)',
     lms: [
@@ -453,6 +477,14 @@ const ENG_60D = [
   {buyer:'Upgrader Familiar',cls:'c2',bc:'#639922',camps:[{name:'[DC] Upgrader Familiar',status:'PAUSED',impr:82252,reach:37622,clicks:2211,spend:156.91,v50:2815,v3s:16124},{name:'Rell5-UF',status:'PAUSED',impr:2660,reach:2164,clicks:103,spend:7.41,v50:265,v3s:913},{name:'Rell2-UF (administrador)',status:'PAUSED',impr:3041,reach:2448,clicks:270,spend:14.81,v50:105,v3s:1104},{name:'Rell2-UF (boton)',status:'PAUSED',impr:2525,reach:2111,clicks:73,spend:14.09,v50:90,v3s:931}]},
   {buyer:'Consolidado Silencioso',cls:'c3',bc:'#8B44B8',camps:[{name:'[DC] Consolidado Silencioso',status:'PAUSED',impr:103891,reach:39214,clicks:2104,spend:157.05,v50:2128,v3s:12378},{name:'Rell6-CS',status:'PAUSED',impr:2198,reach:1818,clicks:83,spend:7.05,v50:151,v3s:561},{name:'Rell3-CS',status:'PAUSED',impr:10329,reach:6691,clicks:176,spend:13.57,v50:199,v3s:1280}]},
 ];
+// ENG_90D: idéntico a ENG_60D — las campañas DC/Rell orgánicas arrancaron 16/jun/2026, dentro de la
+// ventana de 60 días (11/jun–09/ago), así que no hay actividad orgánica adicional que capturar en
+// los 90 días (12/may–09/ago). Confirmado: no hay campañas orgánicas con delivery antes de 16/jun.
+const ENG_90D = [
+  {buyer:'Familia Transición',cls:'c1',bc:'#378ADD',camps:[{name:'[DC] Familia Transición',status:'PAUSED',impr:87119,reach:49416,clicks:3279,spend:158.28,v50:5301,v3s:21045},{name:'Rell4-FT',status:'PAUSED',impr:8701,reach:5757,clicks:183,spend:13.67,v50:171,v3s:1044},{name:'Rell1-FT (administrador)',status:'PAUSED',impr:3091,reach:2514,clicks:203,spend:14.47,v50:118,v3s:756},{name:'Rell1-FT (boton)',status:'PAUSED',impr:2470,reach:2127,clicks:44,spend:14.45,v50:59,v3s:560}]},
+  {buyer:'Upgrader Familiar',cls:'c2',bc:'#639922',camps:[{name:'[DC] Upgrader Familiar',status:'PAUSED',impr:82252,reach:37622,clicks:2211,spend:156.91,v50:2815,v3s:16124},{name:'Rell5-UF',status:'PAUSED',impr:2660,reach:2164,clicks:103,spend:7.41,v50:265,v3s:913},{name:'Rell2-UF (administrador)',status:'PAUSED',impr:3041,reach:2448,clicks:270,spend:14.81,v50:105,v3s:1104},{name:'Rell2-UF (boton)',status:'PAUSED',impr:2525,reach:2111,clicks:73,spend:14.09,v50:90,v3s:931}]},
+  {buyer:'Consolidado Silencioso',cls:'c3',bc:'#8B44B8',camps:[{name:'[DC] Consolidado Silencioso',status:'PAUSED',impr:103891,reach:39214,clicks:2104,spend:157.05,v50:2128,v3s:12378},{name:'Rell6-CS',status:'PAUSED',impr:2198,reach:1818,clicks:83,spend:7.05,v50:151,v3s:561},{name:'Rell3-CS',status:'PAUSED',impr:10329,reach:6691,clicks:176,spend:13.57,v50:199,v3s:1280}]},
+];
 
 // ── CONTENIDO DE VENTAS ──────────────────────────────────────────────────────
 // Campañas identificadas por "TOUR" + Buyer Persona en el nombre. Objetivo Meta:
@@ -484,67 +516,94 @@ const VTAS_CS_S = [null, null, null, null, null, null, null, null, null, null, n
 // de toda la vida de la campaña (arrancó 01/jul), que cabe entera dentro de esas 2 ventanas.
 const VTAS_AYER = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
-    {name:'CASA-PAULA',status:'ACTIVE',impr:537,reach:460,clicks:17,spend:6.45,v50:23,v3s:153,msgs:1,ghlOpps:1},
-    {name:'CASA-MEDITERRANEA',status:'ACTIVE',impr:447,reach:367,clicks:9,spend:5.65,v50:10,v3s:98,msgs:1,ghlOpps:1},
-    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:542,reach:445,clicks:10,spend:5.86,v50:12,v3s:128,msgs:0,ghlOpps:0},
+    {name:'CASA-PAULA',status:'ACTIVE',impr:537,reach:460,clicks:17,spend:6.45,v50:23,v3s:153,msgs:1,ghlOpps:1,ghlBO:0},
+    {name:'CASA-MEDITERRANEA',status:'ACTIVE',impr:447,reach:367,clicks:9,spend:5.65,v50:10,v3s:98,msgs:1,ghlOpps:1,ghlBO:0},
+    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:542,reach:445,clicks:10,spend:5.86,v50:12,v3s:128,msgs:0,ghlOpps:0,ghlBO:0},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[
-    {name:'CASA LO PINTO',status:'ACTIVE',impr:538,reach:385,clicks:17,spend:6.67,v50:19,v3s:117,msgs:2,ghlOpps:1},
+    {name:'CASA LO PINTO',status:'ACTIVE',impr:538,reach:385,clicks:17,spend:6.67,v50:19,v3s:117,msgs:2,ghlOpps:1,ghlBO:0},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
-    {name:'CASA-PIEDRA',status:'ACTIVE',impr:583,reach:486,clicks:15,spend:6.54,v50:12,v3s:134,msgs:0,ghlOpps:0},
-    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:609,reach:497,clicks:18,spend:7.97,v50:24,v3s:156,msgs:0,ghlOpps:0},
+    {name:'CASA-PIEDRA',status:'ACTIVE',impr:583,reach:486,clicks:15,spend:6.54,v50:12,v3s:134,msgs:0,ghlOpps:0,ghlBO:0},
+    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:609,reach:497,clicks:18,spend:7.97,v50:24,v3s:156,msgs:0,ghlOpps:0,ghlBO:0},
   ]}
 ];
 const VTAS_14D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
-    {name:'CASA-PAULA',status:'ACTIVE',impr:8567,reach:5198,clicks:205,spend:84.92,v50:446,v3s:2695,msgs:8,ghlOpps:6},
-    {name:'CASA-MEDITERRANEA',status:'ACTIVE',impr:9205,reach:4531,clicks:158,spend:82.89,v50:208,v3s:1841,msgs:11,ghlOpps:8},
-    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:6812,reach:3026,clicks:116,spend:73.05,v50:183,v3s:1571,msgs:5,ghlOpps:4},
+    {name:'CASA-PAULA',status:'ACTIVE',impr:8567,reach:5198,clicks:205,spend:84.92,v50:446,v3s:2695,msgs:8,ghlOpps:6,ghlBO:1},
+    {name:'CASA-MEDITERRANEA',status:'ACTIVE',impr:9205,reach:4531,clicks:158,spend:82.89,v50:208,v3s:1841,msgs:11,ghlOpps:8,ghlBO:1},
+    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:6812,reach:3026,clicks:116,spend:73.05,v50:183,v3s:1571,msgs:5,ghlOpps:4,ghlBO:0},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[
-    {name:'CASA LO PINTO',status:'ACTIVE',impr:8805,reach:4341,clicks:175,spend:83.21,v50:245,v3s:2016,msgs:7,ghlOpps:5},
+    {name:'CASA LO PINTO',status:'ACTIVE',impr:8805,reach:4341,clicks:175,spend:83.21,v50:245,v3s:2016,msgs:7,ghlOpps:5,ghlBO:0},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
-    {name:'CASA-PIEDRA',status:'ACTIVE',impr:9318,reach:5329,clicks:199,spend:84.92,v50:310,v3s:2519,msgs:4,ghlOpps:3},
-    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:3113,reach:1756,clicks:59,spend:28.94,v50:112,v3s:767,msgs:0,ghlOpps:0},
+    {name:'CASA-PIEDRA',status:'ACTIVE',impr:9318,reach:5329,clicks:199,spend:84.92,v50:310,v3s:2519,msgs:4,ghlOpps:3,ghlBO:0},
+    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:3113,reach:1756,clicks:59,spend:28.94,v50:112,v3s:767,msgs:0,ghlOpps:0,ghlBO:0},
   ]}
 ];
 const VTAS_30D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
-    {name:'CASA-PAULA',status:'ACTIVE',impr:21893,reach:9869,clicks:472,spend:171.41,v50:1103,v3s:6769,msgs:17,ghlOpps:11},
-    {name:'CASA-MEDITERRANEA',status:'ACTIVE',impr:13564,reach:6098,clicks:221,spend:108.06,v50:314,v3s:2735,msgs:13,ghlOpps:9},
-    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:6812,reach:3026,clicks:116,spend:73.05,v50:183,v3s:1571,msgs:5,ghlOpps:3},
+    {name:'CASA-PAULA',status:'ACTIVE',impr:21893,reach:9869,clicks:472,spend:171.41,v50:1103,v3s:6769,msgs:17,ghlOpps:11,ghlBO:2},
+    {name:'CASA-MEDITERRANEA',status:'ACTIVE',impr:13564,reach:6098,clicks:221,spend:108.06,v50:314,v3s:2735,msgs:13,ghlOpps:9,ghlBO:1},
+    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:6812,reach:3026,clicks:116,spend:73.05,v50:183,v3s:1571,msgs:5,ghlOpps:3,ghlBO:1},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[
-    {name:'CASA LO PINTO',status:'ACTIVE',impr:9809,reach:4585,clicks:195,spend:90.67,v50:279,v3s:2293,msgs:8,ghlOpps:6},
+    {name:'CASA LO PINTO',status:'ACTIVE',impr:9809,reach:4585,clicks:195,spend:90.67,v50:279,v3s:2293,msgs:8,ghlOpps:6,ghlBO:0},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
-    {name:'CASA-PIEDRA',status:'ACTIVE',impr:19217,reach:9010,clicks:409,spend:146.34,v50:681,v3s:5205,msgs:12,ghlOpps:11},
-    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:3113,reach:1756,clicks:59,spend:28.94,v50:112,v3s:767,msgs:0,ghlOpps:0},
+    {name:'CASA-PIEDRA',status:'ACTIVE',impr:19217,reach:9010,clicks:409,spend:146.34,v50:681,v3s:5205,msgs:12,ghlOpps:11,ghlBO:0},
+    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:3113,reach:1756,clicks:59,spend:28.94,v50:112,v3s:767,msgs:0,ghlOpps:0,ghlBO:0},
   ]}
 ];
 // CASA-PAULA (FT) arrancó 01/jul, CASA-PIEDRA (CS) arrancó 16/jul, CASA-MEDITERRANEA (FT) arrancó 22/jul, CASA LO PINTO (UF) arrancó 25/jul, CASA EN PIEDRA ROJA (FT, id 52637639732913) arrancó 28/jul, CASA EN PIEDRA ROJA (CS, id 52640127646313) arrancó ~05/ago — todas caben enteras en 30d/60d (60d reutiliza 30d, confirmado 07/ago: pulls Meta idénticos en ambas ventanas para las 6 campañas).
 // CASA-PAULA (FT) arrancó 01/jul, CASA-PIEDRA (CS) arrancó 16/jul, CASA-MEDITERRANEA (FT) arrancó 22/jul, CASA LO PINTO (UF) arrancó 25/jul, CASA EN PIEDRA ROJA (FT) arrancó 28/jul — todas caben enteras en 30d/60d (60d reutiliza 30d, ver nota 03/ago/2026);;
 const VTAS_60D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
-    {name:'CASA-PAULA',status:'ACTIVE',impr:29176,reach:11506,clicks:649,spend:210.81,v50:1504,v3s:8901,msgs:26,ghlOpps:12},
-    {name:'CASA-MEDITERRANEA',status:'ACTIVE',impr:13564,reach:6098,clicks:221,spend:108.06,v50:314,v3s:2735,msgs:13,ghlOpps:9},
-    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:6812,reach:3026,clicks:116,spend:73.05,v50:183,v3s:1571,msgs:5,ghlOpps:3},
+    {name:'CASA-PAULA',status:'ACTIVE',impr:29176,reach:11506,clicks:649,spend:210.81,v50:1504,v3s:8901,msgs:26,ghlOpps:12,ghlBO:2},
+    {name:'CASA-MEDITERRANEA',status:'ACTIVE',impr:13564,reach:6098,clicks:221,spend:108.06,v50:314,v3s:2735,msgs:13,ghlOpps:9,ghlBO:1},
+    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:6812,reach:3026,clicks:116,spend:73.05,v50:183,v3s:1571,msgs:5,ghlOpps:3,ghlBO:1},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[
-    {name:'CASA LO PINTO',status:'ACTIVE',impr:9809,reach:4585,clicks:195,spend:90.67,v50:279,v3s:2293,msgs:8,ghlOpps:6},
+    {name:'CASA LO PINTO',status:'ACTIVE',impr:9809,reach:4585,clicks:195,spend:90.67,v50:279,v3s:2293,msgs:8,ghlOpps:6,ghlBO:0},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
-    {name:'CASA-PIEDRA',status:'ACTIVE',impr:19217,reach:9010,clicks:409,spend:146.34,v50:681,v3s:5205,msgs:12,ghlOpps:11},
-    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:3113,reach:1756,clicks:59,spend:28.94,v50:112,v3s:767,msgs:0,ghlOpps:0},
+    {name:'CASA-PIEDRA',status:'ACTIVE',impr:19217,reach:9010,clicks:409,spend:146.34,v50:681,v3s:5205,msgs:12,ghlOpps:11,ghlBO:0},
+    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:3113,reach:1756,clicks:59,spend:28.94,v50:112,v3s:767,msgs:0,ghlOpps:0,ghlBO:0},
   ]}
 ];
 // 60d reutiliza 30d — todas las campañas TOUR nacieron dentro de los últimos 30 días (confirmado 07/ago/2026 con pulls Meta idénticos en ambas ventanas).
 // CASA-PAULA (FT) arrancó 01/jul, CASA-PIEDRA (CS) arrancó 16/jul, CASA-MEDITERRANEA (FT) arrancó 22/jul, CASA LO PINTO (UF) arrancó 25/jul, CASA EN PIEDRA ROJA (FT) arrancó 28/jul — todas caben enteras en 30d/60d (60d reutiliza 30d);
 
+// VTAS_90D: idéntico a VTAS_60D — todas las campañas TOUR arrancaron dentro de los últimos 60 días
+// (la más vieja, CASA-PAULA, el 01/jul/2026), así que la ventana de 90 días (12/may–09/ago) no
+// captura ninguna campaña TOUR adicional. Agregado 10/ago/2026.
+const VTAS_90D = [
+  {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',camps:[
+    {name:'CASA-PAULA',status:'ACTIVE',impr:29176,reach:11506,clicks:649,spend:210.81,v50:1504,v3s:8901,msgs:26,ghlOpps:12,ghlBO:2},
+    {name:'CASA-MEDITERRANEA',status:'ACTIVE',impr:13564,reach:6098,clicks:221,spend:108.06,v50:314,v3s:2735,msgs:13,ghlOpps:9,ghlBO:1},
+    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:6812,reach:3026,clicks:116,spend:73.05,v50:183,v3s:1571,msgs:5,ghlOpps:3,ghlBO:1},
+  ]},
+  {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',camps:[
+    {name:'CASA LO PINTO',status:'ACTIVE',impr:9809,reach:4585,clicks:195,spend:90.67,v50:279,v3s:2293,msgs:8,ghlOpps:6,ghlBO:0},
+  ]},
+  {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',camps:[
+    {name:'CASA-PIEDRA',status:'ACTIVE',impr:19217,reach:9010,clicks:409,spend:146.34,v50:681,v3s:5205,msgs:12,ghlOpps:11,ghlBO:0},
+    {name:'CASA EN PIEDRA ROJA',status:'ACTIVE',impr:3113,reach:1756,clicks:59,spend:28.94,v50:112,v3s:767,msgs:0,ghlOpps:0,ghlBO:0},
+  ]}
+];
+
 
 const VTAS_PERIODOS = {
+  '90d':   {
+    // Idéntico a '60d' — sin campañas TOUR adicionales antes del 01/jul (ver nota VTAS_90D).
+    spend:657.87, msgs_ft:44, msgs_uf:8, msgs_cs:12, costo_msg:10.28, hook_rate:26.28,
+    funnels:[
+      {buyer:'Familia Transición', cls:'c1', color:'#378ADD', i:49552, v3:13207, hr:26.65, v50:2001, v50p:4.04},
+      {buyer:'Upgrader Familiar', cls:'c2', color:'#639922', i:9809, v3:2293, hr:23.38, v50:279, v50p:2.84},
+      {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8', i:22330, v3:5972, hr:26.74, v50:793, v50p:3.55}
+    ]
+  },
   '60d':   {
     spend:657.87, msgs_ft:44, msgs_uf:8, msgs_cs:12, costo_msg:10.28, hook_rate:26.28,
     funnels:[
@@ -593,44 +652,46 @@ function renderVtasKPIs(key){
 }
 
 function renderVtasTable(key){
-  const vtasData = key==='ayer'?VTAS_AYER:key==='14d'?VTAS_14D:key==='30d'?VTAS_30D:VTAS_60D;
+  const vtasData = key==='ayer'?VTAS_AYER:key==='14d'?VTAS_14D:key==='30d'?VTAS_30D:key==='60d'?VTAS_60D:VTAS_90D;
   const tb=document.getElementById('t-vtas');tb.innerHTML='';
-  let gI=0,gR=0,gC=0,gS=0,gV=0,gV3=0,gMsg=0,gGhl=0,nCamps=0;
+  let gI=0,gR=0,gC=0,gS=0,gV=0,gV3=0,gMsg=0,gGhl=0,gBO=0,nCamps=0;
   vtasData.forEach(g=>{
     const sI=g.camps.reduce((a,c)=>a+c.impr,0),sR=g.camps.reduce((a,c)=>a+c.reach,0),
           sC=g.camps.reduce((a,c)=>a+c.clicks,0),sS=g.camps.reduce((a,c)=>a+c.spend,0),
           sV=g.camps.reduce((a,c)=>a+c.v50,0), sV3=g.camps.reduce((a,c)=>a+c.v3s,0),
-          sMsg=g.camps.reduce((a,c)=>a+(c.msgs||0),0), sGhl=g.camps.reduce((a,c)=>a+(c.ghlOpps||0),0);
-    gI+=sI;gR+=sR;gC+=sC;gS+=sS;gV+=sV;gV3+=sV3;gMsg+=sMsg;gGhl+=sGhl;nCamps+=g.camps.length;
+          sMsg=g.camps.reduce((a,c)=>a+(c.msgs||0),0), sGhl=g.camps.reduce((a,c)=>a+(c.ghlOpps||0),0),
+          sBO=g.camps.reduce((a,c)=>a+(c.ghlBO||0),0);
+    gI+=sI;gR+=sR;gC+=sC;gS+=sS;gV+=sV;gV3+=sV3;gMsg+=sMsg;gGhl+=sGhl;gBO+=sBO;nCamps+=g.camps.length;
     const sPct=sI>0?sV/sI*100:0,sHR=sI>0?sV3/sI*100:0;
-    const sCostoMsg=sMsg>0?sS/sMsg:null, sCostoContacto=sGhl>0?sS/sGhl:null;
-    tb.insertAdjacentHTML('beforeend',`<tr class="grp"><td colspan="12"><span class="chip ${g.cls}">${g.buyer}</span>&nbsp;<span style="font-weight:500;font-size:10px;color:var(--text2)">${g.camps.length} camps · Alcance: ${fmt(sR)} · ${sMsg} mensaje${sMsg===1?'':'s'} · ${sGhl} oport. GHL</span></td></tr>`);
+    const sCostoMsg=sMsg>0?sS/sMsg:null, sCostoContacto=sGhl>0?sS/sGhl:null, sCostoBO=sBO>0?sS/sBO:null;
+    tb.insertAdjacentHTML('beforeend',`<tr class="grp"><td colspan="14"><span class="chip ${g.cls}">${g.buyer}</span>&nbsp;<span style="font-weight:500;font-size:10px;color:var(--text2)">${g.camps.length} camps · Alcance: ${fmt(sR)} · ${sMsg} mensaje${sMsg===1?'':'s'} · ${sGhl} oport. GHL · ${sBO} B.O.</span></td></tr>`);
     if(g.camps.length===0){
-      tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td colspan="12" style="font-style:italic;font-weight:500;color:var(--text2)">Sin campañas de contenido de ventas activas todavía para este buyer.</td></tr>`);
+      tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td colspan="14" style="font-style:italic;font-weight:500;color:var(--text2)">Sin campañas de contenido de ventas activas todavía para este buyer.</td></tr>`);
       return;
     }
     g.camps.forEach(c=>{
       const ctr=c.impr>0?c.clicks/c.impr*100:0, cpm=c.impr>0?c.spend/c.impr*1000:0,
             hr=c.impr>0?c.v3s/c.impr*100:0, pctV=c.impr>0?c.v50/c.impr*100:0,
-            msgs=c.msgs||0, ghl=c.ghlOpps||0,
-            costoMsg=msgs>0?c.spend/msgs:null, costoContacto=ghl>0?c.spend/ghl:null;
+            msgs=c.msgs||0, ghl=c.ghlOpps||0, bo=c.ghlBO||0,
+            costoMsg=msgs>0?c.spend/msgs:null, costoContacto=ghl>0?c.spend/ghl:null, costoBO=bo>0?c.spend/bo:null;
       tb.insertAdjacentHTML('beforeend',`<tr>
         <td>${c.name} <span class="chip act">${c.status==='ACTIVE'?'Activa':'Pausada'}</span></td>
         <td>${fmt(c.impr)}</td><td>${fmt(c.reach)}</td><td>${fmt(c.clicks)}</td>
         <td>${ctr.toFixed(2)}%</td><td>$${cpm.toFixed(2)}</td>
         <td>${hr.toFixed(1)}%</td><td>${pctV.toFixed(1)}%</td>
-        <td>${msgs}</td><td>${ghl}</td>
+        <td>${msgs}</td><td>${ghl}</td><td>${bo}</td>
         <td>${costoMsg!=null?'$'+costoMsg.toFixed(2):'—'}</td>
-        <td>${costoContacto!=null?'$'+costoContacto.toFixed(2):'—'}</td></tr>`);
+        <td>${costoContacto!=null?'$'+costoContacto.toFixed(2):'—'}</td>
+        <td>${costoBO!=null?'$'+costoBO.toFixed(2):'—'}</td></tr>`);
     });
-    tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td>Subtotal ${g.buyer}</td><td>${fmt(sI)}</td><td>${fmt(sR)}</td><td>${fmt(sC)}</td><td>${(sI>0?sC/sI*100:0).toFixed(2)}%</td><td>$${(sI>0?sS/sI*1000:0).toFixed(2)}</td><td>${sHR.toFixed(1)}%</td><td>${sPct.toFixed(1)}%</td><td>${sMsg}</td><td>${sGhl}</td><td>${sCostoMsg!=null?'$'+sCostoMsg.toFixed(2):'—'}</td><td>${sCostoContacto!=null?'$'+sCostoContacto.toFixed(2):'—'}</td></tr>`);
+    tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td>Subtotal ${g.buyer}</td><td>${fmt(sI)}</td><td>${fmt(sR)}</td><td>${fmt(sC)}</td><td>${(sI>0?sC/sI*100:0).toFixed(2)}%</td><td>$${(sI>0?sS/sI*1000:0).toFixed(2)}</td><td>${sHR.toFixed(1)}%</td><td>${sPct.toFixed(1)}%</td><td>${sMsg}</td><td>${sGhl}</td><td>${sBO}</td><td>${sCostoMsg!=null?'$'+sCostoMsg.toFixed(2):'—'}</td><td>${sCostoContacto!=null?'$'+sCostoContacto.toFixed(2):'—'}</td><td>${sCostoBO!=null?'$'+sCostoBO.toFixed(2):'—'}</td></tr>`);
   });
   const gPct=gI>0?gV/gI*100:0,gHR=gI>0?gV3/gI*100:0;
-  const gCostoMsg=gMsg>0?gS/gMsg:null, gCostoContacto=gGhl>0?gS/gGhl:null;
-  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL (${nCamps} camp${nCamps===1?'':'s'})</td><td>${fmt(gI)}</td><td>${fmt(gR)}</td><td>${fmt(gC)}</td><td>${(gI>0?gC/gI*100:0).toFixed(2)}%</td><td>$${(gI>0?gS/gI*1000:0).toFixed(2)}</td><td>${gHR.toFixed(1)}%</td><td>${gPct.toFixed(1)}%</td><td>${gMsg}</td><td>${gGhl}</td><td>${gCostoMsg!=null?'$'+gCostoMsg.toFixed(2):'—'}</td><td>${gCostoContacto!=null?'$'+gCostoContacto.toFixed(2):'—'}</td></tr>`);
+  const gCostoMsg=gMsg>0?gS/gMsg:null, gCostoContacto=gGhl>0?gS/gGhl:null, gCostoBO=gBO>0?gS/gBO:null;
+  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL (${nCamps} camp${nCamps===1?'':'s'})</td><td>${fmt(gI)}</td><td>${fmt(gR)}</td><td>${fmt(gC)}</td><td>${(gI>0?gC/gI*100:0).toFixed(2)}%</td><td>$${(gI>0?gS/gI*1000:0).toFixed(2)}</td><td>${gHR.toFixed(1)}%</td><td>${gPct.toFixed(1)}%</td><td>${gMsg}</td><td>${gGhl}</td><td>${gBO}</td><td>${gCostoMsg!=null?'$'+gCostoMsg.toFixed(2):'—'}</td><td>${gCostoContacto!=null?'$'+gCostoContacto.toFixed(2):'—'}</td><td>${gCostoBO!=null?'$'+gCostoBO.toFixed(2):'—'}</td></tr>`);
   const activeBuyers=vtasData.filter(g=>g.camps.length>0).map(g=>g.buyer);
   const emptyBuyers=vtasData.filter(g=>g.camps.length===0).map(g=>g.buyer);
-  document.getElementById('ins-vtas').innerHTML = `${activeBuyers.length?`<strong>${activeBuyers.join(', ')}</strong> con contenido de ventas activo.`:'Sin campañas de contenido de ventas activas en este período.'}${gMsg>0?` <strong>${gMsg} mensaje${gMsg===1?'':'s'}</strong> a $${gCostoMsg.toFixed(2)} USD c/u.`:''}${gGhl===0?` Conv. Oport. (GHL) en 0 — no se detectaron oportunidades con Fuente "META-TOUR" en Compradores/Arrendatarios todavía (campaña recién arrancó); Costo/Contacto no calculable hasta que exista al menos 1.`:` <strong>${gGhl} oportunidad${gGhl===1?'':'es'}</strong> GHL a $${gCostoContacto.toFixed(2)} USD c/u.`}${emptyBuyers.length?` ${emptyBuyers.join(' y ')} todavía sin campaña TOUR.`:''} Tendencias diarias se muestran al acumular ${VTAS_MIN_DAYS_TREND}+ días de historia.`;
+  document.getElementById('ins-vtas').innerHTML = `${activeBuyers.length?`<strong>${activeBuyers.join(', ')}</strong> con contenido de ventas activo.`:'Sin campañas de contenido de ventas activas en este período.'}${gMsg>0?` <strong>${gMsg} mensaje${gMsg===1?'':'s'}</strong> a $${gCostoMsg.toFixed(2)} USD c/u.`:''}${gGhl===0?` Conv. Oport. (GHL) en 0 — no se detectaron oportunidades con Fuente "META-TOUR" en Compradores/Arrendatarios todavía (campaña recién arrancó); Costo/Contacto no calculable hasta que exista al menos 1.`:` <strong>${gGhl} oportunidad${gGhl===1?'':'es'}</strong> GHL a $${gCostoContacto.toFixed(2)} USD c/u.`}${gBO===0?` Leads B.O en 0 — todavía ninguna oportunidad META-TOUR llegó a "Ingresado Back Office".`:` <strong>${gBO} lead${gBO===1?'':'s'} B.O.</strong> a $${gCostoBO.toFixed(2)} USD c/u.`}${emptyBuyers.length?` ${emptyBuyers.join(' y ')} todavía sin campaña TOUR.`:''} Tendencias diarias se muestran al acumular ${VTAS_MIN_DAYS_TREND}+ días de historia.`;
 }
 
 function renderVtasFunnels(key){
@@ -678,7 +739,7 @@ function renderVtasPerf(key){
   if(vtasPerfFT){vtasPerfFT.destroy();vtasPerfFT=null;}
   if(vtasPerfUF){vtasPerfUF.destroy();vtasPerfUF=null;}
   if(vtasPerfCS){vtasPerfCS.destroy();vtasPerfCS=null;}
-  const idx = key==='60d'?IDX60:key==='30d'?IDX30:key==='14d'?IDX14:LABELS28.length-1;
+  const idx = key==='90d'?IDX90:key==='60d'?IDX60:key==='30d'?IDX30:key==='14d'?IDX14:LABELS28.length-1;
   const buyers=[
     {wrapId:'vtas-perf-ft-wrap',canvasId:'vtas-perf-ft',hook:VTAS_FT_HOOK,v50p:VTAS_FT_V50P,msg:VTAS_FT_MSG,spend:VTAS_FT_S,color:'#378ADD',colorV50:'#7fb8ee',bar:'rgba(55,138,221,0.3)'},
     {wrapId:'vtas-perf-uf-wrap',canvasId:'vtas-perf-uf',hook:VTAS_UF_HOOK,v50p:VTAS_UF_V50P,msg:VTAS_UF_MSG,spend:VTAS_UF_S,color:'#639922',colorV50:'#96c45a',bar:'rgba(99,153,34,0.3)'},
@@ -721,7 +782,7 @@ function renderVtasCost(key){
   if(vtasCostFT){vtasCostFT.destroy();vtasCostFT=null;}
   if(vtasCostUF){vtasCostUF.destroy();vtasCostUF=null;}
   if(vtasCostCS){vtasCostCS.destroy();vtasCostCS=null;}
-  const idx = key==='60d'?IDX60:key==='30d'?IDX30:key==='14d'?IDX14:LABELS28.length-1;
+  const idx = key==='90d'?IDX90:key==='60d'?IDX60:key==='30d'?IDX30:key==='14d'?IDX14:LABELS28.length-1;
   const buyers=[
     {wrapId:'vtas-cost-ft-wrap',canvasId:'vtas-cost-ft',spend:VTAS_FT_S,msg:VTAS_FT_MSG,color:'#378ADD'},
     {wrapId:'vtas-cost-uf-wrap',canvasId:'vtas-cost-uf',spend:VTAS_UF_S,msg:VTAS_UF_MSG,color:'#639922'},
@@ -806,8 +867,28 @@ function renderFunnels(lms){
   });
 }
 
+let CURRENT_KEY = 'ayer';
+let BACKOFFICE_SHOW_ALL = false;
+
+function updateBackofficeTitle(key){
+  const d=PERIODOS[key];
+  document.getElementById('ct-backoffice').childNodes[0].textContent = BACKOFFICE_SHOW_ALL
+    ? `Embudo Backoffice · Compradores · Histórico completo (desde 05/jun/2026) `
+    : `Embudo Backoffice · Compradores · ${d.label} `;
+}
+
+function toggleBackofficeAll(){
+  BACKOFFICE_SHOW_ALL = !BACKOFFICE_SHOW_ALL;
+  const btn = document.getElementById('backoffice-all-btn');
+  btn.textContent = BACKOFFICE_SHOW_ALL ? 'Ver por período' : 'Ver histórico completo';
+  btn.classList.toggle('active', BACKOFFICE_SHOW_ALL);
+  updateBackofficeTitle(CURRENT_KEY);
+  renderBackoffice(BACKOFFICE_SHOW_ALL ? 'todo' : CURRENT_KEY);
+}
+
 function setView(key){
-  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  CURRENT_KEY = key;
+  document.querySelectorAll('.fbtn').forEach(b=>{ if(b.id!=='backoffice-all-btn') b.classList.remove('active'); });
   document.querySelector(`.fbtn[onclick="setView('${key}')"]`).classList.add('active');
   const d=PERIODOS[key];
   document.getElementById('hdr-period').textContent=d.label;
@@ -815,8 +896,8 @@ function setView(key){
   document.getElementById('ct-lm').childNodes[0].textContent=`Lead Magnets · ${d.label} `;
 
   document.getElementById('ct-ghl').childNodes[0].textContent=`Compradores · ${d.label} `;
-  document.getElementById('ct-backoffice').childNodes[0].textContent=`Embudo Backoffice · Compradores · ${d.label} `;
-  renderKPIs(d);renderLMs(d);renderFunnels(d.lms);renderGHL(d,key);renderGHL2(d,key);renderBackoffice(key);renderVch(key);renderVchLM(key);renderEng(key);renderCPL(key);renderOrgKPIs(key);renderOrgFunnels(key);renderOrgSpend(key);renderVtasKPIs(key);renderVtasTable(key);renderVtasFunnels(key);renderVtasPerf(key);renderVtasCost(key);
+  updateBackofficeTitle(key);
+  renderKPIs(d);renderLMs(d);renderFunnels(d.lms);renderGHL(d,key);renderGHL2(d,key);renderBackoffice(BACKOFFICE_SHOW_ALL ? 'todo' : key);renderVch(key);renderVchLM(key);renderEng(key);renderCPL(key);renderOrgKPIs(key);renderOrgFunnels(key);renderOrgSpend(key);renderVtasKPIs(key);renderVtasTable(key);renderVtasFunnels(key);renderVtasPerf(key);renderVtasCost(key);
 }
 
 function renderKPIs(d){
@@ -890,8 +971,8 @@ function renderLMs(d){
 
 
 function renderEng(key){
-  const engData = key==='ayer' ? ENG_AYER : key==='14d' ? ENG_14D : key==='30d' ? ENG_30D : ENG_60D;
-  const periodLabel = key==='ayer' ? 'Ayer' : key==='14d' ? '14 días' : key==='30d' ? '30 días' : '60 días';
+  const engData = key==='ayer' ? ENG_AYER : key==='14d' ? ENG_14D : key==='30d' ? ENG_30D : key==='60d' ? ENG_60D : ENG_90D;
+  const periodLabel = key==='ayer' ? 'Ayer' : key==='14d' ? '14 días' : key==='30d' ? '30 días' : key==='60d' ? '60 días' : '90 días';
   const ctEl=document.getElementById('ct-eng');
   if(ctEl) ctEl.childNodes[0].textContent=`Engagement por Buyer Persona · ${periodLabel} `;
   const tb2=document.getElementById('t2');tb2.innerHTML='';
@@ -970,18 +1051,44 @@ function renderGHL2(d,key){
 const CLP_USD_RATE = 925.89; // XE mid-market, 16/jul/2026 16:10 UTC — fijo, actualizar manualmente si se requiere.
 const PORTAL_MONTHLY_CLP = 2000000; // Costo fijo mensual Portalinmobiliario, prorrateado a base 30 días.
 const BACKOFFICE_PERIODOS = {
-  '60d': { days:60, metaSpendUSD:2627.04,
-    portal:{nuevo:2, asigEjec:5, ingBO:42, descartado:84, ganado:0},
-    campanas:{nuevo:4, asigEjec:10, ingBO:33, descartado:96, ganado:0} },
-  '30d': { days:30, metaSpendUSD:1302.44,
-    portal:{nuevo:2, asigEjec:4, ingBO:24, descartado:47, ganado:0},
-    campanas:{nuevo:4, asigEjec:10, ingBO:27, descartado:80, ganado:0} },
-  '14d': { days:14, metaSpendUSD:618.84,
-    portal:{nuevo:2, asigEjec:4, ingBO:13, descartado:23, ganado:0},
-    campanas:{nuevo:3, asigEjec:10, ingBO:16, descartado:39, ganado:0} },
-  'ayer': { days:1, metaSpendUSD:58.16,
-    portal:{nuevo:2, asigEjec:0, ingBO:0, descartado:0, ganado:0},
-    campanas:{nuevo:3, asigEjec:3, ingBO:1, descartado:1, ganado:0} },
+  // Refrescado 10/ago/2026 (2) con pull en vivo filtrado por status="open" — corregido tras
+  // comparar contra el tablero Kanban real de Gianfranco, que solo cuenta oportunidades "open"
+  // (excluye las marcadas manualmente ganadas/perdidas aunque sigan visualmente en una etapa; caso
+  // confirmado: "Ma. Carolina" en Asignado Ejecutiva con status=lost, invisible en el Kanban). El
+  // primer refresco del mismo día (status="all") sobreestimaba levemente por esto. metaSpendUSD =
+  // gasto total de la cuenta (todas las campañas, pull agregado sin filtro).
+  '90d': { days:90, metaSpendUSD:2930.07,
+    portal:{nuevo:0, asigEjec:5, ingBO:50, descartado:87, ganado:0},
+    campanas:{nuevo:1, asigEjec:5, ingBO:37, descartado:125, ganado:0} },
+  '60d': { days:60, metaSpendUSD:2794.56,
+    portal:{nuevo:0, asigEjec:5, ingBO:44, descartado:84, ganado:0},
+    campanas:{nuevo:1, asigEjec:5, ingBO:37, descartado:124, ganado:0} },
+  '30d': { days:30, metaSpendUSD:1384.47,
+    portal:{nuevo:0, asigEjec:5, ingBO:29, descartado:39, ganado:0},
+    campanas:{nuevo:0, asigEjec:5, ingBO:27, descartado:96, ganado:0} },
+  '14d': { days:14, metaSpendUSD:718.57,
+    portal:{nuevo:0, asigEjec:5, ingBO:12, descartado:14, ganado:0},
+    campanas:{nuevo:0, asigEjec:5, ingBO:16, descartado:46, ganado:0} },
+  'ayer': { days:1, metaSpendUSD:60.94,
+    portal:{nuevo:0, asigEjec:0, ingBO:2, descartado:0, ganado:0},
+    campanas:{nuevo:0, asigEjec:0, ingBO:2, descartado:4, ganado:0} },
+  // "todo" = ancla corregida 10/ago/2026 (3): antes usaba la fecha de creación del pipeline GHL
+  // (01/may/2026), pero Gianfranco confirmó que el 05/jun/2026 es la fecha real en que arrancaron
+  // las campañas de Meta Y se conectó GHL para leer leads de Meta/Portal — antes de esa fecha el
+  // pipeline existía pero sin captura automática real (el puñado de oportunidades de 01/may-04/jun
+  // no son representativas de actividad de campaña). Recalculado con pull en vivo status="open"
+  // desde 2026-06-05 00:00 Chile hasta ayer inclusive (meta.total=315 en todo el pipeline, 5
+  // descartadas por caer después del corte de ayer, 310 en ventana). days=66 (05/jun–09/ago
+  // inclusive). metaSpendUSD = pull agregado de cuenta para la misma ventana exacta (2026-06-05 a
+  // 2026-08-09), no el histórico completo de la cuenta. NOTA: con la data actual esto coincide
+  // exactamente con el bloque '90d' porque no hubo oportunidades creadas entre ~12/may y 04/jun —
+  // es esperado, no un bug; van a divergir de nuevo cuando '90d' se convierta en ventana rodante
+  // real (pase de más de 90 días desde el 05/jun). Ya NO calza contra el Kanban completo sin
+  // filtrar (315) porque este período excluye a propósito lo anterior al 05/jun — si Gianfranco
+  // filtra su Kanban por fecha de creación ≥05/jun, ahí sí debería calzar 1:1.
+  'todo': { days:66, metaSpendUSD:2929.93,
+    portal:{nuevo:0, asigEjec:5, ingBO:50, descartado:87, ganado:0},
+    campanas:{nuevo:1, asigEjec:5, ingBO:37, descartado:125, ganado:0} },
 };
 const fmtCLP = n => '$'+Math.round(n).toLocaleString('es-CL');
 
@@ -997,22 +1104,27 @@ function renderBackoffice(key){
     {label:'Campañas', s:d.campanas, cost:campCost},
   ];
   rows.forEach(r=>{
-    const cpo = r.s.ingBO>0 ? r.cost/r.s.ingBO : null;
+    const rowTotal = STAGES.reduce((a,st)=>a+r.s[st],0);
+    const costoConv = rowTotal>0 ? r.cost/rowTotal : null;
+    const costoBO = r.s.ingBO>0 ? r.cost/r.s.ingBO : null;
     tb.insertAdjacentHTML('beforeend',`<tr>
       <td>${r.label}</td>
       <td>${r.s.nuevo}</td><td>${r.s.asigEjec}</td><td>${r.s.ingBO}</td><td>${r.s.descartado}</td><td>${r.s.ganado}</td>
-      <td>${fmtCLP(r.cost)}</td><td>${cpo!=null?fmtCLP(cpo):'—'}</td></tr>`);
+      <td>${rowTotal}</td>
+      <td>${fmtCLP(r.cost)}</td><td>${costoConv!=null?fmtCLP(costoConv):'—'}</td><td>${costoBO!=null?fmtCLP(costoBO):'—'}</td></tr>`);
   });
   const totals = {};
   STAGES.forEach(st=>{ totals[st] = rows.reduce((a,r)=>a+r.s[st],0); });
+  const totRowTotal = STAGES.reduce((a,st)=>a+totals[st],0);
   const totCost=rows.reduce((a,r)=>a+r.cost,0);
-  const totCpo = totals.ingBO>0 ? totCost/totals.ingBO : null;
-  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL</td><td>${totals.nuevo}</td><td>${totals.asigEjec}</td><td>${totals.ingBO}</td><td>${totals.descartado}</td><td>${totals.ganado}</td><td>${fmtCLP(totCost)}</td><td>${totCpo!=null?fmtCLP(totCpo):'—'}</td></tr>`);
+  const totCostoConv = totRowTotal>0 ? totCost/totRowTotal : null;
+  const totCostoBO = totals.ingBO>0 ? totCost/totals.ingBO : null;
+  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL</td><td>${totals.nuevo}</td><td>${totals.asigEjec}</td><td>${totals.ingBO}</td><td>${totals.descartado}</td><td>${totals.ganado}</td><td>${totRowTotal}</td><td>${fmtCLP(totCost)}</td><td>${totCostoConv!=null?fmtCLP(totCostoConv):'—'}</td><td>${totCostoBO!=null?fmtCLP(totCostoBO):'—'}</td></tr>`);
   const withBo = rows.filter(r=>r.s.ingBO>0);
   const best = withBo.length ? withBo.reduce((a,r)=>(r.cost/r.s.ingBO)<(a.cost/a.s.ingBO)?r:a) : null;
-  const totCreadas = rows.reduce((a,r)=>a+STAGES.reduce((x,st)=>x+r.s[st],0),0);
+  const totCreadas = totRowTotal;
   document.getElementById('ins-backoffice').innerHTML = best
-    ? `<strong>${best.label}</strong> tiene el mejor Costo/Oportunidad (${fmtCLP(best.cost/best.s.ingBO)}) en este período. Total: <strong>${totals.ingBO} de ${totCreadas}</strong> oportunidades en etapa Ingresado Back Office.`
+    ? `<strong>${best.label}</strong> tiene el mejor Costo/BO (${fmtCLP(best.cost/best.s.ingBO)}) en este período. Total: <strong>${totals.ingBO} de ${totCreadas}</strong> oportunidades en etapa Ingresado BO.`
     : `Sin oportunidades en etapa "Ingresado Back Office" en este período.`;
 }
 
@@ -1044,6 +1156,10 @@ const LM3_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11
 
 // Slices por período
 const VCH_DATA = {
+  '90d': { labels:VCH_LABELS.slice(IDX90),
+    ft:{hook:LM1_HOOK.slice(IDX90), v50p:LM1_V50P.slice(IDX90), v50r:LM1_V50R.slice(IDX90), bars:L1.slice(IDX90)},
+    uf:{hook:LM2_HOOK.slice(IDX90), v50p:LM2_V50P.slice(IDX90), v50r:LM2_V50R.slice(IDX90), bars:L2.slice(IDX90)},
+    cs:{hook:LM3_HOOK.slice(IDX90), v50p:LM3_V50P.slice(IDX90), v50r:LM3_V50R.slice(IDX90), bars:L3.slice(IDX90)} },
   '60d': { labels:VCH_LABELS.slice(IDX60),
     ft:{hook:LM1_HOOK.slice(IDX60), v50p:LM1_V50P.slice(IDX60), v50r:LM1_V50R.slice(IDX60), bars:L1.slice(IDX60)},
     uf:{hook:LM2_HOOK.slice(IDX60), v50p:LM2_V50P.slice(IDX60), v50r:LM2_V50R.slice(IDX60), bars:L2.slice(IDX60)},
@@ -1078,6 +1194,7 @@ const ENG_CS_HOOK = [null, null, null, null, null, null, null, null, null, null,
 const ENG_CS_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1.92, 1.57, 1.24, 2.89, 3.65, 2.85, 4.14, 3.59, 3.97, 3.18, 3.78, 3.99, 3.23, 2.54, 2.57, 1.95, 1.95, 2.1, 1.83, 1.66, 1.62, 1.62, 1.8, 2.13, 1.72, 1.75, 1.19, 1.48, 2.6, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
 const ENG_CS_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 25, 19, 51, 69, 73, 84, 47, 57, 54, 79, 71, 75, 113, 162, 135, 138, 136, 98, 102, 83, 89, 98, 118, 99, 100, 85, 99, 104, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 const ENG_DATA={
+  '90d':{labels:VCH_LABELS.slice(IDX90), ft:{hook:ENG_FT_HOOK.slice(IDX90),v50p:ENG_FT_V50P.slice(IDX90),v50r:ENG_FT_V50R.slice(IDX90)}, uf:{hook:ENG_UF_HOOK.slice(IDX90),v50p:ENG_UF_V50P.slice(IDX90),v50r:ENG_UF_V50R.slice(IDX90)}, cs:{hook:ENG_CS_HOOK.slice(IDX90),v50p:ENG_CS_V50P.slice(IDX90),v50r:ENG_CS_V50R.slice(IDX90)}},
   '60d':{labels:VCH_LABELS.slice(IDX60), ft:{hook:ENG_FT_HOOK.slice(IDX60),v50p:ENG_FT_V50P.slice(IDX60),v50r:ENG_FT_V50R.slice(IDX60)}, uf:{hook:ENG_UF_HOOK.slice(IDX60),v50p:ENG_UF_V50P.slice(IDX60),v50r:ENG_UF_V50R.slice(IDX60)}, cs:{hook:ENG_CS_HOOK.slice(IDX60),v50p:ENG_CS_V50P.slice(IDX60),v50r:ENG_CS_V50R.slice(IDX60)}},
   '30d':{labels:VCH_LABELS.slice(IDX30), ft:{hook:ENG_FT_HOOK.slice(IDX30),v50p:ENG_FT_V50P.slice(IDX30),v50r:ENG_FT_V50R.slice(IDX30)}, uf:{hook:ENG_UF_HOOK.slice(IDX30),v50p:ENG_UF_V50P.slice(IDX30),v50r:ENG_UF_V50R.slice(IDX30)}, cs:{hook:ENG_CS_HOOK.slice(IDX30),v50p:ENG_CS_V50P.slice(IDX30),v50r:ENG_CS_V50R.slice(IDX30)}},
   '14d':{labels:VCH_LABELS.slice(IDX14), ft:{hook:ENG_FT_HOOK.slice(IDX14),v50p:ENG_FT_V50P.slice(IDX14),v50r:ENG_FT_V50R.slice(IDX14)}, uf:{hook:ENG_UF_HOOK.slice(IDX14),v50p:ENG_UF_V50P.slice(IDX14),v50r:ENG_UF_V50R.slice(IDX14)}, cs:{hook:ENG_CS_HOOK.slice(IDX14),v50p:ENG_CS_V50P.slice(IDX14),v50r:ENG_CS_V50R.slice(IDX14)}},
@@ -1190,6 +1307,14 @@ function renderCPL(key){
 
 // ── DATOS ORGÁNICO KPIs + FUNNELS POR PERÍODO ────────────────────────────────
 const ORG_PERIODOS = {
+  '90d': { spend:571.76, v50_ft:5649, v50_uf:3275, v50_cs:2478, costo_v50:0.0502, hook_rate:18.39,
+    // Idéntico a '60d' — campañas DC/Rell orgánicas arrancaron 16/jun, sin actividad antes de eso.
+    funnels:[
+      {buyer:'Familia Transición', cls:'c1', color:'#378ADD', i:101381, v3:23405, hr:23.09, v50:5649, v50p:5.57},
+      {buyer:'Upgrader Familiar', cls:'c2', color:'#639922', i:90478, v3:19072, hr:21.08, v50:3275, v50p:3.62},
+      {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8', i:116418, v3:14219, hr:12.21, v50:2478, v50p:2.13},
+    ]
+  },
   '60d': { spend:571.76, v50_ft:5649, v50_uf:3275, v50_cs:2478, costo_v50:0.0502, hook_rate:18.39,
     funnels:[
       {buyer:'Familia Transición', cls:'c1', color:'#378ADD', i:101381, v3:23405, hr:23.09, v50:5649, v50p:5.57},
@@ -1333,6 +1458,9 @@ function renderOrgSpend(key){
   } else if(key==='14d'){
     labels=LABELS28.slice(IDX14); sFT=ORG_FT_S.slice(IDX14); sUF=ORG_UF_S.slice(IDX14); sCS=ORG_CS_S.slice(IDX14);
     vFT=ENG_FT_V50R.slice(IDX14); vUF=ENG_UF_V50R.slice(IDX14); vCS=ENG_CS_V50R.slice(IDX14);
+  } else if(key==='90d'){
+    labels=LABELS28.slice(IDX90); sFT=ORG_FT_S.slice(IDX90); sUF=ORG_UF_S.slice(IDX90); sCS=ORG_CS_S.slice(IDX90);
+    vFT=ENG_FT_V50R.slice(IDX90); vUF=ENG_UF_V50R.slice(IDX90); vCS=ENG_CS_V50R.slice(IDX90);
   } else {
     labels=['07/08']; sFT=[null]; sUF=[null]; sCS=[null];
     vFT=[0]; vUF=[0]; vCS=[0];
