@@ -244,11 +244,13 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
   <div class="ct" id="ct-vtas">Rendimiento por Buyer Persona</div>
   <table><thead><tr>
     <th style="text-align:left">Campaña</th>
-    <th>Impresiones</th><th>Alcance</th><th>Clicks</th><th>CTR</th><th>CPM</th>
-    <th>Hook Rate</th><th>%V50/Alc</th><th>Conv. Mensajes<br>(META)</th><th>Conv. Oport.<br>(GHL)</th><th>Leads B.O</th>
+    <th>Días</th>
+    <th>Gasto</th>
+    <th>Impresiones</th><th>FREQ</th><th>Clicks</th><th>CTR</th><th>CPM</th>
+    <th>Hook Rate</th><th>%V50</th><th>%V95</th><th>MSJE<br>(META)</th><th>OPOR<br>(GHL)</th><th>Leads B.O</th>
     <th>Costo/Mensaje</th><th>Costo/Contacto</th><th>Costo/BO</th>
   </tr></thead><tbody id="t-vtas"></tbody></table>
-  <div class="sn">Leads B.O = oportunidades META-TOUR de esa campaña que llegaron a "Ingresado Back Office" (pipeline Compradores) · reparto por campaña proporcional a Conv. Mensajes dentro del buyer (GHL solo identifica Buyer Persona vía campo Presupuesto, no campaña individual — el total por buyer es exacto) · Costo/BO = Inversión ÷ Leads B.O (— si Leads B.O = 0)</div>
+  <div class="sn">Días = días circulando desde el primer día con datos reales de esa campaña hasta ayer · Gasto = inversión Meta de esa campaña en el período (USD) · FREQ = Impresiones ÷ Alcance (veces que la persona promedio vio el anuncio) · %V50 = video visto ≥50% ÷ Impresiones · %V95 = video visto ≥95% ÷ Alcance (— hasta que el pipeline empiece a traer `video_p95_watched_actions` de Meta) · MSJE (META) = Conv. Mensajes · OPOR (GHL) = Conv. Oportunidades · Leads B.O = oportunidades META-TOUR de esa campaña que llegaron a "Ingresado Back Office" (pipeline Compradores) · reparto por campaña proporcional a MSJE dentro del buyer (GHL solo identifica Buyer Persona vía campo Presupuesto, no campaña individual — el total por buyer es exacto) · Costo/BO = Inversión ÷ Leads B.O (— si Leads B.O = 0)</div>
   <div class="ins" id="ins-vtas"></div>
 
   <div class="inner-sep"></div>
@@ -343,6 +345,7 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
 // ── DATOS REALES — 0 valores hardcodeados ──
 // Todos los datos vienen de Meta Ads API (adset level, time_increment=1) y GHL MCP
 // Fechas: HOY=16/ago/2026, AYER=15/ago, DESDE_30=17/jul, DESDE_14=02/ago
+const AYER_ISO = '2026-08-15'; // usado para calcular "Días" (circulando) en la tabla de Ventas — c.start es el primer día con datos reales de esa campaña (ver tabla CONTENIDO DE VENTAS)
 
 const LABELS28 = ["16/05", "17/05", "18/05", "19/05", "20/05", "21/05", "22/05", "23/05", "24/05", "25/05", "26/05", "27/05", "28/05", "29/05", "30/05", "31/05", "01/06", "02/06", "03/06", "04/06", "05/06", "06/06", "07/06", "08/06", "09/06", "10/06", "11/06", "12/06", "13/06", "14/06", "15/06", "16/06", "17/06", "18/06", "19/06", "20/06", "21/06", "22/06", "23/06", "24/06", "25/06", "26/06", "27/06", "28/06", "29/06", "30/06", "01/07", "02/07", "03/07", "04/07", "05/07", "06/07", "07/07", "08/07", "09/07", "10/07", "11/07", "12/07", "13/07", "14/07", "15/07", "16/07", "17/07", "18/07", "19/07", "20/07", "21/07", "22/07", "23/07", "24/07", "25/07", "26/07", "27/07", "28/07", "29/07", "30/07", "31/07", "01/08", "02/08", "03/08", "04/08", "05/08", "06/08", "07/08", "08/08", "09/08", "10/08", "11/08", "12/08", "13/08", "14/08", "15/08"];
 const L1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 3, 2, 4, 6, 2, 5, 5, 5, 4, 4, 1, 4, 2, 2, 4, 0, 4, 4, 8, 5, 7, 3, 7, 1, 5, 4, 3, 3, 9, 7, 2, 5, 2, 1, 4, 4, 8, 5, 6, 1, 8, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -512,53 +515,53 @@ const VTAS_CS_S = [null, null, null, null, null, null, null, null, null, null, n
 // de toda la vida de la campaña (arrancó 01/jul), que cabe entera dentro de esas 2 ventanas.
 const VTAS_AYER = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:0,camps:[
-    {name:'15781 CASA-PAULA',status:'ACTIVE',impr:518,reach:470,clicks:15,spend:5.13,v50:24,v3s:180,msgs:1,ghlOpps:1},
-    {name:'20901 CASA-MEDITERRANEA',status:'ACTIVE',impr:484,reach:423,clicks:7,spend:4.69,v50:9,v3s:105,msgs:2,ghlOpps:2},
-    {name:'18434 CASA EN PIEDRA ROJA',status:'ACTIVE',impr:438,reach:380,clicks:7,spend:5.03,v50:13,v3s:113,msgs:0,ghlOpps:0},
-    {name:'31520 CASA PIEDRA ROJA',status:'ACTIVE',impr:646,reach:556,clicks:13,spend:7.42,v50:32,v3s:223,msgs:0,ghlOpps:0},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:518,reach:470,clicks:15,spend:5.13,v50:24,v3s:180,msgs:1,ghlOpps:1},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:484,reach:423,clicks:7,spend:4.69,v50:9,v3s:105,msgs:2,ghlOpps:2},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:438,reach:380,clicks:7,spend:5.03,v50:13,v3s:113,msgs:0,ghlOpps:0},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:646,reach:556,clicks:13,spend:7.42,v50:32,v3s:223,msgs:0,ghlOpps:0},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',status:'ACTIVE',impr:367,reach:315,clicks:11,spend:3.96,v50:8,v3s:88,msgs:1,ghlOpps:1},
-    {name:'32098 CASA PIEDRA ROA',status:'ACTIVE',impr:739,reach:531,clicks:17,spend:7.53,v50:20,v3s:187,msgs:1,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:367,reach:315,clicks:11,spend:3.96,v50:8,v3s:88,msgs:1,ghlOpps:1},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:739,reach:531,clicks:17,spend:7.53,v50:20,v3s:187,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:0,camps:[
-    {name:'11511 CASA-PIEDRA',status:'ACTIVE',impr:505,reach:436,clicks:9,spend:4.64,v50:11,v3s:122,msgs:0,ghlOpps:0},
-    {name:'13111 CASA EN PIEDRA ROJA',status:'ACTIVE',impr:344,reach:302,clicks:7,spend:4.14,v50:13,v3s:100,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',status:'ACTIVE',impr:599,reach:502,clicks:12,spend:7.66,v50:11,v3s:141,msgs:2,ghlOpps:1},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:505,reach:436,clicks:9,spend:4.64,v50:11,v3s:122,msgs:0,ghlOpps:0},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:344,reach:302,clicks:7,spend:4.14,v50:13,v3s:100,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:599,reach:502,clicks:12,spend:7.66,v50:11,v3s:141,msgs:2,ghlOpps:1},
   ]},
 ];
 const VTAS_14D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:0,camps:[
-    {name:'15781 CASA-PAULA',status:'ACTIVE',impr:8056,reach:5103,clicks:211,spend:83.84,v50:410,v3s:2504,msgs:8,ghlOpps:6},
-    {name:'20901 CASA-MEDITERRANEA',status:'ACTIVE',impr:7392,reach:3728,clicks:116,spend:83.92,v50:168,v3s:1554,msgs:11,ghlOpps:9},
-    {name:'18434 CASA EN PIEDRA ROJA',status:'ACTIVE',impr:7784,reach:3850,clicks:125,spend:83.97,v50:187,v3s:1752,msgs:2,ghlOpps:2},
-    {name:'31520 CASA PIEDRA ROJA',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,msgs:1,ghlOpps:1},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:8056,reach:5103,clicks:211,spend:83.84,v50:410,v3s:2504,msgs:8,ghlOpps:6},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:7392,reach:3728,clicks:116,spend:83.92,v50:168,v3s:1554,msgs:11,ghlOpps:9},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:7784,reach:3850,clicks:125,spend:83.97,v50:187,v3s:1752,msgs:2,ghlOpps:2},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',status:'ACTIVE',impr:7477,reach:3717,clicks:174,spend:83.92,v50:181,v3s:1612,msgs:8,ghlOpps:6},
-    {name:'32098 CASA PIEDRA ROA',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,msgs:2,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:7477,reach:3717,clicks:174,spend:83.92,v50:181,v3s:1612,msgs:8,ghlOpps:6},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,msgs:2,ghlOpps:1},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:1,camps:[
-    {name:'11511 CASA-PIEDRA',status:'ACTIVE',impr:10025,reach:6112,clicks:219,spend:83.93,v50:308,v3s:2589,msgs:4,ghlOpps:4},
-    {name:'13111 CASA EN PIEDRA ROJA',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,msgs:3,ghlOpps:3},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:10025,reach:6112,clicks:219,spend:83.93,v50:308,v3s:2589,msgs:4,ghlOpps:4},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,msgs:3,ghlOpps:3},
   ]},
 ];
 const VTAS_30D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:4,camps:[
-    {name:'15781 CASA-PAULA',status:'ACTIVE',impr:20284,reach:9647,clicks:461,spend:177.78,v50:999,v3s:6245,msgs:17,ghlOpps:12},
-    {name:'20901 CASA-MEDITERRANEA',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,msgs:18,ghlOpps:13},
-    {name:'18434 CASA EN PIEDRA ROJA',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,msgs:5,ghlOpps:4},
-    {name:'31520 CASA PIEDRA ROJA',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,msgs:1,ghlOpps:1},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:20284,reach:9647,clicks:461,spend:177.78,v50:999,v3s:6245,msgs:17,ghlOpps:12},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,msgs:18,ghlOpps:13},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,msgs:5,ghlOpps:4},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,msgs:11,ghlOpps:8},
-    {name:'32098 CASA PIEDRA ROA',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,msgs:2,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,msgs:11,ghlOpps:8},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,msgs:2,ghlOpps:1},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:1,camps:[
-    {name:'11511 CASA-PIEDRA',status:'ACTIVE',impr:23060,reach:10686,clicks:493,spend:179.72,v50:780,v3s:6113,msgs:15,ghlOpps:14},
-    {name:'13111 CASA EN PIEDRA ROJA',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,msgs:3,ghlOpps:3},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23060,reach:10686,clicks:493,spend:179.72,v50:780,v3s:6113,msgs:15,ghlOpps:14},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,msgs:3,ghlOpps:3},
   ]},
 ];
 // Refrescado 11/ago/2026 con pull fresco de Meta por ventana exacta (ya no 60d=30d: CASA-PAULA
@@ -568,19 +571,19 @@ const VTAS_30D = [
 // 10/ago/2026, arrancó ese mismo día.
 const VTAS_60D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:4,camps:[
-    {name:'15781 CASA-PAULA',status:'ACTIVE',impr:32501,reach:12681,clicks:737,spend:246.28,v50:1662,v3s:9905,msgs:30,ghlOpps:17},
-    {name:'20901 CASA-MEDITERRANEA',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,msgs:18,ghlOpps:10},
-    {name:'18434 CASA EN PIEDRA ROJA',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,msgs:5,ghlOpps:3},
-    {name:'31520 CASA PIEDRA ROJA',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,msgs:1,ghlOpps:1},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:32501,reach:12681,clicks:737,spend:246.28,v50:1662,v3s:9905,msgs:30,ghlOpps:17},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,msgs:18,ghlOpps:10},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,msgs:5,ghlOpps:3},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,msgs:11,ghlOpps:8},
-    {name:'32098 CASA PIEDRA ROA',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,msgs:2,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,msgs:11,ghlOpps:8},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,msgs:2,ghlOpps:1},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:1,camps:[
-    {name:'11511 CASA-PIEDRA',status:'ACTIVE',impr:23439,reach:10704,clicks:498,spend:181.75,v50:798,v3s:6242,msgs:15,ghlOpps:14},
-    {name:'13111 CASA EN PIEDRA ROJA',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,msgs:3,ghlOpps:3},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23439,reach:10704,clicks:498,spend:181.75,v50:798,v3s:6242,msgs:15,ghlOpps:14},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,msgs:3,ghlOpps:3},
   ]},
 ];
 
@@ -589,19 +592,19 @@ const VTAS_60D = [
 // captura ninguna campaña TOUR adicional. Refrescado 11/ago/2026 (ver Paso 2h punto 4).
 const VTAS_90D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:4,camps:[
-    {name:'15781 CASA-PAULA',status:'ACTIVE',impr:32501,reach:12681,clicks:737,spend:246.28,v50:1662,v3s:9905,msgs:30,ghlOpps:17},
-    {name:'20901 CASA-MEDITERRANEA',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,msgs:18,ghlOpps:10},
-    {name:'18434 CASA EN PIEDRA ROJA',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,msgs:5,ghlOpps:3},
-    {name:'31520 CASA PIEDRA ROJA',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,msgs:1,ghlOpps:1},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:32501,reach:12681,clicks:737,spend:246.28,v50:1662,v3s:9905,msgs:30,ghlOpps:17},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,msgs:18,ghlOpps:10},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,msgs:5,ghlOpps:3},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,msgs:11,ghlOpps:8},
-    {name:'32098 CASA PIEDRA ROA',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,msgs:2,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,msgs:11,ghlOpps:8},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,msgs:2,ghlOpps:1},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:1,camps:[
-    {name:'11511 CASA-PIEDRA',status:'ACTIVE',impr:23439,reach:10704,clicks:498,spend:181.75,v50:798,v3s:6242,msgs:15,ghlOpps:14},
-    {name:'13111 CASA EN PIEDRA ROJA',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,msgs:3,ghlOpps:3},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23439,reach:10704,clicks:498,spend:181.75,v50:798,v3s:6242,msgs:15,ghlOpps:14},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,msgs:3,ghlOpps:3},
   ]},
 ];
 
@@ -665,43 +668,49 @@ function renderVtasKPIs(key){
 function renderVtasTable(key){
   const vtasData = key==='ayer'?VTAS_AYER:key==='14d'?VTAS_14D:key==='30d'?VTAS_30D:key==='60d'?VTAS_60D:VTAS_90D;
   const tb=document.getElementById('t-vtas');tb.innerHTML='';
-  let gI=0,gR=0,gC=0,gS=0,gV=0,gV3=0,gMsg=0,gGhl=0,gBO=0,nCamps=0;
+  let gI=0,gR=0,gC=0,gS=0,gV=0,gV3=0,gV95=0,gMsg=0,gGhl=0,gBO=0,nCamps=0,gHasV95=false;
   vtasData.forEach(g=>{
     const sI=g.camps.reduce((a,c)=>a+c.impr,0),sR=g.camps.reduce((a,c)=>a+c.reach,0),
           sC=g.camps.reduce((a,c)=>a+c.clicks,0),sS=g.camps.reduce((a,c)=>a+c.spend,0),
           sV=g.camps.reduce((a,c)=>a+c.v50,0), sV3=g.camps.reduce((a,c)=>a+c.v3s,0),
+          sV95=g.camps.reduce((a,c)=>a+(c.v95||0),0), sHasV95=g.camps.some(c=>c.v95!=null),
           sMsg=g.camps.reduce((a,c)=>a+(c.msgs||0),0), sGhl=g.camps.reduce((a,c)=>a+(c.ghlOpps||0),0),
           sBO=g.ghlBO||0; // ghlBO ya no se suma por campaña: GHL no atribuye Back Office a nivel de
                           // anuncio individual (ver Hallazgo 9), así que se guarda 1 sola vez por
                           // buyer en g.ghlBO y cada campaña del buyer muestra ese mismo total.
-    gI+=sI;gR+=sR;gC+=sC;gS+=sS;gV+=sV;gV3+=sV3;gMsg+=sMsg;gGhl+=sGhl;gBO+=sBO;nCamps+=g.camps.length;
-    const sPct=sI>0?sV/sI*100:0,sHR=sI>0?sV3/sI*100:0;
+    gI+=sI;gR+=sR;gC+=sC;gS+=sS;gV+=sV;gV3+=sV3;gV95+=sV95;gMsg+=sMsg;gGhl+=sGhl;gBO+=sBO;nCamps+=g.camps.length;
+    if(sHasV95) gHasV95=true;
+    const sFreq=sR>0?sI/sR:0, sPct=sI>0?sV/sI*100:0, sPct95=(sHasV95&&sR>0)?sV95/sR*100:null, sHR=sI>0?sV3/sI*100:0;
     const sCostoMsg=sMsg>0?sS/sMsg:null, sCostoContacto=sGhl>0?sS/sGhl:null, sCostoBO=sBO>0?sS/sBO:null;
-    tb.insertAdjacentHTML('beforeend',`<tr class="grp"><td colspan="14"><span class="chip ${g.cls}">${g.buyer}</span>&nbsp;<span style="font-weight:500;font-size:10px;color:var(--text2)">${g.camps.length} camps · Alcance: ${fmt(sR)} · ${sMsg} mensaje${sMsg===1?'':'s'} · ${sGhl} oport. GHL · ${sBO} B.O.</span></td></tr>`);
+    tb.insertAdjacentHTML('beforeend',`<tr class="grp"><td colspan="17"><span class="chip ${g.cls}">${g.buyer}</span>&nbsp;<span style="font-weight:500;font-size:10px;color:var(--text2)">${g.camps.length} camps · Alcance: ${fmt(sR)} · Gasto: $${sS.toFixed(2)} · ${sMsg} mensaje${sMsg===1?'':'s'} · ${sGhl} oport. GHL · ${sBO} B.O.</span></td></tr>`);
     if(g.camps.length===0){
-      tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td colspan="14" style="font-style:italic;font-weight:500;color:var(--text2)">Sin campañas de contenido de ventas activas todavía para este buyer.</td></tr>`);
+      tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td colspan="17" style="font-style:italic;font-weight:500;color:var(--text2)">Sin campañas de contenido de ventas activas todavía para este buyer.</td></tr>`);
       return;
     }
     g.camps.forEach(c=>{
       const ctr=c.impr>0?c.clicks/c.impr*100:0, cpm=c.impr>0?c.spend/c.impr*1000:0,
             hr=c.impr>0?c.v3s/c.impr*100:0, pctV=c.impr>0?c.v50/c.impr*100:0,
+            freq=c.reach>0?c.impr/c.reach:0, pctV95=(c.v95!=null&&c.reach>0)?c.v95/c.reach*100:null,
             msgs=c.msgs||0, ghl=c.ghlOpps||0, bo=g.ghlBO||0, // bo = total del buyer, no de la campaña (ver Hallazgo 9)
-            costoMsg=msgs>0?c.spend/msgs:null, costoContacto=ghl>0?c.spend/ghl:null, costoBO=bo>0?c.spend/bo:null;
+            costoMsg=msgs>0?c.spend/msgs:null, costoContacto=ghl>0?c.spend/ghl:null, costoBO=bo>0?c.spend/bo:null,
+            dias=c.start?Math.round((new Date(AYER_ISO)-new Date(c.start))/86400000)+1:null;
       tb.insertAdjacentHTML('beforeend',`<tr>
         <td>${c.name} <span class="chip act">${c.status==='ACTIVE'?'Activa':'Pausada'}</span></td>
-        <td>${fmt(c.impr)}</td><td>${fmt(c.reach)}</td><td>${fmt(c.clicks)}</td>
+        <td>${dias!=null?dias:'—'}</td>
+        <td>$${c.spend.toFixed(2)}</td>
+        <td>${fmt(c.impr)}</td><td>${freq.toFixed(2)}</td><td>${fmt(c.clicks)}</td>
         <td>${ctr.toFixed(2)}%</td><td>$${cpm.toFixed(2)}</td>
-        <td>${hr.toFixed(1)}%</td><td>${pctV.toFixed(1)}%</td>
+        <td>${hr.toFixed(1)}%</td><td>${pctV.toFixed(1)}%</td><td>${pctV95!=null?pctV95.toFixed(1)+'%':'—'}</td>
         <td>${msgs}</td><td>${ghl}</td><td>${bo}</td>
         <td>${costoMsg!=null?'$'+costoMsg.toFixed(2):'—'}</td>
         <td>${costoContacto!=null?'$'+costoContacto.toFixed(2):'—'}</td>
         <td>${costoBO!=null?'$'+costoBO.toFixed(2):'—'}</td></tr>`);
     });
-    tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td>Subtotal ${g.buyer}</td><td>${fmt(sI)}</td><td>${fmt(sR)}</td><td>${fmt(sC)}</td><td>${(sI>0?sC/sI*100:0).toFixed(2)}%</td><td>$${(sI>0?sS/sI*1000:0).toFixed(2)}</td><td>${sHR.toFixed(1)}%</td><td>${sPct.toFixed(1)}%</td><td>${sMsg}</td><td>${sGhl}</td><td>${sBO}</td><td>${sCostoMsg!=null?'$'+sCostoMsg.toFixed(2):'—'}</td><td>${sCostoContacto!=null?'$'+sCostoContacto.toFixed(2):'—'}</td><td>${sCostoBO!=null?'$'+sCostoBO.toFixed(2):'—'}</td></tr>`);
+    tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td>Subtotal ${g.buyer}</td><td></td><td>$${sS.toFixed(2)}</td><td>${fmt(sI)}</td><td>${sFreq.toFixed(2)}</td><td>${fmt(sC)}</td><td>${(sI>0?sC/sI*100:0).toFixed(2)}%</td><td>$${(sI>0?sS/sI*1000:0).toFixed(2)}</td><td>${sHR.toFixed(1)}%</td><td>${sPct.toFixed(1)}%</td><td>${sPct95!=null?sPct95.toFixed(1)+'%':'—'}</td><td>${sMsg}</td><td>${sGhl}</td><td>${sBO}</td><td>${sCostoMsg!=null?'$'+sCostoMsg.toFixed(2):'—'}</td><td>${sCostoContacto!=null?'$'+sCostoContacto.toFixed(2):'—'}</td><td>${sCostoBO!=null?'$'+sCostoBO.toFixed(2):'—'}</td></tr>`);
   });
-  const gPct=gI>0?gV/gI*100:0,gHR=gI>0?gV3/gI*100:0;
+  const gFreq=gR>0?gI/gR:0, gPct=gI>0?gV/gI*100:0, gPct95=(gHasV95&&gR>0)?gV95/gR*100:null, gHR=gI>0?gV3/gI*100:0;
   const gCostoMsg=gMsg>0?gS/gMsg:null, gCostoContacto=gGhl>0?gS/gGhl:null, gCostoBO=gBO>0?gS/gBO:null;
-  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL (${nCamps} camp${nCamps===1?'':'s'})</td><td>${fmt(gI)}</td><td>${fmt(gR)}</td><td>${fmt(gC)}</td><td>${(gI>0?gC/gI*100:0).toFixed(2)}%</td><td>$${(gI>0?gS/gI*1000:0).toFixed(2)}</td><td>${gHR.toFixed(1)}%</td><td>${gPct.toFixed(1)}%</td><td>${gMsg}</td><td>${gGhl}</td><td>${gBO}</td><td>${gCostoMsg!=null?'$'+gCostoMsg.toFixed(2):'—'}</td><td>${gCostoContacto!=null?'$'+gCostoContacto.toFixed(2):'—'}</td><td>${gCostoBO!=null?'$'+gCostoBO.toFixed(2):'—'}</td></tr>`);
+  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL (${nCamps} camp${nCamps===1?'':'s'})</td><td></td><td>$${gS.toFixed(2)}</td><td>${fmt(gI)}</td><td>${gFreq.toFixed(2)}</td><td>${fmt(gC)}</td><td>${(gI>0?gC/gI*100:0).toFixed(2)}%</td><td>$${(gI>0?gS/gI*1000:0).toFixed(2)}</td><td>${gHR.toFixed(1)}%</td><td>${gPct.toFixed(1)}%</td><td>${gPct95!=null?gPct95.toFixed(1)+'%':'—'}</td><td>${gMsg}</td><td>${gGhl}</td><td>${gBO}</td><td>${gCostoMsg!=null?'$'+gCostoMsg.toFixed(2):'—'}</td><td>${gCostoContacto!=null?'$'+gCostoContacto.toFixed(2):'—'}</td><td>${gCostoBO!=null?'$'+gCostoBO.toFixed(2):'—'}</td></tr>`);
   const activeBuyers=vtasData.filter(g=>g.camps.length>0).map(g=>g.buyer);
   const emptyBuyers=vtasData.filter(g=>g.camps.length===0).map(g=>g.buyer);
   document.getElementById('ins-vtas').innerHTML = `${activeBuyers.length?`<strong>${activeBuyers.join(', ')}</strong> con contenido de ventas activo.`:'Sin campañas de contenido de ventas activas en este período.'}${gMsg>0?` <strong>${gMsg} mensaje${gMsg===1?'':'s'}</strong> a $${gCostoMsg.toFixed(2)} USD c/u.`:''}${gGhl===0?` Conv. Oport. (GHL) en 0 — no se detectaron oportunidades con Fuente "META-TOUR" en Compradores/Arrendatarios todavía (campaña recién arrancó); Costo/Contacto no calculable hasta que exista al menos 1.`:` <strong>${gGhl} oportunidad${gGhl===1?'':'es'}</strong> GHL a $${gCostoContacto.toFixed(2)} USD c/u.`}${gBO===0?` Leads B.O en 0 — todavía ninguna oportunidad META-TOUR llegó a "Ingresado Back Office".`:` <strong>${gBO} lead${gBO===1?'':'s'} B.O.</strong> a $${gCostoBO.toFixed(2)} USD c/u.`}${emptyBuyers.length?` ${emptyBuyers.join(' y ')} todavía sin campaña TOUR.`:''} Tendencias diarias se muestran al acumular ${VTAS_MIN_DAYS_TREND}+ días de historia.`;
