@@ -513,55 +513,60 @@ const VTAS_CS_S = [null, null, null, null, null, null, null, null, null, null, n
 // Tabla por período (mismas columnas que Contenido Orgánico) — 1 campaña real hoy.
 // 'ayer' = solo el día de ayer (igual criterio que ENG_AYER). '14d'/'30d'/'60d' = acumulado
 // de toda la vida de la campaña (arrancó 01/jul), que cabe entera dentro de esas 2 ventanas.
+// v95 (video_p95_watched_actions) agregado manualmente 17/ago/2026 vía llamada directa a
+// ads_get_ad_entities (pull puntual por ventana exacta, ayer=2026-08-15) — el runbook de la tarea
+// programada (Paso 1/1B) TODAVÍA NO incluye este campo en el pull diario automático. Si no se
+// actualiza el SKILL.md, la próxima corrida automática no va a refrescar v95 (puede quedar stale
+// o perderse si el proceso reconstruye el array sin ese campo).
 const VTAS_AYER = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:0,camps:[
-    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:518,reach:470,clicks:15,spend:5.13,v50:24,v3s:180,msgs:1,ghlOpps:1},
-    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:484,reach:423,clicks:7,spend:4.69,v50:9,v3s:105,msgs:2,ghlOpps:2},
-    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:438,reach:380,clicks:7,spend:5.03,v50:13,v3s:113,msgs:0,ghlOpps:0},
-    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:646,reach:556,clicks:13,spend:7.42,v50:32,v3s:223,msgs:0,ghlOpps:0},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:518,reach:470,clicks:15,spend:5.13,v50:24,v3s:180,v95:2,msgs:1,ghlOpps:1},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:484,reach:423,clicks:7,spend:4.69,v50:9,v3s:105,v95:2,msgs:2,ghlOpps:2},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:438,reach:380,clicks:7,spend:5.03,v50:13,v3s:113,v95:4,msgs:0,ghlOpps:0},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:646,reach:556,clicks:13,spend:7.42,v50:32,v3s:223,v95:6,msgs:0,ghlOpps:0},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:367,reach:315,clicks:11,spend:3.96,v50:8,v3s:88,msgs:1,ghlOpps:1},
-    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:739,reach:531,clicks:17,spend:7.53,v50:20,v3s:187,msgs:1,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:367,reach:315,clicks:11,spend:3.96,v50:8,v3s:88,v95:3,msgs:1,ghlOpps:1},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:739,reach:531,clicks:17,spend:7.53,v50:20,v3s:187,v95:7,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:0,camps:[
-    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:505,reach:436,clicks:9,spend:4.64,v50:11,v3s:122,msgs:0,ghlOpps:0},
-    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:344,reach:302,clicks:7,spend:4.14,v50:13,v3s:100,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:599,reach:502,clicks:12,spend:7.66,v50:11,v3s:141,msgs:2,ghlOpps:1},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:505,reach:436,clicks:9,spend:4.64,v50:11,v3s:122,v95:3,msgs:0,ghlOpps:0},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:344,reach:302,clicks:7,spend:4.14,v50:13,v3s:100,v95:4,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:599,reach:502,clicks:12,spend:7.66,v50:11,v3s:141,v95:0,msgs:2,ghlOpps:1},
   ]},
 ];
 const VTAS_14D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:0,camps:[
-    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:8056,reach:5103,clicks:211,spend:83.84,v50:410,v3s:2504,msgs:8,ghlOpps:6},
-    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:7392,reach:3728,clicks:116,spend:83.92,v50:168,v3s:1554,msgs:11,ghlOpps:9},
-    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:7784,reach:3850,clicks:125,spend:83.97,v50:187,v3s:1752,msgs:2,ghlOpps:2},
-    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,msgs:1,ghlOpps:1},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:8056,reach:5103,clicks:211,spend:83.84,v50:410,v3s:2504,v95:104,msgs:8,ghlOpps:6},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:7392,reach:3728,clicks:116,spend:83.92,v50:168,v3s:1554,v95:44,msgs:11,ghlOpps:9},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:7784,reach:3850,clicks:125,spend:83.97,v50:187,v3s:1752,v95:56,msgs:2,ghlOpps:2},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,v95:15,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:7477,reach:3717,clicks:174,spend:83.92,v50:181,v3s:1612,msgs:8,ghlOpps:6},
-    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,msgs:2,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:7477,reach:3717,clicks:174,spend:83.92,v50:181,v3s:1612,v95:70,msgs:8,ghlOpps:6},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,v95:18,msgs:2,ghlOpps:1},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:1,camps:[
-    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:10025,reach:6112,clicks:219,spend:83.93,v50:308,v3s:2589,msgs:4,ghlOpps:4},
-    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,msgs:3,ghlOpps:3},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:10025,reach:6112,clicks:219,spend:83.93,v50:308,v3s:2589,v95:71,msgs:4,ghlOpps:4},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,v95:70,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,v95:12,msgs:3,ghlOpps:3},
   ]},
 ];
 const VTAS_30D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:4,camps:[
-    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:20284,reach:9647,clicks:461,spend:177.78,v50:999,v3s:6245,msgs:17,ghlOpps:12},
-    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,msgs:18,ghlOpps:13},
-    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,msgs:5,ghlOpps:4},
-    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,msgs:1,ghlOpps:1},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:20284,reach:9647,clicks:461,spend:177.78,v50:999,v3s:6245,v95:230,msgs:17,ghlOpps:12},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,v95:141,msgs:18,ghlOpps:13},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,v95:65,msgs:5,ghlOpps:4},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,v95:15,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,msgs:11,ghlOpps:8},
-    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,msgs:2,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,v95:118,msgs:11,ghlOpps:8},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,v95:18,msgs:2,ghlOpps:1},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:1,camps:[
-    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23060,reach:10686,clicks:493,spend:179.72,v50:780,v3s:6113,msgs:15,ghlOpps:14},
-    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,msgs:3,ghlOpps:3},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23060,reach:10686,clicks:493,spend:179.72,v50:780,v3s:6113,v95:195,msgs:15,ghlOpps:14},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,v95:70,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,v95:12,msgs:3,ghlOpps:3},
   ]},
 ];
 // Refrescado 11/ago/2026 con pull fresco de Meta por ventana exacta (ya no 60d=30d: CASA-PAULA
@@ -571,19 +576,19 @@ const VTAS_30D = [
 // 10/ago/2026, arrancó ese mismo día.
 const VTAS_60D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:4,camps:[
-    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:32501,reach:12681,clicks:737,spend:246.28,v50:1662,v3s:9905,msgs:30,ghlOpps:17},
-    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,msgs:18,ghlOpps:10},
-    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,msgs:5,ghlOpps:3},
-    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,msgs:1,ghlOpps:1},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:32501,reach:12681,clicks:737,spend:246.28,v50:1662,v3s:9905,v95:341,msgs:30,ghlOpps:17},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,v95:141,msgs:18,ghlOpps:10},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,v95:65,msgs:5,ghlOpps:3},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,v95:15,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,msgs:11,ghlOpps:8},
-    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,msgs:2,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,v95:118,msgs:11,ghlOpps:8},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,v95:18,msgs:2,ghlOpps:1},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:1,camps:[
-    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23439,reach:10704,clicks:498,spend:181.75,v50:798,v3s:6242,msgs:15,ghlOpps:14},
-    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,msgs:3,ghlOpps:3},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23439,reach:10704,clicks:498,spend:181.75,v50:798,v3s:6242,v95:196,msgs:15,ghlOpps:14},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,v95:70,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,v95:12,msgs:3,ghlOpps:3},
   ]},
 ];
 
@@ -592,19 +597,19 @@ const VTAS_60D = [
 // captura ninguna campaña TOUR adicional. Refrescado 11/ago/2026 (ver Paso 2h punto 4).
 const VTAS_90D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:4,camps:[
-    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:32501,reach:12681,clicks:737,spend:246.28,v50:1662,v3s:9905,msgs:30,ghlOpps:17},
-    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,msgs:18,ghlOpps:10},
-    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,msgs:5,ghlOpps:3},
-    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,msgs:1,ghlOpps:1},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:32501,reach:12681,clicks:737,spend:246.28,v50:1662,v3s:9905,v95:341,msgs:30,ghlOpps:17},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,v95:141,msgs:18,ghlOpps:10},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,v95:65,msgs:5,ghlOpps:3},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,v95:15,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,msgs:11,ghlOpps:8},
-    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,msgs:2,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,v95:118,msgs:11,ghlOpps:8},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,v95:18,msgs:2,ghlOpps:1},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:1,camps:[
-    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23439,reach:10704,clicks:498,spend:181.75,v50:798,v3s:6242,msgs:15,ghlOpps:14},
-    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,msgs:3,ghlOpps:3},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23439,reach:10704,clicks:498,spend:181.75,v50:798,v3s:6242,v95:196,msgs:15,ghlOpps:14},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,v95:70,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,v95:12,msgs:3,ghlOpps:3},
   ]},
 ];
 
