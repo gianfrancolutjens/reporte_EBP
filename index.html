@@ -246,11 +246,11 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
     <th style="text-align:left">Campaña</th>
     <th>Días</th>
     <th>Gasto</th>
-    <th>Impresiones</th><th>FREQ</th><th>Clicks</th><th>CTR</th><th>CPM</th>
-    <th>Hook Rate</th><th>%V50</th><th>%V95</th><th>MSJE<br>(META)</th><th>OPOR<br>(GHL)</th><th>Leads B.O</th>
-    <th>Costo/Mensaje</th><th>Costo/Contacto</th><th>Costo/BO</th>
+    <th>IMPRE</th><th>FREQ</th><th>CTR</th><th>CPM</th>
+    <th>Hook Rate</th><th>%V50</th><th>%V95</th><th>Clicks</th><th>MSJE<br>(META)</th><th>OPOR<br>(GHL)</th><th>Leads B.O</th>
+    <th>$/META</th><th>$/GHL</th><th>Costo/BO</th>
   </tr></thead><tbody id="t-vtas"></tbody></table>
-  <div class="sn">Días = días circulando desde el primer día con datos reales de esa campaña hasta ayer · Gasto = inversión Meta de esa campaña en el período (USD) · FREQ = Impresiones ÷ Alcance (veces que la persona promedio vio el anuncio) · %V50 = video visto ≥50% ÷ Impresiones · %V95 = video visto ≥95% ÷ Alcance (— hasta que el pipeline empiece a traer `video_p95_watched_actions` de Meta) · MSJE (META) = Conv. Mensajes · OPOR (GHL) = Conv. Oportunidades · Leads B.O = oportunidades META-TOUR de esa campaña que llegaron a "Ingresado Back Office" (pipeline Compradores) · reparto por campaña proporcional a MSJE dentro del buyer (GHL solo identifica Buyer Persona vía campo Presupuesto, no campaña individual — el total por buyer es exacto) · Costo/BO = Inversión ÷ Leads B.O (— si Leads B.O = 0)</div>
+  <div class="sn">Días = días circulando desde el primer día con datos reales de esa campaña hasta ayer · Gasto = inversión Meta de esa campaña en el período (USD) · IMPRE = Impresiones · FREQ = Impresiones ÷ Alcance (veces que la persona promedio vio el anuncio) · %V50 = video visto ≥50% ÷ Impresiones · %V95 = video visto ≥95% ÷ Impresiones · MSJE (META) = Conv. Mensajes · OPOR (GHL) = Conv. Oportunidades · Leads B.O = oportunidades META-TOUR de esa campaña que llegaron a "Ingresado Back Office" (pipeline Compradores) · <strong>OPOR (GHL) y Leads B.O muestran el mismo valor en todas las campañas de un mismo buyer</strong>: GHL identifica la Buyer Persona vía campo Presupuesto pero no la campaña/anuncio individual de origen, así que solo se conoce el total por buyer — no es posible atribuir oportunidades a una campaña específica · $/META = Inversión ÷ Mensajes · $/GHL = Inversión ÷ Oportunidades GHL (del buyer) · Costo/BO = Inversión ÷ Leads B.O (— si no aplica)</div>
   <div class="ins" id="ins-vtas"></div>
 
   <div class="inner-sep"></div>
@@ -680,7 +680,7 @@ function renderVtasTable(key){
                           // buyer en g.ghlBO y cada campaña del buyer muestra ese mismo total.
     gI+=sI;gR+=sR;gC+=sC;gS+=sS;gV+=sV;gV3+=sV3;gV95+=sV95;gMsg+=sMsg;gGhl+=sGhl;gBO+=sBO;nCamps+=g.camps.length;
     if(sHasV95) gHasV95=true;
-    const sFreq=sR>0?sI/sR:0, sPct=sI>0?sV/sI*100:0, sPct95=(sHasV95&&sR>0)?sV95/sR*100:null, sHR=sI>0?sV3/sI*100:0;
+    const sFreq=sR>0?sI/sR:0, sPct=sI>0?sV/sI*100:0, sPct95=(sHasV95&&sI>0)?sV95/sI*100:null, sHR=sI>0?sV3/sI*100:0;
     const sCostoMsg=sMsg>0?sS/sMsg:null, sCostoContacto=sGhl>0?sS/sGhl:null, sCostoBO=sBO>0?sS/sBO:null;
     tb.insertAdjacentHTML('beforeend',`<tr class="grp"><td colspan="17"><span class="chip ${g.cls}">${g.buyer}</span>&nbsp;<span style="font-weight:500;font-size:10px;color:var(--text2)">${g.camps.length} camps · Alcance: ${fmt(sR)} · Gasto: $${sS.toFixed(2)} · ${sMsg} mensaje${sMsg===1?'':'s'} · ${sGhl} oport. GHL · ${sBO} B.O.</span></td></tr>`);
     if(g.camps.length===0){
@@ -690,27 +690,28 @@ function renderVtasTable(key){
     g.camps.forEach(c=>{
       const ctr=c.impr>0?c.clicks/c.impr*100:0, cpm=c.impr>0?c.spend/c.impr*1000:0,
             hr=c.impr>0?c.v3s/c.impr*100:0, pctV=c.impr>0?c.v50/c.impr*100:0,
-            freq=c.reach>0?c.impr/c.reach:0, pctV95=(c.v95!=null&&c.reach>0)?c.v95/c.reach*100:null,
-            msgs=c.msgs||0, ghl=c.ghlOpps||0, bo=g.ghlBO||0, // bo = total del buyer, no de la campaña (ver Hallazgo 9)
+            freq=c.reach>0?c.impr/c.reach:0, pctV95=(c.v95!=null&&c.impr>0)?c.v95/c.impr*100:null,
+            msgs=c.msgs||0, ghl=sGhl, bo=g.ghlBO||0, // ghl y bo = total del buyer, no de la campaña — GHL no atribuye oportunidades ni Back Office a nivel de anuncio individual (ver Hallazgo 9 y nota bajo la tabla)
             costoMsg=msgs>0?c.spend/msgs:null, costoContacto=ghl>0?c.spend/ghl:null, costoBO=bo>0?c.spend/bo:null,
             dias=c.start?Math.round((new Date(AYER_ISO)-new Date(c.start))/86400000)+1:null;
       tb.insertAdjacentHTML('beforeend',`<tr>
         <td>${c.name} <span class="chip act">${c.status==='ACTIVE'?'Activa':'Pausada'}</span></td>
         <td>${dias!=null?dias:'—'}</td>
         <td>$${c.spend.toFixed(2)}</td>
-        <td>${fmt(c.impr)}</td><td>${freq.toFixed(2)}</td><td>${fmt(c.clicks)}</td>
+        <td>${fmt(c.impr)}</td><td>${freq.toFixed(2)}</td>
         <td>${ctr.toFixed(2)}%</td><td>$${cpm.toFixed(2)}</td>
         <td>${hr.toFixed(1)}%</td><td>${pctV.toFixed(1)}%</td><td>${pctV95!=null?pctV95.toFixed(1)+'%':'—'}</td>
+        <td>${fmt(c.clicks)}</td>
         <td>${msgs}</td><td>${ghl}</td><td>${bo}</td>
         <td>${costoMsg!=null?'$'+costoMsg.toFixed(2):'—'}</td>
         <td>${costoContacto!=null?'$'+costoContacto.toFixed(2):'—'}</td>
         <td>${costoBO!=null?'$'+costoBO.toFixed(2):'—'}</td></tr>`);
     });
-    tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td>Subtotal ${g.buyer}</td><td></td><td>$${sS.toFixed(2)}</td><td>${fmt(sI)}</td><td>${sFreq.toFixed(2)}</td><td>${fmt(sC)}</td><td>${(sI>0?sC/sI*100:0).toFixed(2)}%</td><td>$${(sI>0?sS/sI*1000:0).toFixed(2)}</td><td>${sHR.toFixed(1)}%</td><td>${sPct.toFixed(1)}%</td><td>${sPct95!=null?sPct95.toFixed(1)+'%':'—'}</td><td>${sMsg}</td><td>${sGhl}</td><td>${sBO}</td><td>${sCostoMsg!=null?'$'+sCostoMsg.toFixed(2):'—'}</td><td>${sCostoContacto!=null?'$'+sCostoContacto.toFixed(2):'—'}</td><td>${sCostoBO!=null?'$'+sCostoBO.toFixed(2):'—'}</td></tr>`);
+    tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td>Subtotal ${g.buyer}</td><td></td><td>$${sS.toFixed(2)}</td><td>${fmt(sI)}</td><td>${sFreq.toFixed(2)}</td><td>${(sI>0?sC/sI*100:0).toFixed(2)}%</td><td>$${(sI>0?sS/sI*1000:0).toFixed(2)}</td><td>${sHR.toFixed(1)}%</td><td>${sPct.toFixed(1)}%</td><td>${sPct95!=null?sPct95.toFixed(1)+'%':'—'}</td><td>${fmt(sC)}</td><td>${sMsg}</td><td>${sGhl}</td><td>${sBO}</td><td>${sCostoMsg!=null?'$'+sCostoMsg.toFixed(2):'—'}</td><td>${sCostoContacto!=null?'$'+sCostoContacto.toFixed(2):'—'}</td><td>${sCostoBO!=null?'$'+sCostoBO.toFixed(2):'—'}</td></tr>`);
   });
-  const gFreq=gR>0?gI/gR:0, gPct=gI>0?gV/gI*100:0, gPct95=(gHasV95&&gR>0)?gV95/gR*100:null, gHR=gI>0?gV3/gI*100:0;
+  const gFreq=gR>0?gI/gR:0, gPct=gI>0?gV/gI*100:0, gPct95=(gHasV95&&gI>0)?gV95/gI*100:null, gHR=gI>0?gV3/gI*100:0;
   const gCostoMsg=gMsg>0?gS/gMsg:null, gCostoContacto=gGhl>0?gS/gGhl:null, gCostoBO=gBO>0?gS/gBO:null;
-  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL (${nCamps} camp${nCamps===1?'':'s'})</td><td></td><td>$${gS.toFixed(2)}</td><td>${fmt(gI)}</td><td>${gFreq.toFixed(2)}</td><td>${fmt(gC)}</td><td>${(gI>0?gC/gI*100:0).toFixed(2)}%</td><td>$${(gI>0?gS/gI*1000:0).toFixed(2)}</td><td>${gHR.toFixed(1)}%</td><td>${gPct.toFixed(1)}%</td><td>${gPct95!=null?gPct95.toFixed(1)+'%':'—'}</td><td>${gMsg}</td><td>${gGhl}</td><td>${gBO}</td><td>${gCostoMsg!=null?'$'+gCostoMsg.toFixed(2):'—'}</td><td>${gCostoContacto!=null?'$'+gCostoContacto.toFixed(2):'—'}</td><td>${gCostoBO!=null?'$'+gCostoBO.toFixed(2):'—'}</td></tr>`);
+  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL (${nCamps} camp${nCamps===1?'':'s'})</td><td></td><td>$${gS.toFixed(2)}</td><td>${fmt(gI)}</td><td>${gFreq.toFixed(2)}</td><td>${(gI>0?gC/gI*100:0).toFixed(2)}%</td><td>$${(gI>0?gS/gI*1000:0).toFixed(2)}</td><td>${gHR.toFixed(1)}%</td><td>${gPct.toFixed(1)}%</td><td>${gPct95!=null?gPct95.toFixed(1)+'%':'—'}</td><td>${fmt(gC)}</td><td>${gMsg}</td><td>${gGhl}</td><td>${gBO}</td><td>${gCostoMsg!=null?'$'+gCostoMsg.toFixed(2):'—'}</td><td>${gCostoContacto!=null?'$'+gCostoContacto.toFixed(2):'—'}</td><td>${gCostoBO!=null?'$'+gCostoBO.toFixed(2):'—'}</td></tr>`);
   const activeBuyers=vtasData.filter(g=>g.camps.length>0).map(g=>g.buyer);
   const emptyBuyers=vtasData.filter(g=>g.camps.length===0).map(g=>g.buyer);
   document.getElementById('ins-vtas').innerHTML = `${activeBuyers.length?`<strong>${activeBuyers.join(', ')}</strong> con contenido de ventas activo.`:'Sin campañas de contenido de ventas activas en este período.'}${gMsg>0?` <strong>${gMsg} mensaje${gMsg===1?'':'s'}</strong> a $${gCostoMsg.toFixed(2)} USD c/u.`:''}${gGhl===0?` Conv. Oport. (GHL) en 0 — no se detectaron oportunidades con Fuente "META-TOUR" en Compradores/Arrendatarios todavía (campaña recién arrancó); Costo/Contacto no calculable hasta que exista al menos 1.`:` <strong>${gGhl} oportunidad${gGhl===1?'':'es'}</strong> GHL a $${gCostoContacto.toFixed(2)} USD c/u.`}${gBO===0?` Leads B.O en 0 — todavía ninguna oportunidad META-TOUR llegó a "Ingresado Back Office".`:` <strong>${gBO} lead${gBO===1?'':'s'} B.O.</strong> a $${gCostoBO.toFixed(2)} USD c/u.`}${emptyBuyers.length?` ${emptyBuyers.join(' y ')} todavía sin campaña TOUR.`:''} Tendencias diarias se muestran al acumular ${VTAS_MIN_DAYS_TREND}+ días de historia.`;
