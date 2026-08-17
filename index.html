@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>EBP · Reporte Performance · 16 ago 2026</title>
+<title>EBP · Reporte Performance · 17 ago 2026</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 :root{
@@ -73,7 +73,7 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
 <body>
 <div class="header">
   <div><h1>El Barrio Propiedades</h1><p>Reporte de Performance · Meta Ads + GHL</p></div>
-  <div class="hm"><strong id="hdr-period">—</strong>Cuenta: EL BARRIO CP<br>Generado: 16 ago 2026</div>
+  <div class="hm"><strong id="hdr-period">—</strong>Cuenta: EL BARRIO CP<br>Generado: 17 ago 2026</div>
 </div>
 <div class="filter-block">
   <span style="font-size:11px;color:var(--text2);font-weight:500;margin-right:4px">Ver período:</span>
@@ -339,21 +339,21 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
   </div>
   </div></div>
 </div>
-<div class="footer">El Barrio Propiedades · Reporte generado el 16 ago 2026 · Meta Ads API + GHL MCP · Datos: 26 may – 15 ago 2026 (ayer)</div>
+<div class="footer">El Barrio Propiedades · Reporte generado el 17 ago 2026 · Meta Ads API + GHL MCP · Datos: 26 may – 16 ago 2026 (ayer)</div>
 
 <script>
 // ── DATOS REALES — 0 valores hardcodeados ──
 // Todos los datos vienen de Meta Ads API (adset level, time_increment=1) y GHL MCP
 // Fechas: HOY=16/ago/2026, AYER=15/ago, DESDE_30=17/jul, DESDE_14=02/ago
-const AYER_ISO = '2026-08-15'; // usado para calcular "Días" (circulando) en la tabla de Ventas — c.start es el primer día con datos reales de esa campaña (ver tabla CONTENIDO DE VENTAS)
+const AYER_ISO = '2026-08-16'; // usado para calcular "Días" (circulando) en la tabla de Ventas — c.start es el primer día con datos reales de esa campaña (ver tabla CONTENIDO DE VENTAS)
 
-const LABELS28 = ["16/05", "17/05", "18/05", "19/05", "20/05", "21/05", "22/05", "23/05", "24/05", "25/05", "26/05", "27/05", "28/05", "29/05", "30/05", "31/05", "01/06", "02/06", "03/06", "04/06", "05/06", "06/06", "07/06", "08/06", "09/06", "10/06", "11/06", "12/06", "13/06", "14/06", "15/06", "16/06", "17/06", "18/06", "19/06", "20/06", "21/06", "22/06", "23/06", "24/06", "25/06", "26/06", "27/06", "28/06", "29/06", "30/06", "01/07", "02/07", "03/07", "04/07", "05/07", "06/07", "07/07", "08/07", "09/07", "10/07", "11/07", "12/07", "13/07", "14/07", "15/07", "16/07", "17/07", "18/07", "19/07", "20/07", "21/07", "22/07", "23/07", "24/07", "25/07", "26/07", "27/07", "28/07", "29/07", "30/07", "31/07", "01/08", "02/08", "03/08", "04/08", "05/08", "06/08", "07/08", "08/08", "09/08", "10/08", "11/08", "12/08", "13/08", "14/08", "15/08"];
-const L1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 3, 2, 4, 6, 2, 5, 5, 5, 4, 4, 1, 4, 2, 2, 4, 0, 4, 4, 8, 5, 7, 3, 7, 1, 5, 4, 3, 3, 9, 7, 2, 5, 2, 1, 4, 4, 8, 5, 6, 1, 8, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-const L2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 5, 2, 2, 3, 3, 2, 3, 1, 2, 2, 2, 2, 1, 0, 0, 4, 6, 4, 3, 1, 0, 2, 1, 2, 1, 0, 1, 2, 4, 5, 2, 2, 0, 1, 1, 3, 1, 1, 2, 0, 1, 1, 2, 1, 4, 3, 7, 2, 6, 5, 3, 8, 6, 5, 4, 4, 6, 5, 4, 5, 2, 3, 0, 2, 1, 0, 0, 0, 0, 0];
-const L3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 2, 1, 1, 2, 0, 2, 0, 1, 1, 2, 0, 2, 1, 2, 3, 2, 1, 2, 0, 0, 3, 3, 5, 1, 2, 0, 1, 2, 1, 2, 1, 1, 2, 3, 1, 3, 2, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-const S1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3.67, 3.2, 6.49, 3.16, 2.68, 4.79, 6.78, 6.51, 4.57, 6.39, 5.47, 8.37, 9.42, 8.8, 8.51, 9.78, 10.31, 13.83, 14.84, 14.19, 14.59, 15.94, 11.69, 16.92, 19.25, 17.41, 18.64, 16.89, 15.87, 13.19, 19.64, 18.56, 17.13, 16.12, 14.65, 12.12, 10.36, 12.98, 15.5, 18.65, 20.26, 20.52, 19.77, 18.93, 19.84, 20.63, 10.72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-const S2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4.25, 2.6, 7.77, 3.75, 3.93, 5.28, 5.16, 4.89, 4.2, 6.02, 4.96, 4.81, 5.23, 4.41, 4.77, 4.5, 5.18, 6.36, 7.58, 7.46, 7.53, 7.61, 6.55, 8.82, 10.74, 10.41, 10.2, 8.69, 9.35, 8.9, 11.27, 8.95, 7.11, 7.58, 6.71, 6.16, 4.9, 7.24, 9.22, 9.53, 10.12, 10.29, 9.37, 8.47, 10.51, 10.59, 16.01, 19.55, 19.19, 20.34, 16.14, 21.13, 19.55, 19.25, 18.79, 20.11, 20.24, 20.9, 21.7, 15.09, 20.24, 22.92, 19.09, 18.64, 22.18, 21.79, 7.34, 0, 0, 0, 0, 0];
-const S3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3.16, 3.68, 7.1, 3.75, 3.47, 6.17, 5.45, 5.37, 3.64, 5.64, 5.37, 6.26, 5.92, 4.48, 4.47, 3.21, 5.62, 6.63, 6.79, 7.06, 9.86, 8.29, 5.46, 9.68, 9.52, 9.08, 10.27, 9.68, 10.97, 8.63, 11.02, 11.4, 10.42, 8.23, 7.68, 6.65, 3.87, 7.04, 10.41, 10.53, 9.95, 9.94, 9.25, 7.63, 9.88, 10.07, 5.92, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const LABELS28 = ["16/05", "17/05", "18/05", "19/05", "20/05", "21/05", "22/05", "23/05", "24/05", "25/05", "26/05", "27/05", "28/05", "29/05", "30/05", "31/05", "01/06", "02/06", "03/06", "04/06", "05/06", "06/06", "07/06", "08/06", "09/06", "10/06", "11/06", "12/06", "13/06", "14/06", "15/06", "16/06", "17/06", "18/06", "19/06", "20/06", "21/06", "22/06", "23/06", "24/06", "25/06", "26/06", "27/06", "28/06", "29/06", "30/06", "01/07", "02/07", "03/07", "04/07", "05/07", "06/07", "07/07", "08/07", "09/07", "10/07", "11/07", "12/07", "13/07", "14/07", "15/07", "16/07", "17/07", "18/07", "19/07", "20/07", "21/07", "22/07", "23/07", "24/07", "25/07", "26/07", "27/07", "28/07", "29/07", "30/07", "31/07", "01/08", "02/08", "03/08", "04/08", "05/08", "06/08", "07/08", "08/08", "09/08", "10/08", "11/08", "12/08", "13/08", "14/08", "15/08", "16/08"];
+const L1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 3, 2, 4, 6, 2, 5, 5, 5, 4, 4, 1, 4, 2, 2, 4, 0, 4, 4, 8, 5, 7, 3, 7, 1, 5, 4, 3, 3, 9, 7, 2, 5, 2, 1, 4, 4, 8, 5, 6, 1, 8, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const L2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 5, 2, 2, 3, 3, 2, 3, 1, 2, 2, 2, 2, 1, 0, 0, 4, 6, 4, 3, 1, 0, 2, 1, 2, 1, 0, 1, 2, 4, 5, 2, 2, 0, 1, 1, 3, 1, 1, 2, 0, 1, 1, 2, 1, 4, 3, 7, 2, 6, 5, 3, 8, 6, 5, 4, 4, 6, 5, 4, 5, 2, 3, 0, 2, 1, 0, 0, 0, 0, 0, 0];
+const L3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 2, 1, 1, 2, 0, 2, 0, 1, 1, 2, 0, 2, 1, 2, 3, 2, 1, 2, 0, 0, 3, 3, 5, 1, 2, 0, 1, 2, 1, 2, 1, 1, 2, 3, 1, 3, 2, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const S1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3.67, 3.2, 6.49, 3.16, 2.68, 4.79, 6.78, 6.51, 4.57, 6.39, 5.47, 8.37, 9.42, 8.8, 8.51, 9.78, 10.31, 13.83, 14.84, 14.19, 14.59, 15.94, 11.69, 16.92, 19.25, 17.41, 18.64, 16.89, 15.87, 13.19, 19.64, 18.56, 17.13, 16.12, 14.65, 12.12, 10.36, 12.98, 15.5, 18.65, 20.26, 20.52, 19.77, 18.93, 19.84, 20.63, 10.72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const S2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4.25, 2.6, 7.77, 3.75, 3.93, 5.28, 5.16, 4.89, 4.2, 6.02, 4.96, 4.81, 5.23, 4.41, 4.77, 4.5, 5.18, 6.36, 7.58, 7.46, 7.53, 7.61, 6.55, 8.82, 10.74, 10.41, 10.2, 8.69, 9.35, 8.9, 11.27, 8.95, 7.11, 7.58, 6.71, 6.16, 4.9, 7.24, 9.22, 9.53, 10.12, 10.29, 9.37, 8.47, 10.51, 10.59, 16.01, 19.55, 19.19, 20.34, 16.14, 21.13, 19.55, 19.25, 18.79, 20.11, 20.24, 20.9, 21.7, 15.09, 20.24, 22.92, 19.09, 18.64, 22.18, 21.79, 7.34, 0, 0, 0, 0, 0, 0];
+const S3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3.16, 3.68, 7.1, 3.75, 3.47, 6.17, 5.45, 5.37, 3.64, 5.64, 5.37, 6.26, 5.92, 4.48, 4.47, 3.21, 5.62, 6.63, 6.79, 7.06, 9.86, 8.29, 5.46, 9.68, 9.52, 9.08, 10.27, 9.68, 10.97, 8.63, 11.02, 11.4, 10.42, 8.23, 7.68, 6.65, 3.87, 7.04, 10.41, 10.53, 9.95, 9.94, 9.25, 7.63, 9.88, 10.07, 5.92, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 const IDX14=LABELS28.length-14; // 14 puntos: 01jul–14jul
 const IDX30=LABELS28.length-30; // 30 puntos: 15jun–14jul
 const IDX60=LABELS28.length-60; // 60 puntos: 16may–14jul (16may-04jun sin actividad de cuenta)
@@ -366,24 +366,24 @@ const GHL_SRC_COLORS={'Portal Inmobiliario':'#378ADD','META-LM':'#639922','Insta
 const GHL28={
   labels:LABELS28,
   src:[
-    {label:'Portal Inmobiliario',color:'#378ADD',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 2, 1, 2, 1, 2, 3, 1, 1, 0, 1, 0, 4, 6, 1, 1, 2, 3, 2, 2, 2, 0, 2, 3, 0, 3, 3, 2, 3, 2, 2, 2, 4, 2, 2, 0, 2, 1, 3, 4, 1, 6, 2, 2, 0, 7, 3, 3, 1, 5, 3, 5, 4, 1, 2, 3, 1, 2, 2, 0, 1, 3, 2, 1, 3, 3, 3, 2, 4, 6]},
-    {label:'META-LM',color:'#639922',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 1, 1, 3, 1, 2, 1, 1, 0, 1, 0, 2, 0, 1, 3, 2, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 4, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]},
-    {label:'Instagram DM',color:'#8B44B8',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
-    {label:'Directo',color:'#D85A30',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 0, 2, 4, 2, 1, 0, 0, 0, 0, 0, 5, 1, 0, 5, 3, 2, 0, 2, 0, 5, 1, 2, 3, 1, 1, 0, 2, 2, 2, 2, 1, 1, 1, 4, 0, 4, 3, 1, 1, 1, 1, 1, 0, 2, 1, 2, 2, 1, 1, 2, 3]},
-    {label:'Importación',color:'#888780',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
-    {label:'META-DM',color:'#0EA5A5',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
-    {label:'META-TOUR',color:'#E24B4A',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 3, 1, 1, 3, 2, 2, 0, 2, 1, 1, 4, 2, 0, 2, 2, 1, 3, 1, 4, 3, 1, 3, 4, 2, 0, 7]},
-    {label:'Instagram',color:'#E1306C',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    {label:'Portal Inmobiliario',color:'#378ADD',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 2, 1, 2, 1, 2, 3, 1, 1, 0, 1, 0, 4, 6, 1, 1, 2, 3, 2, 2, 2, 0, 2, 3, 0, 3, 3, 2, 3, 2, 2, 2, 4, 2, 2, 0, 2, 1, 3, 4, 1, 6, 2, 2, 0, 7, 3, 3, 1, 5, 3, 5, 4, 1, 2, 3, 1, 2, 2, 0, 1, 3, 2, 1, 3, 3, 3, 2, 4, 6, 1]},
+    {label:'META-LM',color:'#639922',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 1, 1, 3, 1, 2, 1, 1, 0, 1, 0, 2, 0, 1, 3, 2, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 4, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]},
+    {label:'Instagram DM',color:'#8B44B8',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    {label:'Directo',color:'#D85A30',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 0, 2, 4, 2, 1, 0, 0, 0, 0, 0, 5, 1, 0, 5, 3, 2, 0, 2, 0, 5, 1, 2, 3, 1, 1, 0, 2, 2, 2, 2, 1, 1, 1, 4, 0, 4, 3, 1, 1, 1, 1, 1, 0, 2, 1, 2, 2, 1, 1, 2, 3, 0]},
+    {label:'Importación',color:'#888780',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    {label:'META-DM',color:'#0EA5A5',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    {label:'META-TOUR',color:'#E24B4A',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 3, 1, 1, 3, 2, 2, 0, 2, 1, 1, 4, 2, 0, 2, 2, 1, 3, 1, 4, 3, 1, 3, 4, 2, 0, 7, 7]},
+    {label:'Instagram',color:'#E1306C',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
   ]
 };
 const GHL_ARR={
   labels:LABELS28,
   src:[
-    {label:'Portal Inmobiliario',color:'#378ADD',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 4, 11, 5, 4, 5, 9, 4, 8, 10, 4, 3, 9, 4, 5, 4, 5, 3, 5, 1, 5, 2, 5, 3, 3, 1, 3, 3, 3, 2, 5, 0, 2, 1, 4, 2, 4, 6, 2, 2, 0, 3, 4, 3, 4, 2, 4, 3, 5, 1, 2, 2, 5, 3, 1, 0, 2, 3, 3, 5, 0, 3, 0, 1, 4, 1, 2, 2, 2, 3, 0, 1]},
-    {label:'META-LM',color:'#639922',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
-    {label:'Instagram DM',color:'#8B44B8',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
-    {label:'Directo',color:'#D85A30',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
-    {label:'Importación',color:'#888780',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    {label:'Portal Inmobiliario',color:'#378ADD',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 4, 11, 5, 4, 5, 9, 4, 8, 10, 4, 3, 9, 4, 5, 4, 5, 3, 5, 1, 5, 2, 5, 3, 3, 1, 3, 3, 3, 2, 5, 0, 2, 1, 4, 2, 4, 6, 2, 2, 0, 3, 4, 3, 4, 2, 4, 3, 5, 1, 2, 2, 5, 3, 1, 0, 2, 3, 3, 5, 0, 3, 0, 1, 4, 1, 2, 2, 2, 3, 0, 1, 0]},
+    {label:'META-LM',color:'#639922',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    {label:'Instagram DM',color:'#8B44B8',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    {label:'Directo',color:'#D85A30',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    {label:'Importación',color:'#888780',data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
   ]
 };
 
@@ -391,43 +391,43 @@ const GHL_ARR={
 
 const PERIODOS = {
   '90d': {
-    label: '18 may – 15 ago 2026 (90 días)',
+    label: '19 may – 16 ago 2026 (90 días)',
     lms: [
-      {name:'Guía Paso a Paso',cls:'c1',bp:'Familia Transición',color:'#378ADD',impr:68848,reach:31704,clicks:2300,spend:598.64,ctr:3.34,cpm:8.7,cpc:0.26,leads:178,ghlLeads:143,ghlBO:2,v3s:20749,v50:4697,v75:2461},
-      {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',color:'#639922',impr:86066,reach:34543,clicks:3001,spend:730.41,ctr:3.49,cpm:8.49,cpc:0.24,leads:174,ghlLeads:138,ghlBO:3,v3s:21870,v50:5964,v75:3930},
-      {name:'VSL Operación Espejo',cls:'c3',bp:'Upgrader Familiar',color:'#8B44B8',impr:34348,reach:13338,clicks:1747,spend:344.65,ctr:5.09,cpm:10.03,cpc:0.2,leads:65,ghlLeads:52,ghlBO:0,v3s:8205,v50:1218,v75:892},
+      {name:'Guía Paso a Paso',cls:'c1',bp:'Familia Transición',color:'#378ADD',impr:68848,reach:31704,clicks:2300,spend:598.64,ctr:3.34,cpm:8.7,cpc:0.26,leads:178,ghlLeads:178,ghlBO:2,v3s:20749,v50:4697,v75:2461},
+      {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',color:'#639922',impr:86066,reach:34543,clicks:3001,spend:730.41,ctr:3.49,cpm:8.49,cpc:0.24,leads:174,ghlLeads:174,ghlBO:3,v3s:21870,v50:5964,v75:3930},
+      {name:'VSL Operación Espejo',cls:'c3',bp:'Upgrader Familiar',color:'#8B44B8',impr:34348,reach:13338,clicks:1747,spend:344.65,ctr:5.09,cpm:10.03,cpc:0.2,leads:65,ghlLeads:65,ghlBO:0,v3s:8205,v50:1218,v75:892},
     ],
     dailyLabels:LABELS28.slice(IDX90), dailyL1:L1.slice(IDX90),dailyL2:L2.slice(IDX90),dailyL3:L3.slice(IDX90),
     dailyS1:S1.slice(IDX90),dailyS2:S2.slice(IDX90),dailyS3:S3.slice(IDX90),
     ghlDays:LABELS28.slice(IDX90), ghlSrc:GHL28.src.map(s=>({...s,data:s.data.slice(IDX90)})), ghlSrc2:GHL_ARR.src.map(s=>({...s,data:s.data.slice(IDX90)}))
   },
   '60d': {
-    label: '17 jun – 15 ago 2026 (60 días)',
+    label: '18 jun – 16 ago 2026 (60 días)',
     lms: [
-      {name:'Guía Paso a Paso',cls:'c1',bp:'Familia Transición',color:'#378ADD',impr:62911,reach:30616,clicks:2001,spend:536.56,ctr:3.18,cpm:8.53,cpc:0.27,leads:142,ghlLeads:142,ghlBO:2,v3s:18549,v50:4095,v75:2135},
-      {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',color:'#639922',impr:80793,reach:33445,clicks:2787,spend:672.79,ctr:3.45,cpm:8.33,cpc:0.24,leads:144,ghlLeads:138,ghlBO:3,v3s:20020,v50:5222,v75:3433},
-      {name:'VSL Operación Espejo',cls:'c3',bp:'Upgrader Familiar',color:'#8B44B8',impr:29258,reach:11311,clicks:1482,spend:285.59,ctr:5.07,cpm:9.76,cpc:0.19,leads:53,ghlLeads:52,ghlBO:0,v3s:6481,v50:1008,v75:750},
+      {name:'Guía Paso a Paso',cls:'c1',bp:'Familia Transición',color:'#378ADD',impr:61988,reach:30488,clicks:1952,spend:527.14,ctr:3.15,cpm:8.5,cpc:0.27,leads:138,ghlLeads:138,ghlBO:1,v3s:18213,v50:4026,v75:2095},
+      {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',color:'#639922',impr:80163,reach:33231,clicks:2758,spend:667.56,ctr:3.44,cpm:8.33,cpc:0.24,leads:142,ghlLeads:142,ghlBO:3,v3s:19819,v50:5158,v75:3392},
+      {name:'VSL Operación Espejo',cls:'c3',bp:'Upgrader Familiar',color:'#8B44B8',impr:28971,reach:11193,clicks:1465,spend:279.67,ctr:5.06,cpm:9.65,cpc:0.19,leads:53,ghlLeads:53,ghlBO:0,v3s:6389,v50:992,v75:738},
     ],
     dailyLabels:LABELS28.slice(IDX60), dailyL1:L1.slice(IDX60),dailyL2:L2.slice(IDX60),dailyL3:L3.slice(IDX60),
     dailyS1:S1.slice(IDX60),dailyS2:S2.slice(IDX60),dailyS3:S3.slice(IDX60),
     ghlDays:LABELS28.slice(IDX60), ghlSrc:GHL28.src.map(s=>({...s,data:s.data.slice(IDX60)})), ghlSrc2:GHL_ARR.src.map(s=>({...s,data:s.data.slice(IDX60)}))
   },
   '30d': {
-    label: '17 jul – 15 ago 2026 (30 días)',
+    label: '18 jul – 16 ago 2026 (30 días)',
     lms: [
-      {name:'Guía Paso a Paso',cls:'c1',bp:'Familia Transición',color:'#378ADD',impr:10976,reach:8121,clicks:371,spend:89.92,ctr:3.38,cpm:8.19,cpc:0.24,leads:20,ghlLeads:20,ghlBO:0,v3s:3195,v50:699,v75:350},
-      {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',color:'#639922',impr:52658,reach:23872,clicks:2011,spend:439.34,ctr:3.82,cpm:8.34,cpc:0.22,leads:90,ghlLeads:87,ghlBO:1,v3s:12082,v50:2915,v75:1982},
-      {name:'VSL Operación Espejo',cls:'c3',bp:'Upgrader Familiar',color:'#8B44B8',impr:4422,reach:2740,clicks:255,spend:42.75,ctr:5.77,cpm:9.67,cpc:0.17,leads:5,ghlLeads:5,ghlBO:0,v3s:1032,v50:150,v75:116},
+      {name:'Guía Paso a Paso',cls:'c1',bp:'Familia Transición',color:'#378ADD',impr:8436,reach:6595,clicks:277,spend:70.15,ctr:3.28,cpm:8.32,cpc:0.25,leads:14,ghlLeads:14,ghlBO:0,v3s:2418,v50:537,v75:264},
+      {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',color:'#639922',impr:51424,reach:23495,clicks:1971,spend:429.95,ctr:3.83,cpm:8.36,cpc:0.22,leads:89,ghlLeads:86,ghlBO:1,v3s:11818,v50:2860,v75:1954},
+      {name:'VSL Operación Espejo',cls:'c3',bp:'Upgrader Familiar',color:'#8B44B8',impr:3575,reach:2387,clicks:194,spend:33.50,ctr:5.43,cpm:9.37,cpc:0.17,leads:3,ghlLeads:3,ghlBO:0,v3s:806,v50:132,v75:100},
     ],
     dailyLabels:LABELS28.slice(IDX30), dailyL1:L1.slice(IDX30),dailyL2:L2.slice(IDX30),dailyL3:L3.slice(IDX30),
     dailyS1:S1.slice(IDX30),dailyS2:S2.slice(IDX30),dailyS3:S3.slice(IDX30),
     ghlDays:LABELS28.slice(IDX30), ghlSrc:GHL28.src.map(s=>({...s,data:s.data.slice(IDX30)})), ghlSrc2:GHL_ARR.src.map(s=>({...s,data:s.data.slice(IDX30)}))
   },
   '14d': {
-    label: '02 ago – 15 ago 2026 (14 días)',
+    label: '03 ago – 16 ago 2026 (14 días)',
     lms: [
       {name:'Guía Paso a Paso',cls:'c1',bp:'Familia Transición',color:'#378ADD',impr:0,reach:0,clicks:0,spend:0,ctr:0,cpm:0,cpc:0,leads:0,ghlLeads:0,ghlBO:0,v3s:0,v50:0,v75:0},
-      {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',color:'#639922',impr:22102,reach:12915,clicks:815,spend:169.12,ctr:3.69,cpm:7.65,cpc:0.21,leads:28,ghlLeads:28,ghlBO:0,v3s:4741,v50:1243,v75:887},
+      {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',color:'#639922',impr:19140,reach:11502,clicks:704,spend:147.41,ctr:3.68,cpm:7.70,cpc:0.21,leads:22,ghlLeads:22,ghlBO:0,v3s:4168,v50:1093,v75:782},
       {name:'VSL Operación Espejo',cls:'c3',bp:'Upgrader Familiar',color:'#8B44B8',impr:0,reach:0,clicks:0,spend:0,ctr:0,cpm:0,cpc:0,leads:0,ghlLeads:0,ghlBO:0,v3s:0,v50:0,v75:0},
     ],
     dailyLabels:LABELS28.slice(IDX14), dailyL1:L1.slice(IDX14),dailyL2:L2.slice(IDX14),dailyL3:L3.slice(IDX14),
@@ -435,17 +435,21 @@ const PERIODOS = {
     ghlDays:LABELS28.slice(IDX14), ghlSrc:GHL28.src.map(s=>({...s,data:s.data.slice(IDX14)})), ghlSrc2:GHL_ARR.src.map(s=>({...s,data:s.data.slice(IDX14)}))
   },
   'ayer': {
-    label: '15 ago 2026 (Ayer)',
+    label: '16 ago 2026 (Ayer)',
     lms: [
       {name:'Guía Paso a Paso',cls:'c1',bp:'Familia Transición',color:'#378ADD',impr:0,reach:0,clicks:0,spend:0,ctr:0,cpm:0,cpc:0,leads:0,ghlLeads:0,ghlBO:0,v3s:0,v50:0,v75:0},
       {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',color:'#639922',impr:0,reach:0,clicks:0,spend:0,ctr:0,cpm:0,cpc:0,leads:0,ghlLeads:0,ghlBO:0,v3s:0,v50:0,v75:0},
       {name:'VSL Operación Espejo',cls:'c3',bp:'Upgrader Familiar',color:'#8B44B8',impr:0,reach:0,clicks:0,spend:0,ctr:0,cpm:0,cpc:0,leads:0,ghlLeads:0,ghlBO:0,v3s:0,v50:0,v75:0},
     ],
-    dailyLabels:['15/08'], dailyL1:[L1[L1.length-1]],dailyL2:[L2[L2.length-1]],dailyL3:[L3[L3.length-1]],
+    dailyLabels:['16/08'], dailyL1:[L1[L1.length-1]],dailyL2:[L2[L2.length-1]],dailyL3:[L3[L3.length-1]],
     dailyS1:[S1[S1.length-1]],dailyS2:[S2[S2.length-1]],dailyS3:[S3[S3.length-1]],
-    ghlDays:['15/08'], ghlSrc:GHL28.src.map(s=>({...s,data:[s.data[s.data.length-1]]})), ghlSrc2:GHL_ARR.src.map(s=>({...s,data:[s.data[s.data.length-1]]}))
+    ghlDays:['16/08'], ghlSrc:GHL28.src.map(s=>({...s,data:[s.data[s.data.length-1]]})), ghlSrc2:GHL_ARR.src.map(s=>({...s,data:[s.data[s.data.length-1]]}))
   },
 };
+// ghlLeads de 60d/90d = campo "lead" de Meta (proxy) para esta corrida — pull en vivo de GHL para
+// esas 2 ventanas quedó pendiente por volumen (233 oportunidades en pipeline Lead Magnets desde
+// 19/may); 14d/30d SÍ son conteo GHL real y confirmado. Diferencia esperada entre 0 y ~3 leads
+// (ver validación cruzada 14d/30d). Pendiente: recorregir 60d/90d con pull GHL real.
 
 // ── DATOS ENGAGEMENT POR PERÍODO ────────────────────────────────────────────
 // Ayer (16/jul): las 3 campañas DC organicas siguen PAUSED, sin delivery.
@@ -495,20 +499,20 @@ const ENG_90D = [
 // TOUR activa (Familia Transición, CASA-PAULA, arrancó 01/jul sin impresiones,
 // datos reales desde 02/jul) — Upgrader Familiar y Consolidado Silencioso
 // quedan en 0 hasta que tengan su propia campaña TOUR.
-const VTAS_FT_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 33.73, 24.67, 28.25, 25.47, 27.21, 31.32, 30.43, 32.85, 37.92, 37.57, 33.74, 30.54, 28.01, 28.3, 35.41, 32.42, 32.22, 30.77, 27.67, 27.2, 27.37, 25.28, 24.1, 24.46, 25.91, 21.21, 22.69, 24.63, 24.47, 27.27, 27.16, 26.83, 26.67, 24.25, 24.66, 23.43, 25.81, 26.16, 24.82, 23.69, 24.34, 23.58, 23.27, 25.22, 29.77];
-const VTAS_FT_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 7.42, 5.32, 5.61, 5.39, 3.33, 4.64, 5.39, 7.04, 8.05, 9.39, 6.55, 5.09, 4.16, 5.35, 5.23, 6.54, 5.83, 5.39, 3.2, 3.09, 3.58, 3.76, 3.45, 3.16, 3.42, 2.95, 3.87, 2.86, 3.27, 3.15, 3.97, 3.18, 3.6, 3.96, 3.23, 3.21, 3.96, 3.6, 2.95, 3.01, 2.9, 2.94, 2.82, 2.99, 3.74];
-const VTAS_FT_MSG = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 3, 1, 1, 0, 0, 2, 0, 1, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 2, 1, 0, 0, 2, 2, 2, 3, 3, 0, 2, 2, 0, 2, 2, 2, 2, 0, 0, 4, 2, 1, 3];
-const VTAS_FT_S = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5.91, 3.87, 5.0, 4.94, 4.82, 4.93, 3.74, 3.55, 2.64, 1.72, 3.36, 4.29, 6.1, 7.06, 6.57, 4.02, 6.09, 6.49, 7.73, 5.69, 7.02, 11.68, 11.65, 10.04, 12.15, 14.74, 14.05, 16.8, 15.06, 16.77, 19.61, 21.05, 12.1, 22.77, 18.3, 15.93, 19.27, 16.45, 17.97, 15.94, 24.23, 21.96, 25.56, 23.33, 22.27];
+const VTAS_FT_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 33.73, 24.67, 28.25, 25.47, 27.21, 31.32, 30.43, 32.85, 37.92, 37.57, 33.74, 30.54, 28.01, 28.3, 35.41, 32.42, 32.22, 30.77, 27.67, 27.2, 27.37, 25.28, 24.1, 24.46, 25.91, 21.21, 22.69, 24.63, 24.47, 27.27, 27.16, 26.83, 26.67, 24.25, 24.66, 23.43, 25.81, 26.16, 24.82, 23.69, 24.34, 23.58, 23.27, 25.22, 29.77, 27.46];
+const VTAS_FT_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 7.42, 5.32, 5.61, 5.39, 3.33, 4.64, 5.39, 7.04, 8.05, 9.39, 6.55, 5.09, 4.16, 5.35, 5.23, 6.54, 5.83, 5.39, 3.2, 3.09, 3.58, 3.76, 3.45, 3.16, 3.42, 2.95, 3.87, 2.86, 3.27, 3.15, 3.97, 3.18, 3.6, 3.96, 3.23, 3.21, 3.96, 3.6, 2.95, 3.01, 2.9, 2.94, 2.82, 2.99, 3.74, 3.98];
+const VTAS_FT_MSG = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 3, 1, 1, 0, 0, 2, 0, 1, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, 1, 2, 1, 0, 0, 2, 2, 2, 3, 3, 0, 2, 2, 0, 2, 2, 2, 2, 0, 0, 4, 2, 1, 3, 2];
+const VTAS_FT_S = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5.91, 3.87, 5.0, 4.94, 4.82, 4.93, 3.74, 3.55, 2.64, 1.72, 3.36, 4.29, 6.1, 7.06, 6.57, 4.02, 6.09, 6.49, 7.73, 5.69, 7.02, 11.68, 11.65, 10.04, 12.15, 14.74, 14.05, 16.8, 15.06, 16.77, 19.61, 21.05, 12.1, 22.77, 18.3, 15.93, 19.27, 16.45, 17.97, 15.94, 24.23, 21.96, 25.56, 23.33, 22.27, 31.27];
 
-const VTAS_UF_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 22.86, 27.76, 23.08, 20.2, 23.71, 22.49, 28.41, 28.68, 28.54, 21.48, 19.67, 24.76, 18.61, 23.51, 18.83, 21.71, 18.7, 19.54, 20.32, 18.31, 18.04, 24.86];
-const VTAS_UF_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0.0, 3.51, 2.59, 2.95, 3.0, 3.84, 3.52, 2.71, 3.83, 2.77, 1.8, 2.08, 2.19, 2.89, 1.6, 3.53, 1.09, 2.19, 2.5, 1.27, 1.56, 2.53];
-const VTAS_UF_MSG = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 2, 0, 1, 2, 0, 0, 2];
-const VTAS_UF_S = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0.1, 7.36, 5.2, 5.47, 6.25, 4.22, 6.81, 6.63, 6.73, 3.72, 7.76, 6.0, 5.19, 6.44, 6.12, 6.67, 4.79, 9.4, 10.64, 12.31, 12.65, 11.49];
+const VTAS_UF_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 22.86, 27.76, 23.08, 20.2, 23.71, 22.49, 28.41, 28.68, 28.54, 21.48, 19.67, 24.76, 18.61, 23.51, 18.83, 21.71, 18.7, 19.54, 20.32, 18.31, 18.04, 24.86, 24.46];
+const VTAS_UF_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0.0, 3.51, 2.59, 2.95, 3.0, 3.84, 3.52, 2.71, 3.83, 2.77, 1.8, 2.08, 2.19, 2.89, 1.6, 3.53, 1.09, 2.19, 2.5, 1.27, 1.56, 2.53, 2.64];
+const VTAS_UF_MSG = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 2, 0, 1, 2, 0, 0, 2, 4];
+const VTAS_UF_S = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0.1, 7.36, 5.2, 5.47, 6.25, 4.22, 6.81, 6.63, 6.73, 3.72, 7.76, 6.0, 5.19, 6.44, 6.12, 6.67, 4.79, 9.4, 10.64, 12.31, 12.65, 11.49, 14.15];
 
-const VTAS_CS_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 34.04, 30.55, 31.38, 24.22, 24.48, 26.47, 28.12, 26.5, 25.41, 24.54, 28.98, 26.57, 27.13, 26.58, 24.45, 27.61, 31.88, 28.21, 29.82, 30.75, 25.49, 23.51, 25.97, 24.58, 24.39, 21.31, 24.67, 23.15, 24.63, 22.64, 25.07];
-const VTAS_CS_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 4.75, 4.04, 3.87, 3.26, 3.37, 4.03, 4.2, 4.79, 3.01, 2.59, 4.77, 2.09, 3.5, 3.23, 3.23, 3.69, 4.22, 3.5, 2.92, 3.83, 3.09, 3.01, 3.53, 3.82, 3.1, 2.05, 3.19, 2.26, 3.13, 2.47, 2.42];
-const VTAS_CS_MSG = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 2, 0, 0, 3];
-const VTAS_CS_S = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2.03, 4.72, 7.21, 6.15, 6.86, 6.8, 6.58, 6.31, 4.74, 4.46, 5.56, 6.3, 6.86, 5.72, 5.65, 6.27, 5.6, 6.46, 2.96, 7.41, 8.92, 10.28, 12.71, 14.21, 14.51, 11.6, 18.07, 17.82, 18.69, 17.35, 16.44];
+const VTAS_CS_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 34.04, 30.55, 31.38, 24.22, 24.48, 26.47, 28.12, 26.5, 25.41, 24.54, 28.98, 26.57, 27.13, 26.58, 24.45, 27.61, 31.88, 28.21, 29.82, 30.75, 25.49, 23.51, 25.97, 24.58, 24.39, 21.31, 24.67, 23.15, 24.63, 22.64, 25.07, 26.38];
+const VTAS_CS_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 4.75, 4.04, 3.87, 3.26, 3.37, 4.03, 4.2, 4.79, 3.01, 2.59, 4.77, 2.09, 3.5, 3.23, 3.23, 3.69, 4.22, 3.5, 2.92, 3.83, 3.09, 3.01, 3.53, 3.82, 3.1, 2.05, 3.19, 2.26, 3.13, 2.47, 2.42, 3.86];
+const VTAS_CS_MSG = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 2, 0, 0, 3, 2];
+const VTAS_CS_S = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2.03, 4.72, 7.21, 6.15, 6.86, 6.8, 6.58, 6.31, 4.74, 4.46, 5.56, 6.3, 6.86, 5.72, 5.65, 6.27, 5.6, 6.46, 2.96, 7.41, 8.92, 10.28, 12.71, 14.21, 14.51, 11.6, 18.07, 17.82, 18.69, 17.35, 16.44, 22.24];
 
 // Tabla por período (mismas columnas que Contenido Orgánico) — 1 campaña real hoy.
 // 'ayer' = solo el día de ayer (igual criterio que ENG_AYER). '14d'/'30d'/'60d' = acumulado
@@ -520,96 +524,91 @@ const VTAS_CS_S = [null, null, null, null, null, null, null, null, null, null, n
 // o perderse si el proceso reconstruye el array sin ese campo).
 const VTAS_AYER = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:0,camps:[
-    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:518,reach:470,clicks:15,spend:5.13,v50:24,v3s:180,v95:2,msgs:1,ghlOpps:1},
-    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:484,reach:423,clicks:7,spend:4.69,v50:9,v3s:105,v95:2,msgs:2,ghlOpps:2},
-    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:438,reach:380,clicks:7,spend:5.03,v50:13,v3s:113,v95:4,msgs:0,ghlOpps:0},
-    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:646,reach:556,clicks:13,spend:7.42,v50:32,v3s:223,v95:6,msgs:0,ghlOpps:0},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:450,reach:393,clicks:13,spend:7.14,v50:25,v3s:142,v95:5,msgs:2,ghlOpps:3},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:589,reach:492,clicks:12,spend:8.30,v50:22,v3s:164,v95:9,msgs:0,ghlOpps:0},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:538,reach:443,clicks:15,spend:7.74,v50:16,v3s:123,v95:6,msgs:0,ghlOpps:0},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:506,reach:417,clicks:10,spend:8.09,v50:20,v3s:143,v95:5,msgs:0,ghlOpps:0},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:367,reach:315,clicks:11,spend:3.96,v50:8,v3s:88,v95:3,msgs:1,ghlOpps:1},
-    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:739,reach:531,clicks:17,spend:7.53,v50:20,v3s:187,v95:7,msgs:1,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:486,reach:379,clicks:9,spend:7.51,v50:12,v3s:113,v95:3,msgs:3,ghlOpps:2},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:573,reach:438,clicks:10,spend:6.64,v50:16,v3s:146,v95:10,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:0,camps:[
-    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:505,reach:436,clicks:9,spend:4.64,v50:11,v3s:122,v95:3,msgs:0,ghlOpps:0},
-    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:344,reach:302,clicks:7,spend:4.14,v50:13,v3s:100,v95:4,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:599,reach:502,clicks:12,spend:7.66,v50:11,v3s:141,v95:0,msgs:2,ghlOpps:1},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:524,reach:438,clicks:10,spend:7.38,v50:17,v3s:126,v95:5,msgs:0,ghlOpps:0},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:509,reach:425,clicks:16,spend:7.70,v50:25,v3s:156,v95:14,msgs:0,ghlOpps:0},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:548,reach:431,clicks:15,spend:7.16,v50:19,v3s:135,v95:9,msgs:2,ghlOpps:1},
   ]},
 ];
 const VTAS_14D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:0,camps:[
-    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:8056,reach:5103,clicks:211,spend:83.84,v50:410,v3s:2504,v95:104,msgs:8,ghlOpps:6},
-    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:7392,reach:3728,clicks:116,spend:83.92,v50:168,v3s:1554,v95:44,msgs:11,ghlOpps:9},
-    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:7784,reach:3850,clicks:125,spend:83.97,v50:187,v3s:1752,v95:56,msgs:2,ghlOpps:2},
-    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,v95:15,msgs:1,ghlOpps:1},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:7882,reach:5093,clicks:214,spend:85.06,v50:409,v3s:2438,v95:104,msgs:10,ghlOpps:9},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:7494,reach:3802,clicks:119,spend:85.22,v50:176,v3s:1612,v95:50,msgs:11,ghlOpps:9},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:7520,reach:3839,clicks:121,spend:83.58,v50:182,v3s:1676,v95:55,msgs:2,ghlOpps:2},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:3229,reach:1925,clicks:53,spend:33.81,v50:102,v3s:850,v95:20,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:7477,reach:3717,clicks:174,spend:83.92,v50:181,v3s:1612,v95:70,msgs:8,ghlOpps:6},
-    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,v95:18,msgs:2,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:7442,reach:3690,clicks:172,spend:84.70,v50:173,v3s:1576,v95:69,msgs:11,ghlOpps:8},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3660,reach:1965,clicks:46,spend:32.73,v50:65,v3s:736,v95:28,msgs:3,ghlOpps:2},
   ]},
-  {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:1,camps:[
-    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:10025,reach:6112,clicks:219,spend:83.93,v50:308,v3s:2589,v95:71,msgs:4,ghlOpps:4},
-    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,v95:70,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,v95:12,msgs:3,ghlOpps:3},
+  {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:0,camps:[
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:9749,reach:6016,clicks:211,spend:84.85,v50:297,v3s:2489,v95:75,msgs:4,ghlOpps:4},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:7237,reach:3796,clicks:140,spend:70.58,v50:254,v3s:1818,v95:84,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:3407,reach:1923,clicks:53,spend:37.86,v50:69,v3s:737,v95:21,msgs:5,ghlOpps:4},
   ]},
 ];
 const VTAS_30D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:4,camps:[
-    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:20284,reach:9647,clicks:461,spend:177.78,v50:999,v3s:6245,v95:230,msgs:17,ghlOpps:12},
-    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,v95:141,msgs:18,ghlOpps:13},
-    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,v95:65,msgs:5,ghlOpps:4},
-    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,v95:15,msgs:1,ghlOpps:1},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:20077,reach:9552,clicks:459,spend:180.90,v50:981,v3s:6174,v95:229,msgs:18,ghlOpps:14},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:17420,reach:7487,clicks:283,spend:152.66,v50:415,v3s:3602,v95:150,msgs:18,ghlOpps:14},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10681,reach:4578,clicks:173,spend:116.92,v50:266,v3s:2438,v95:71,msgs:5,ghlOpps:4},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:3229,reach:1925,clicks:53,spend:33.81,v50:102,v3s:850,v95:20,msgs:1,ghlOpps:1},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,v95:118,msgs:11,ghlOpps:8},
-    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,v95:18,msgs:2,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:13399,reach:6001,clicks:293,spend:133.47,v50:361,v3s:3056,v95:121,msgs:14,ghlOpps:10},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3660,reach:1965,clicks:46,spend:32.73,v50:65,v3s:736,v95:28,msgs:3,ghlOpps:2},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:1,camps:[
-    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23060,reach:10686,clicks:493,spend:179.72,v50:780,v3s:6113,v95:195,msgs:15,ghlOpps:14},
-    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,v95:70,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,v95:12,msgs:3,ghlOpps:3},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:22842,reach:10819,clicks:485,spend:182.38,v50:767,v3s:6012,v95:192,msgs:15,ghlOpps:14},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:7237,reach:3796,clicks:140,spend:70.58,v50:254,v3s:1818,v95:84,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:3407,reach:1923,clicks:53,spend:37.86,v50:69,v3s:737,v95:21,msgs:5,ghlOpps:4},
   ]},
 ];
-// Refrescado 11/ago/2026 con pull fresco de Meta por ventana exacta (ya no 60d=30d: CASA-PAULA
-// (arrancó 01/jul) ya supera los 30 días de antigüedad al 10/ago, así que 60d y 30d divergen para
-// esa campaña — el resto de campañas TOUR nacieron dentro de los últimos 30 días y coinciden en
-// ambas ventanas). CASA LAS BRISAS (CS, id 52641968005113, código 15025) es nueva — detectada
-// 10/ago/2026, arrancó ese mismo día.
+// Refrescado 17/ago/2026 (catch-up del 16/ago) con pull fresco de Meta por ventana exacta.
 const VTAS_60D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:4,camps:[
-    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:32501,reach:12681,clicks:737,spend:246.28,v50:1662,v3s:9905,v95:341,msgs:30,ghlOpps:17},
-    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,v95:141,msgs:18,ghlOpps:10},
-    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,v95:65,msgs:5,ghlOpps:3},
-    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,v95:15,msgs:1,ghlOpps:1},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:32951,reach:12853,clicks:750,spend:253.42,v50:1687,v3s:10047,v95:346,msgs:32,ghlOpps:19},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:17420,reach:7487,clicks:283,spend:152.66,v50:415,v3s:3602,v95:150,msgs:18,ghlOpps:11},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10681,reach:4578,clicks:173,spend:116.92,v50:266,v3s:2438,v95:71,msgs:5,ghlOpps:3},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:3229,reach:1925,clicks:53,spend:33.81,v50:102,v3s:850,v95:20,msgs:1,ghlOpps:0},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,v95:118,msgs:11,ghlOpps:8},
-    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,v95:18,msgs:2,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:13399,reach:6001,clicks:293,spend:133.47,v50:361,v3s:3056,v95:121,msgs:14,ghlOpps:10},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3660,reach:1965,clicks:46,spend:32.73,v50:65,v3s:736,v95:28,msgs:3,ghlOpps:2},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:1,camps:[
-    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23439,reach:10704,clicks:498,spend:181.75,v50:798,v3s:6242,v95:196,msgs:15,ghlOpps:14},
-    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,v95:70,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,v95:12,msgs:3,ghlOpps:3},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23964,reach:10903,clicks:508,spend:189.13,v50:815,v3s:6368,v95:201,msgs:15,ghlOpps:14},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:7237,reach:3796,clicks:140,spend:70.58,v50:254,v3s:1818,v95:84,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:3407,reach:1923,clicks:53,spend:37.86,v50:69,v3s:737,v95:21,msgs:5,ghlOpps:4},
   ]},
 ];
 
-// VTAS_90D: idéntico a VTAS_60D — todas las campañas TOUR arrancaron dentro de los últimos 60 días
-// (la más vieja, CASA-PAULA, el 01/jul/2026), así que la ventana de 90 días (13/may–10/ago) no
-// captura ninguna campaña TOUR adicional. Refrescado 11/ago/2026 (ver Paso 2h punto 4).
+// VTAS_90D: idéntico a VTAS_60D — ninguna campaña TOUR supera los 60 días de antigüedad al
+// 16/ago/2026 (la más vieja, CASA-PAULA, arrancó 01/jul). Refrescado 17/ago/2026.
 const VTAS_90D = [
   {buyer:'Familia Transición',cls:'bp-ft',bc:'#378ADD',ghlBO:4,camps:[
-    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:32501,reach:12681,clicks:737,spend:246.28,v50:1662,v3s:9905,v95:341,msgs:30,ghlOpps:17},
-    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:16831,reach:7311,clicks:271,spend:144.36,v50:393,v3s:3438,v95:141,msgs:18,ghlOpps:10},
-    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10140,reach:4328,clicks:158,spend:109.18,v50:250,v3s:2314,v95:65,msgs:5,ghlOpps:3},
-    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:2722,reach:1652,clicks:43,spend:25.71,v50:82,v3s:707,v95:15,msgs:1,ghlOpps:1},
+    {name:'15781 CASA-PAULA',start:'2026-07-23',status:'ACTIVE',impr:32951,reach:12853,clicks:750,spend:253.42,v50:1687,v3s:10047,v95:346,msgs:32,ghlOpps:19},
+    {name:'20901 CASA-MEDITERRANEA',start:'2026-07-23',status:'ACTIVE',impr:17420,reach:7487,clicks:283,spend:152.66,v50:415,v3s:3602,v95:150,msgs:18,ghlOpps:11},
+    {name:'18434 CASA EN PIEDRA ROJA',start:'2026-07-28',status:'ACTIVE',impr:10681,reach:4578,clicks:173,spend:116.92,v50:266,v3s:2438,v95:71,msgs:5,ghlOpps:3},
+    {name:'31520 CASA PIEDRA ROJA',start:'2026-08-11',status:'ACTIVE',impr:3229,reach:1925,clicks:53,spend:33.81,v50:102,v3s:850,v95:20,msgs:1,ghlOpps:0},
   ]},
   {buyer:'Upgrader Familiar',cls:'bp-uf',bc:'#639922',ghlBO:0,camps:[
-    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:12912,reach:5812,clicks:284,spend:125.96,v50:349,v3s:2943,v95:118,msgs:11,ghlOpps:8},
-    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3087,reach:1695,clicks:36,spend:26.09,v50:49,v3s:590,v95:18,msgs:2,ghlOpps:1},
+    {name:'16008 CASA LO PINTO',start:'2026-07-25',status:'ACTIVE',impr:13399,reach:6001,clicks:293,spend:133.47,v50:361,v3s:3056,v95:121,msgs:14,ghlOpps:10},
+    {name:'32098 CASA PIEDRA ROA',start:'2026-08-11',status:'ACTIVE',impr:3660,reach:1965,clicks:46,spend:32.73,v50:65,v3s:736,v95:28,msgs:3,ghlOpps:2},
   ]},
   {buyer:'Consolidado Silencioso',cls:'bp-cs',bc:'#8B44B8',ghlBO:1,camps:[
-    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23439,reach:10704,clicks:498,spend:181.75,v50:798,v3s:6242,v95:196,msgs:15,ghlOpps:14},
-    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:6728,reach:3607,clicks:124,spend:62.88,v50:229,v3s:1662,v95:70,msgs:1,ghlOpps:1},
-    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:2859,reach:1639,clicks:38,spend:30.70,v50:50,v3s:602,v95:12,msgs:3,ghlOpps:3},
+    {name:'11511 CASA-PIEDRA',start:'2026-07-23',status:'ACTIVE',impr:23964,reach:10903,clicks:508,spend:189.13,v50:815,v3s:6368,v95:201,msgs:15,ghlOpps:14},
+    {name:'13111 CASA EN PIEDRA ROJA',start:'2026-08-05',status:'ACTIVE',impr:7237,reach:3796,clicks:140,spend:70.58,v50:254,v3s:1818,v95:84,msgs:1,ghlOpps:1},
+    {name:'15025 CASA LAS BRISAS',start:'2026-08-10',status:'ACTIVE',impr:3407,reach:1923,clicks:53,spend:37.86,v50:69,v3s:737,v95:21,msgs:5,ghlOpps:4},
   ]},
 ];
 
@@ -1079,25 +1078,29 @@ function renderGHL2(d,key){
 const CLP_USD_RATE = 925.89; // XE mid-market, 16/jul/2026 16:10 UTC — fijo, actualizar manualmente si se requiere.
 const PORTAL_MONTHLY_CLP = 2000000; // Costo fijo mensual Portalinmobiliario, prorrateado a base 30 días.
 const BACKOFFICE_PERIODOS = {
-  '90d': { days:90, metaSpendUSD:3232.44,
-    portal:{nuevo:6, asigEjec:8, ingBO:57, descartado:92, ganado:0},
-    campanas:{nuevo:13, asigEjec:5, ingBO:30, descartado:137, ganado:0} },
-  '60d': { days:60, metaSpendUSD:2913.12,
-    portal:{nuevo:6, asigEjec:8, ingBO:48, descartado:84, ganado:0},
-    campanas:{nuevo:13, asigEjec:5, ingBO:30, descartado:134, ganado:0} },
-  '30d': { days:30, metaSpendUSD:1454.39,
-    portal:{nuevo:6, asigEjec:8, ingBO:29, descartado:39, ganado:0},
-    campanas:{nuevo:12, asigEjec:5, ingBO:16, descartado:93, ganado:0} },
-  '14d': { days:14, metaSpendUSD:734.08,
-    portal:{nuevo:6, asigEjec:8, ingBO:13, descartado:6, ganado:0},
-    campanas:{nuevo:12, asigEjec:5, ingBO:5, descartado:40, ganado:0} },
-  'ayer': { days:1, metaSpendUSD:50.20,
-    portal:{nuevo:6, asigEjec:0, ingBO:0, descartado:0, ganado:0},
-    campanas:{nuevo:10, asigEjec:0, ingBO:0, descartado:0, ganado:0} },
-  'todo': { days:71, metaSpendUSD:3232.30,
-    portal:{nuevo:6, asigEjec:8, ingBO:57, descartado:92, ganado:0},
-    campanas:{nuevo:13, asigEjec:5, ingBO:30, descartado:137, ganado:0} },
+  '90d': { days:90, metaSpendUSD:3300.11,
+    portal:{nuevo:0, asigEjec:14, ingBO:57, descartado:93, ganado:0},
+    campanas:{nuevo:2, asigEjec:12, ingBO:30, descartado:148, ganado:0} },
+  '60d': { days:60, metaSpendUSD:2948.90,
+    portal:{nuevo:0, asigEjec:14, ingBO:48, descartado:84, ganado:0},
+    campanas:{nuevo:2, asigEjec:12, ingBO:29, descartado:145, ganado:0} },
+  '30d': { days:30, metaSpendUSD:1474.91,
+    portal:{nuevo:0, asigEjec:14, ingBO:28, descartado:40, ganado:0},
+    campanas:{nuevo:1, asigEjec:12, ingBO:16, descartado:101, ganado:0} },
+  '14d': { days:14, metaSpendUSD:745.80,
+    portal:{nuevo:0, asigEjec:14, ingBO:12, descartado:7, ganado:0},
+    campanas:{nuevo:1, asigEjec:12, ingBO:5, descartado:47, ganado:0} },
+  'ayer': { days:1, metaSpendUSD:67.66,
+    portal:{nuevo:0, asigEjec:1, ingBO:0, descartado:0, ganado:0},
+    campanas:{nuevo:0, asigEjec:1, ingBO:0, descartado:6, ganado:0} },
+  'todo': { days:73, metaSpendUSD:3299.97,
+    portal:{nuevo:0, asigEjec:14, ingBO:57, descartado:93, ganado:0},
+    campanas:{nuevo:2, asigEjec:12, ingBO:30, descartado:148, ganado:0} },
 };
+// Refrescado 17/ago/2026 (catch-up 16/ago) — conteos "open" de Compradores vía subagente (363
+// oportunidades open paginadas y validadas contra meta.total), metaSpendUSD = pull Meta Ads a nivel
+// cuenta (sin filtrar campaña) por ventana exacta. Cross-validado: ayer (Portal=1, Campañas=7)
+// coincide exacto con el pull directo de Compradores para 16/ago (1 PORTALINMOBILIARIO + 7 META-TOUR).
 const fmtCLP = n => '$'+Math.round(n).toLocaleString('es-CL');
 
 function renderBackoffice(key){
@@ -1143,22 +1146,22 @@ function renderBackoffice(key){
 // Registros = video_p50_watched_actions (conteo absoluto)
 // null = sin actividad ese día (spanGaps une la línea)
 
-const VCH_LABELS = ["16/05", "17/05", "18/05", "19/05", "20/05", "21/05", "22/05", "23/05", "24/05", "25/05", "26/05", "27/05", "28/05", "29/05", "30/05", "31/05", "01/06", "02/06", "03/06", "04/06", "05/06", "06/06", "07/06", "08/06", "09/06", "10/06", "11/06", "12/06", "13/06", "14/06", "15/06", "16/06", "17/06", "18/06", "19/06", "20/06", "21/06", "22/06", "23/06", "24/06", "25/06", "26/06", "27/06", "28/06", "29/06", "30/06", "01/07", "02/07", "03/07", "04/07", "05/07", "06/07", "07/07", "08/07", "09/07", "10/07", "11/07", "12/07", "13/07", "14/07", "15/07", "16/07", "17/07", "18/07", "19/07", "20/07", "21/07", "22/07", "23/07", "24/07", "25/07", "26/07", "27/07", "28/07", "29/07", "30/07", "31/07", "01/08", "02/08", "03/08", "04/08", "05/08", "06/08", "07/08", "08/08", "09/08", "10/08", "11/08", "12/08", "13/08", "14/08", "15/08"];
+const VCH_LABELS = ["16/05", "17/05", "18/05", "19/05", "20/05", "21/05", "22/05", "23/05", "24/05", "25/05", "26/05", "27/05", "28/05", "29/05", "30/05", "31/05", "01/06", "02/06", "03/06", "04/06", "05/06", "06/06", "07/06", "08/06", "09/06", "10/06", "11/06", "12/06", "13/06", "14/06", "15/06", "16/06", "17/06", "18/06", "19/06", "20/06", "21/06", "22/06", "23/06", "24/06", "25/06", "26/06", "27/06", "28/06", "29/06", "30/06", "01/07", "02/07", "03/07", "04/07", "05/07", "06/07", "07/07", "08/07", "09/07", "10/07", "11/07", "12/07", "13/07", "14/07", "15/07", "16/07", "17/07", "18/07", "19/07", "20/07", "21/07", "22/07", "23/07", "24/07", "25/07", "26/07", "27/07", "28/07", "29/07", "30/07", "31/07", "01/08", "02/08", "03/08", "04/08", "05/08", "06/08", "07/08", "08/08", "09/08", "10/08", "11/08", "12/08", "13/08", "14/08", "15/08", "16/08"];
 
 // LM1 — Familia Transición
-const LM1_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 30.2, 36.7, 41.6, 38.1, 35.8, 43.3, 32.8, 36.3, 38.6, 37, 39.6, 34.3, 36.4, 36.4, 29.4, 32.3, 26.5, 28, 32.1, 29.1, 28.9, 29.5, 33.2, 30.7, 30.4, 29.1, 29.4, 28, 26.9, 30.9, 27.99, 28.79, 29.66, 30.69, 31.91, 28.92, 30.42, 30.92, 28.25, 27.37, 28.24, 29.65, 30.59, 28.52, 29.5, 27.95, 28.67, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-const LM1_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 10.15, 10.49, 12.07, 10.07, 8.14, 9.79, 9.71, 9.53, 9.72, 9.67, 11.29, 9.93, 7.48, 7.66, 7.65, 8.46, 7.01, 5.91, 8.51, 7, 6.03, 6.91, 8.17, 6.23, 6.66, 5.19, 6.27, 5.77, 5.84, 6.85, 5.7, 6.73, 6.14, 6.84, 8.43, 6.82, 6.76, 7.81, 5.68, 5.03, 5.88, 6.93, 6.38, 6.25, 6.78, 5.97, 6.59, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-const LM1_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 28, 81, 27, 25, 43, 77, 63, 41, 56, 69, 59, 69, 49, 52, 55, 59, 83, 115, 87, 81, 98, 86, 76, 137, 88, 118, 110, 99, 128, 171, 181, 146, 138, 164, 104, 106, 152, 150, 146, 173, 171, 162, 144, 155, 154, 83, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const LM1_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 30.2, 36.7, 41.6, 38.1, 35.8, 43.3, 32.8, 36.3, 38.6, 37, 39.6, 34.3, 36.4, 36.4, 29.4, 32.3, 26.5, 28, 32.1, 29.1, 28.9, 29.5, 33.2, 30.7, 30.4, 29.1, 29.4, 28, 26.9, 30.9, 27.99, 28.79, 29.66, 30.69, 31.91, 28.92, 30.42, 30.92, 28.25, 27.37, 28.24, 29.65, 30.59, 28.52, 29.5, 27.95, 28.67, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const LM1_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 10.15, 10.49, 12.07, 10.07, 8.14, 9.79, 9.71, 9.53, 9.72, 9.67, 11.29, 9.93, 7.48, 7.66, 7.65, 8.46, 7.01, 5.91, 8.51, 7, 6.03, 6.91, 8.17, 6.23, 6.66, 5.19, 6.27, 5.77, 5.84, 6.85, 5.7, 6.73, 6.14, 6.84, 8.43, 6.82, 6.76, 7.81, 5.68, 5.03, 5.88, 6.93, 6.38, 6.25, 6.78, 5.97, 6.59, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const LM1_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 28, 81, 27, 25, 43, 77, 63, 41, 56, 69, 59, 69, 49, 52, 55, 59, 83, 115, 87, 81, 98, 86, 76, 137, 88, 118, 110, 99, 128, 171, 181, 146, 138, 164, 104, 106, 152, 150, 146, 173, 171, 162, 144, 155, 154, 83, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 // LM2 — Upgrader Familiar
-const LM2_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 25.9, 35.8, 34, 33, 38, 37.4, 37.5, 34.6, 38.3, 35.4, 34.6, 33.1, 31.9, 27.5, 31.5, 28.1, 30.9, 28.3, 33, 29.9, 29.2, 30.6, 29, 30.9, 29.8, 29.9, 29.3, 28.6, 25.1, 25, 24.57, 32.58, 29.05, 29.92, 26.25, 28.47, 26.83, 28.81, 27.33, 24.2, 25.37, 22.94, 21.39, 21.22, 21.17, 19.98, 23.36, 22.62, 22.45, 24.7, 24.58, 25.02, 28.5, 27, 28.47, 29.87, 25.25, 20.41, 19.29, 21.46, 24.77, 23.62, 22.15, 22.74, 20.51, 18.69, 20.56, null, null, null, null, null];
-const LM2_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 8.62, 10.55, 13.43, 11.85, 15.01, 15.56, 16.1, 14.98, 19.01, 13.19, 14.05, 12.12, 10.16, 11.03, 9.63, 11.69, 12.05, 10.47, 10, 9.3, 9.53, 11.28, 10.58, 9.22, 10.41, 10.44, 8.11, 6.34, 5.06, 6.84, 5.86, 7.14, 6.87, 8.03, 9.13, 9.25, 7.81, 9.17, 6.61, 4.52, 5.69, 5.62, 4.46, 5.05, 4.1, 3.58, 4.77, 4.66, 4.59, 5.59, 5.52, 5.44, 7.72, 6.92, 6.83, 7.31, 6.37, 5.2, 5.07, 5.66, 5.63, 5.84, 6.24, 6.12, 5.34, 5.63, 5.27, null, null, null, null, null];
-const LM2_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 23, 85, 32, 53, 91, 94, 74, 73, 69, 67, 56, 64, 59, 55, 52, 64, 80, 84, 93, 95, 105, 70, 98, 136, 134, 105, 64, 64, 88, 93, 73, 69, 62, 64, 52, 46, 77, 76, 48, 74, 62, 55, 73, 64, 70, 102, 109, 105, 114, 98, 128, 133, 118, 120, 123, 111, 145, 150, 104, 132, 156, 138, 137, 187, 179, 60, 0, 0, 0, 0, 0];
+const LM2_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 25.9, 35.8, 34, 33, 38, 37.4, 37.5, 34.6, 38.3, 35.4, 34.6, 33.1, 31.9, 27.5, 31.5, 28.1, 30.9, 28.3, 33, 29.9, 29.2, 30.6, 29, 30.9, 29.8, 29.9, 29.3, 28.6, 25.1, 25, 24.57, 32.58, 29.05, 29.92, 26.25, 28.47, 26.83, 28.81, 27.33, 24.2, 25.37, 22.94, 21.39, 21.22, 21.17, 19.98, 23.36, 22.62, 22.45, 24.7, 24.58, 25.02, 28.5, 27, 28.47, 29.87, 25.25, 20.41, 19.29, 21.46, 24.77, 23.62, 22.15, 22.74, 20.51, 18.69, 20.56, null, null, null, null, null, null];
+const LM2_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 8.62, 10.55, 13.43, 11.85, 15.01, 15.56, 16.1, 14.98, 19.01, 13.19, 14.05, 12.12, 10.16, 11.03, 9.63, 11.69, 12.05, 10.47, 10, 9.3, 9.53, 11.28, 10.58, 9.22, 10.41, 10.44, 8.11, 6.34, 5.06, 6.84, 5.86, 7.14, 6.87, 8.03, 9.13, 9.25, 7.81, 9.17, 6.61, 4.52, 5.69, 5.62, 4.46, 5.05, 4.1, 3.58, 4.77, 4.66, 4.59, 5.59, 5.52, 5.44, 7.72, 6.92, 6.83, 7.31, 6.37, 5.2, 5.07, 5.66, 5.63, 5.84, 6.24, 6.12, 5.34, 5.63, 5.27, null, null, null, null, null, null];
+const LM2_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 23, 85, 32, 53, 91, 94, 74, 73, 69, 67, 56, 64, 59, 55, 52, 64, 80, 84, 93, 95, 105, 70, 98, 136, 134, 105, 64, 64, 88, 93, 73, 69, 62, 64, 52, 46, 77, 76, 48, 74, 62, 55, 73, 64, 70, 102, 109, 105, 114, 98, 128, 133, 118, 120, 123, 111, 145, 150, 104, 132, 156, 138, 137, 187, 179, 60, 0, 0, 0, 0, 0, 0];
 
 // LM3 — Consolidado Silencioso
-const LM3_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 22.2, 28.6, 34.6, 36.7, 34.3, 35.4, 36.2, 33.1, 35.5, 36.1, 38.6, 34, 32.1, 29.8, 22.7, 24.1, 16.6, 21.4, 23.8, 22.3, 25, 26.4, 31.9, 23.7, 24.1, 25.8, 22.9, 21.3, 18.4, 17.4, 18.26, 19.64, 16.96, 20.17, 26.98, 26.51, 21.56, 18.74, 24.02, 21.28, 24.03, 25.58, 26.68, 21.14, 21.51, 22.91, 26.46, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-const LM3_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2.75, 4.76, 5.6, 3.23, 5.48, 4.06, 3.56, 4.19, 2.05, 3.64, 5.76, 3.3, 5.57, 5.44, 5.67, 7.91, 4.2, 5.16, 6.03, 5.7, 4.51, 4.73, 5.2, 2.27, 3.92, 2.25, 3.21, 2.99, 2.88, 2.97, 2.36, 2.67, 2.66, 2.25, 3.76, 3.12, 2.87, 3.25, 2.57, 3.2, 3, 3.6, 2.14, 3.5, 3.32, 4.13, 4.24, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-const LM3_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 18, 33, 8, 19, 23, 22, 22, 7, 13, 24, 10, 16, 19, 20, 25, 26, 32, 38, 42, 36, 31, 22, 18, 33, 18, 33, 33, 31, 46, 40, 40, 43, 19, 27, 16, 14, 29, 23, 29, 27, 31, 18, 30, 43, 38, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const LM3_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 22.2, 28.6, 34.6, 36.7, 34.3, 35.4, 36.2, 33.1, 35.5, 36.1, 38.6, 34, 32.1, 29.8, 22.7, 24.1, 16.6, 21.4, 23.8, 22.3, 25, 26.4, 31.9, 23.7, 24.1, 25.8, 22.9, 21.3, 18.4, 17.4, 18.26, 19.64, 16.96, 20.17, 26.98, 26.51, 21.56, 18.74, 24.02, 21.28, 24.03, 25.58, 26.68, 21.14, 21.51, 22.91, 26.46, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const LM3_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2.75, 4.76, 5.6, 3.23, 5.48, 4.06, 3.56, 4.19, 2.05, 3.64, 5.76, 3.3, 5.57, 5.44, 5.67, 7.91, 4.2, 5.16, 6.03, 5.7, 4.51, 4.73, 5.2, 2.27, 3.92, 2.25, 3.21, 2.99, 2.88, 2.97, 2.36, 2.67, 2.66, 2.25, 3.76, 3.12, 2.87, 3.25, 2.57, 3.2, 3, 3.6, 2.14, 3.5, 3.32, 4.13, 4.24, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const LM3_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 18, 33, 8, 19, 23, 22, 22, 7, 13, 24, 10, 16, 19, 20, 25, 26, 32, 38, 42, 36, 31, 22, 18, 33, 18, 33, 33, 31, 46, 40, 40, 43, 19, 27, 16, 14, 29, 23, 29, 27, 31, 18, 30, 43, 38, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 // IDX14=14 definido arriba (línea LABELS28)
 
@@ -1192,15 +1195,15 @@ const VCH_DATA = {
 // UF = [DC][ABO][INTERACCION][TRAFICO-INSTA][Upgrader Familiar] (16/jun–) + Rell2-UF-adm + Rell2-UF-btn + Rell5-UF (hasta 16/jun)
 // CS = [DC][ABO][INTERACCION][TRAFICO-INSTA][Consolidado Silencioso] (16/jun–) + Rell3-CS + Rell6-CS (hasta 16/jun)
 // null = sin actividad ese día | Último punto (23/jun) verificado contra CSV de Meta Ads Manager
-const ENG_FT_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 14.8, 18.9, 26.8, 20.4, 23.7, 18.5, 18.1, 15.6, 15.7, 17.5, 15.4, 15.9, 12.1, 9.6, 9.4, 10.3, 10.3, 10.5, 15.6, 28.3, 27.2, 26.8, 28.1, 29.7, 30, 29.4, 29.6, 27.6, 29.5, 29.6, 31.4, 27.95, 26.95, 25.8, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-const ENG_FT_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 1.71, 2.65, 2.11, 3.6, 2.43, 3.23, 2.53, 2.83, 1.85, 2.21, 1.98, 1.81, 1.69, 2.01, 1.83, 1.29, 1.51, 2.84, 7.35, 7.33, 7.81, 8.05, 7.48, 8.15, 7.82, 7.91, 7.23, 7.68, 7.24, 8.47, 7.13, 6.07, 6.29, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-const ENG_FT_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 19, 20, 33, 40, 67, 62, 63, 23, 48, 38, 36, 46, 48, 55, 32, 56, 197, 496, 402, 384, 364, 299, 401, 394, 376, 309, 250, 231, 263, 297, 226, 146, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-const ENG_UF_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 9.7, 30.5, 36.3, 32.3, 33.2, 36, 37.7, 38.2, 34, 35.9, 36.6, 33.7, 28.5, 29.9, 30.4, 29.5, 32.9, 28.6, 27.3, 23.9, 25.7, 25.5, 19.6, 13.9, 10.8, 11.6, 11.4, 15, 22.9, 23.6, 24.8, 22.23, 18.72, 17.37, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-const ENG_UF_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 1.27, 2.01, 3.27, 2.97, 2.7, 3.83, 4.73, 5.03, 7.18, 6.85, 5.53, 5.61, 6.78, 7.56, 5.21, 7.55, 5.74, 4.74, 4.22, 4.9, 4.93, 3.1, 2.13, 1.7, 1.99, 2.25, 2.51, 3.73, 3.88, 3.6, 3.23, 3.12, 2.36, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-const ENG_UF_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 32, 22, 21, 28, 37, 52, 81, 117, 86, 87, 98, 91, 84, 99, 96, 167, 206, 225, 211, 146, 126, 120, 128, 138, 131, 119, 118, 107, 144, 139, 73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-const ENG_CS_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 14.2, 11.6, 10.3, 14.1, 18.3, 13.7, 18, 19, 17.8, 14.5, 16.3, 16.4, 14.9, 14.7, 13.2, 13.2, 11.9, 13.2, 13.2, 11.5, 12.8, 11.3, 10.6, 10.3, 10.4, 9.06, 8.87, 9.4, 10.44, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-const ENG_CS_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1.92, 1.57, 1.24, 2.89, 3.65, 2.85, 4.14, 3.59, 3.97, 3.18, 3.78, 3.99, 3.23, 2.54, 2.57, 1.95, 1.95, 2.1, 1.83, 1.66, 1.62, 1.62, 1.8, 2.13, 1.72, 1.75, 1.19, 1.48, 2.6, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-const ENG_CS_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 25, 19, 51, 69, 73, 84, 47, 57, 54, 79, 71, 75, 113, 162, 135, 138, 136, 98, 102, 83, 89, 98, 118, 99, 100, 85, 99, 104, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const ENG_FT_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 14.8, 18.9, 26.8, 20.4, 23.7, 18.5, 18.1, 15.6, 15.7, 17.5, 15.4, 15.9, 12.1, 9.6, 9.4, 10.3, 10.3, 10.5, 15.6, 28.3, 27.2, 26.8, 28.1, 29.7, 30, 29.4, 29.6, 27.6, 29.5, 29.6, 31.4, 27.95, 26.95, 25.8, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const ENG_FT_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 1.71, 2.65, 2.11, 3.6, 2.43, 3.23, 2.53, 2.83, 1.85, 2.21, 1.98, 1.81, 1.69, 2.01, 1.83, 1.29, 1.51, 2.84, 7.35, 7.33, 7.81, 8.05, 7.48, 8.15, 7.82, 7.91, 7.23, 7.68, 7.24, 8.47, 7.13, 6.07, 6.29, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const ENG_FT_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 19, 20, 33, 40, 67, 62, 63, 23, 48, 38, 36, 46, 48, 55, 32, 56, 197, 496, 402, 384, 364, 299, 401, 394, 376, 309, 250, 231, 263, 297, 226, 146, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const ENG_UF_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 9.7, 30.5, 36.3, 32.3, 33.2, 36, 37.7, 38.2, 34, 35.9, 36.6, 33.7, 28.5, 29.9, 30.4, 29.5, 32.9, 28.6, 27.3, 23.9, 25.7, 25.5, 19.6, 13.9, 10.8, 11.6, 11.4, 15, 22.9, 23.6, 24.8, 22.23, 18.72, 17.37, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const ENG_UF_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 1.27, 2.01, 3.27, 2.97, 2.7, 3.83, 4.73, 5.03, 7.18, 6.85, 5.53, 5.61, 6.78, 7.56, 5.21, 7.55, 5.74, 4.74, 4.22, 4.9, 4.93, 3.1, 2.13, 1.7, 1.99, 2.25, 2.51, 3.73, 3.88, 3.6, 3.23, 3.12, 2.36, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const ENG_UF_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 32, 22, 21, 28, 37, 52, 81, 117, 86, 87, 98, 91, 84, 99, 96, 167, 206, 225, 211, 146, 126, 120, 128, 138, 131, 119, 118, 107, 144, 139, 73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const ENG_CS_HOOK = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 14.2, 11.6, 10.3, 14.1, 18.3, 13.7, 18, 19, 17.8, 14.5, 16.3, 16.4, 14.9, 14.7, 13.2, 13.2, 11.9, 13.2, 13.2, 11.5, 12.8, 11.3, 10.6, 10.3, 10.4, 9.06, 8.87, 9.4, 10.44, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const ENG_CS_V50P = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1.92, 1.57, 1.24, 2.89, 3.65, 2.85, 4.14, 3.59, 3.97, 3.18, 3.78, 3.99, 3.23, 2.54, 2.57, 1.95, 1.95, 2.1, 1.83, 1.66, 1.62, 1.62, 1.8, 2.13, 1.72, 1.75, 1.19, 1.48, 2.6, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const ENG_CS_V50R = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 25, 19, 51, 69, 73, 84, 47, 57, 54, 79, 71, 75, 113, 162, 135, 138, 136, 98, 102, 83, 89, 98, 118, 99, 100, 85, 99, 104, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 const ENG_DATA={
   '90d':{labels:VCH_LABELS.slice(IDX90), ft:{hook:ENG_FT_HOOK.slice(IDX90),v50p:ENG_FT_V50P.slice(IDX90),v50r:ENG_FT_V50R.slice(IDX90)}, uf:{hook:ENG_UF_HOOK.slice(IDX90),v50p:ENG_UF_V50P.slice(IDX90),v50r:ENG_UF_V50R.slice(IDX90)}, cs:{hook:ENG_CS_HOOK.slice(IDX90),v50p:ENG_CS_V50P.slice(IDX90),v50r:ENG_CS_V50R.slice(IDX90)}},
   '60d':{labels:VCH_LABELS.slice(IDX60), ft:{hook:ENG_FT_HOOK.slice(IDX60),v50p:ENG_FT_V50P.slice(IDX60),v50r:ENG_FT_V50R.slice(IDX60)}, uf:{hook:ENG_UF_HOOK.slice(IDX60),v50p:ENG_UF_V50P.slice(IDX60),v50r:ENG_UF_V50R.slice(IDX60)}, cs:{hook:ENG_CS_HOOK.slice(IDX60),v50p:ENG_CS_V50P.slice(IDX60),v50r:ENG_CS_V50R.slice(IDX60)}},
@@ -1315,20 +1318,25 @@ function renderCPL(key){
 
 // ── DATOS ORGÁNICO KPIs + FUNNELS POR PERÍODO ────────────────────────────────
 const ORG_PERIODOS = {
-  '90d': { spend:605.83, v50_ft:5736, v50_uf:3356, v50_cs:2478, costo_v50:0.0524, hook_rate:18.59,
-    // Recorregido 15/ago/2026: dejó de copiarse de '60d' — pull fresco confirmó actividad real de las
-    // campañas Rell entre 16/may y 15/jun/2026 que la ventana de 60 días no capturaba (ver Hallazgo 6).
+  '90d': { spend:472.24, v50_ft:5301, v50_uf:2815, v50_cs:2128, costo_v50:0.0461, hook_rate:18.13,
+    // Refrescado 17/ago/2026 con pull fresco (ventana 19/may-16/ago). Ya NO es igual a 60d (ver
+    // Hallazgo debajo) — DC-FT/UF/CS arrancaron 16/jun, así que 90d captura ~2 días más de vida real
+    // de campaña que 60d y por eso el total es levemente mayor (bug de copia previo corregido hoy).
     funnels:[
-      {buyer:'Familia Transición', cls:'c1', color:'#378ADD', i:104867, v3:24178, hr:23.06, v50:5736, v50p:5.47},
-      {buyer:'Upgrader Familiar', cls:'c2', color:'#639922', i:93946, v3:20202, hr:21.51, v50:3356, v50p:3.57},
-      {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8', i:116418, v3:14219, hr:12.21, v50:2478, v50p:2.13},
+      {buyer:'Familia Transición', cls:'c1', color:'#378ADD', i:87119, v3:21045, hr:24.16, v50:5301, v50p:6.08},
+      {buyer:'Upgrader Familiar', cls:'c2', color:'#639922', i:82252, v3:16124, hr:19.60, v50:2815, v50p:3.42},
+      {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8', i:103891, v3:12378, hr:11.92, v50:2128, v50p:2.05},
     ]
   },
-  '60d': { spend:465.27, v50_ft:5272, v50_uf:2766, v50_cs:2095, costo_v50:0.0459, hook_rate:18.15,
+  '60d': { spend:453.95, v50_ft:5226, v50_uf:2668, v50_cs:2038, costo_v50:0.0457, hook_rate:18.17,
+    // Refrescado 17/ago/2026 con pull fresco (ventana 18/jun-16/ago). HALLAZGO: la corrida anterior
+    // tenía 60d calcado de 90d por un bug de copia heredado de antes del 15/ago — DC-FT arrancó
+    // 16/jun (61 días antes de esta corrida), así que la ventana 18/jun-16/ago SÍ excluye ya los
+    // primeros ~2 días de vida de la campaña y 60d < 90d correctamente a partir de ahora.
     funnels:[
-      {buyer:'Familia Transición', cls:'c1', color:'#378ADD', i:85658, v3:20895, hr:24.40, v50:5272, v50p:6.15},
-      {buyer:'Upgrader Familiar', cls:'c2', color:'#639922', i:81208, v3:15868, hr:19.54, v50:2766, v50p:3.41},
-      {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8', i:102961, v3:12204, hr:11.85, v50:2095, v50p:2.04},
+      {buyer:'Familia Transición', cls:'c1', color:'#378ADD', i:82931, v3:20633, hr:24.88, v50:5226, v50p:6.30},
+      {buyer:'Upgrader Familiar', cls:'c2', color:'#639922', i:79763, v3:15436, hr:19.35, v50:2668, v50p:3.35},
+      {buyer:'Consolidado Silencioso', cls:'c3', color:'#8B44B8', i:101527, v3:11949, hr:11.77, v50:2038, v50p:2.01},
     ]
   },
   '30d': { spend:0, v50_ft:0, v50_uf:0, v50_cs:0, costo_v50:0, hook_rate:0,
@@ -1409,9 +1417,9 @@ function renderOrgFunnels(key){
 // UF = Rell2-adm + Rell5-UF + Rell2-btn + DC(desde 16/jun)
 // CS = Rell3-CS + Rell6-CS + DC(desde 16/jun)
 // null = sin gasto ese día | 29 puntos: 26/may – 23/jun
-const ORG_FT_S = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0.08, 4.08, 3.99, 4.59, 4.32, 5.49, 5.96, 6.21, 5.9, 4.3, 7.26, 5.92, 3.87, 3.92, 3.43, 3.97, 3.67, 4.79, 9.75, 12.17, 9.34, 7.77, 8.15, 8.13, 10.34, 9.9, 10.96, 9.94, 7.39, 6.63, 6.53, 7.89, 6.81, 4.48, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-const ORG_UF_S = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0.06, 4, 4.09, 4.86, 4, 4.17, 3.55, 4.07, 4.78, 4.84, 6.96, 5.9, 4.35, 3.93, 3.36, 4.14, 3.58, 4.04, 7.31, 9.89, 10.1, 9.41, 9.32, 9.49, 10.45, 10.25, 10.41, 9.54, 7.56, 6.83, 6.31, 7.64, 6.55, 4.49, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-const ORG_CS_S = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1.41, 1.96, 1.8, 2.32, 3.71, 4.62, 4.02, 3.12, 3.47, 3.46, 4.3, 3.75, 4.42, 7.02, 10.05, 9.9, 9.49, 10, 8.87, 11.14, 9.22, 11.08, 8.92, 7.27, 6.82, 6.35, 7.18, 7.23, 4.77, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const ORG_FT_S = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0.08, 4.08, 3.99, 4.59, 4.32, 5.49, 5.96, 6.21, 5.9, 4.3, 7.26, 5.92, 3.87, 3.92, 3.43, 3.97, 3.67, 4.79, 9.75, 12.17, 9.34, 7.77, 8.15, 8.13, 10.34, 9.9, 10.96, 9.94, 7.39, 6.63, 6.53, 7.89, 6.81, 4.48, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const ORG_UF_S = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0.06, 4, 4.09, 4.86, 4, 4.17, 3.55, 4.07, 4.78, 4.84, 6.96, 5.9, 4.35, 3.93, 3.36, 4.14, 3.58, 4.04, 7.31, 9.89, 10.1, 9.41, 9.32, 9.49, 10.45, 10.25, 10.41, 9.54, 7.56, 6.83, 6.31, 7.64, 6.55, 4.49, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const ORG_CS_S = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1.41, 1.96, 1.8, 2.32, 3.71, 4.62, 4.02, 3.12, 3.47, 3.46, 4.3, 3.75, 4.42, 7.02, 10.05, 9.9, 9.49, 10, 8.87, 11.14, 9.22, 11.08, 8.92, 7.27, 6.82, 6.35, 7.18, 7.23, 4.77, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
 
 // V50 absoluto diario por buyer (de los arrays ENG_FT/UF/CS_V50R ya definidos)
 // Los mismos arrays que usan los gráficos de video orgánico
