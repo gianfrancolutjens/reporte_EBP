@@ -1145,19 +1145,19 @@ function renderBackoffice(key){
     const gTotal = rowTotal(sub);
     const costoConv = gTotal>0 ? g.cost/gTotal : null;
     const costoBO = sub.ingBO>0 ? g.cost/sub.ingBO : null;
-    tb.insertAdjacentHTML('beforeend',`<tr class="grp">
-      <td style="text-align:left">${g.label}</td>
-      <td>${sub.nuevo}</td><td>${sub.asigEjec}</td><td>${sub.ingBO}</td><td>${sub.descartado}</td><td>${sub.ganado}</td>
-      <td>${gTotal}</td>
-      <td>${fmtCLP(g.cost)}</td><td>${costoConv!=null?fmtCLP(costoConv):'—'}</td><td>${costoBO!=null?fmtCLP(costoBO):'—'}</td></tr>`);
+    // Header (igual patrón que renderVtasTable: label + resumen en 1 celda, detalle abajo)
+    tb.insertAdjacentHTML('beforeend',`<tr class="grp"><td colspan="10"><span class="chip">${g.label}</span>&nbsp;<span style="font-weight:500;font-size:10px;color:var(--text2)">Compradores: ${rowTotal(g.pipelines.compradores)} · Arrendatarios: ${rowTotal(g.pipelines.arrendatarios)} · TOTAL: ${gTotal}</span></td></tr>`);
+    // Detalle por pipeline (filas planas, sin costo — el costo no es atribuible a nivel de pipeline)
     [['Compradores','compradores'],['Arrendatarios','arrendatarios']].forEach(([lbl,pk])=>{
       const s = g.pipelines[pk];
-      tb.insertAdjacentHTML('beforeend',`<tr class="sub">
-        <td style="text-align:left;padding-left:22px">${lbl}</td>
+      tb.insertAdjacentHTML('beforeend',`<tr>
+        <td>${lbl}</td>
         <td>${s.nuevo}</td><td>${s.asigEjec}</td><td>${s.ingBO}</td><td>${s.descartado}</td><td>${s.ganado}</td>
         <td>${rowTotal(s)}</td>
         <td>—</td><td>—</td><td>—</td></tr>`);
     });
+    // Subtotal de la fuente (abajo del detalle, igual que "Subtotal {buyer}" en Ventas)
+    tb.insertAdjacentHTML('beforeend',`<tr class="sub"><td>Subtotal ${g.label}</td><td>${sub.nuevo}</td><td>${sub.asigEjec}</td><td>${sub.ingBO}</td><td>${sub.descartado}</td><td>${sub.ganado}</td><td>${gTotal}</td><td>${fmtCLP(g.cost)}</td><td>${costoConv!=null?fmtCLP(costoConv):'—'}</td><td>${costoBO!=null?fmtCLP(costoBO):'—'}</td></tr>`);
     STAGES.forEach(st=>grand[st]+=sub[st]);
     grandCost += g.cost;
   });
