@@ -327,7 +327,7 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
   </div>
   <div style="margin-top:20px">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <div class="ct" id="ct-backoffice" style="flex:1;margin-bottom:14px">Embudo Backoffice · Compradores</div>
+        <div class="ct" id="ct-backoffice" style="flex:1;margin-bottom:14px">EMBUDO BACK OFFICE</div>
         <button class="fbtn" id="backoffice-all-btn" onclick="toggleBackofficeAll()" style="margin-bottom:14px">Ver histórico completo</button>
       </div>
       <table><thead><tr>
@@ -335,7 +335,7 @@ tr.sub td{font-weight:600;background:var(--bg2);color:var(--text2);font-size:11p
         <th>Nuevo</th><th>Asignado Ejecutiva</th><th>Ingresado BO</th><th>Descartado</th><th>Ganado</th><th>TOTAL</th>
         <th>Costo Total</th><th>Costo/Conv</th><th>Costo/BO</th>
       </tr></thead><tbody id="t-backoffice"></tbody></table>
-      <div class="sn">Costo unificado en CLP · TC USD/CLP: 925,89 (16/jul/2026, XE, fijo) · Portalinmobiliario: $2.000.000 CLP/mes prorrateado a base 30 días · Campañas: gasto total de Meta Ads (todas las campañas de la cuenta, sin filtrar) convertido a CLP · Solo oportunidades con status "open" (igual que el tablero Kanban de GHL — excluye las marcadas manualmente como ganadas/perdidas aunque sigan visualmente en una etapa) · Cada oportunidad se cuenta en su etapa ACTUAL (no histórica) · Los períodos ayer/14d/30d/60d filtran por fecha de creación; "Ver histórico completo" muestra el pipeline entero sin filtro de fecha, para calzar 1:1 con el tablero de GHL · TOTAL = suma de Nuevo+Asignado Ejecutiva+Ingresado BO+Descartado+Ganado · Costo/Conv = Costo Total ÷ TOTAL (costo por cada contacto) · Costo/BO = Costo Total ÷ Ingresado BO</div>
+      <div class="sn">Agrega los pipelines Compradores + Arrendatarios · PORTALINMOBILIARIO y CAMPAÑAS son subtotales por fuente, cada uno desglosado en 2 líneas (Compradores/Arrendatarios) según el pipeline de origen de la oportunidad · Costo unificado en CLP · TC USD/CLP: 925,89 (16/jul/2026, XE, fijo) · Portalinmobiliario: $2.000.000 CLP/mes prorrateado a base 30 días (costo no se reparte entre pipelines) · Campañas: gasto total de Meta Ads (todas las campañas de la cuenta, sin filtrar) convertido a CLP (costo no se reparte entre pipelines) · Solo oportunidades con status "open" (igual que el tablero Kanban de GHL — excluye las marcadas manualmente como ganadas/perdidas aunque sigan visualmente en una etapa) · Cada oportunidad se cuenta en su etapa ACTUAL (no histórica) · Los períodos ayer/14d/30d/60d/90d filtran por fecha de creación; "Ver histórico completo" muestra ambos pipelines completos sin filtro de fecha (desde 05/jun/2026), para calzar 1:1 con el tablero de GHL · TOTAL = suma de Nuevo+Asignado Ejecutiva+Ingresado BO+Descartado+Ganado · Costo/Conv = Costo Total ÷ TOTAL (costo por cada contacto, solo a nivel de subtotal PORTALINMOBILIARIO/CAMPAÑAS) · Costo/BO = Costo Total ÷ Ingresado BO</div>
       <div class="ins" id="ins-backoffice"></div>
   </div>
   </div></div>
@@ -916,8 +916,8 @@ let BACKOFFICE_SHOW_ALL = false;
 function updateBackofficeTitle(key){
   const d=PERIODOS[key];
   document.getElementById('ct-backoffice').childNodes[0].textContent = BACKOFFICE_SHOW_ALL
-    ? `Embudo Backoffice · Compradores · Histórico completo (desde 05/jun/2026) `
-    : `Embudo Backoffice · Compradores · ${d.label} `;
+    ? `EMBUDO BACK OFFICE · Histórico completo (desde 05/jun/2026) `
+    : `EMBUDO BACK OFFICE · ${d.label} `;
 }
 
 function toggleBackofficeAll(){
@@ -1086,37 +1086,43 @@ function renderGHL2(d,key){
   document.getElementById('ins-ghl2').innerHTML=`<strong>Total período: ${grand} oportunidades</strong>. Portal Inmobiliario: <strong>${p} (${grand>0?Math.round(p/grand*100):0}%)</strong>. META-LM: <strong>${m}</strong>. Instagram DM: <strong>${ig}</strong>. Directo: <strong>${dir}</strong>.${imp>0?` Importación: <strong>${imp}</strong>.`:''}`;
 }
 
-// ── EMBUDO BACKOFFICE (Compradores) — reemplaza el panel Arrendatarios, 16/jul/2026 ──
-// Fuente: pipeline Compradores (WdFrVOSe9FhV1YMcPtHM) vía GHL MCP, status=all (todas las
-// oportunidades, cualquier estado). "Backoffice" = etapa actual "Ingresado Back Office"
-// (id 344bd9ef-09a7-49c6-bd5f-2fb31509751e). Todo en CLP para que Costo/Op sea comparable
-// entre Portalinmobiliario (costo fijo mensual) y Campañas (gasto Meta convertido).
+// ── EMBUDO BACK OFFICE (Compradores + Arrendatarios) — rediseñado 17/ago/2026, ver Hallazgo 16 ──
+// Fuentes: pipelines Compradores (WdFrVOSe9FhV1YMcPtHM) y Arrendatarios (OT42JsJrwH9fUVzEBqpY) vía
+// GHL MCP, status=open (igual que el tablero Kanban, ver Hallazgo 5). "Backoffice" = etapa actual
+// "Ingresado Back Office" de cada pipeline (IDs de etapa distintos por pipeline, ver Hallazgo 16).
+// Todo en CLP para que Costo/Op sea comparable entre Portalinmobiliario (costo fijo mensual) y
+// Campañas (gasto Meta convertido). Estructura: cada ventana tiene 2 fuentes (portal/campanas), y
+// cada fuente tiene 2 sub-objetos (compradores/arrendatarios) con los 5 conteos de etapa — el HTML
+// (renderBackoffice) suma compradores+arrendatarios para pintar el subtotal de cada fuente.
 const CLP_USD_RATE = 925.89; // XE mid-market, 16/jul/2026 16:10 UTC — fijo, actualizar manualmente si se requiere.
-const PORTAL_MONTHLY_CLP = 2000000; // Costo fijo mensual Portalinmobiliario, prorrateado a base 30 días.
+const PORTAL_MONTHLY_CLP = 2000000; // Costo fijo mensual Portalinmobiliario, prorrateado a base 30 días. No se reparte entre pipelines.
 const BACKOFFICE_PERIODOS = {
   '90d': { days:90, metaSpendUSD:3300.11,
-    portal:{nuevo:0, asigEjec:14, ingBO:57, descartado:93, ganado:0},
-    campanas:{nuevo:2, asigEjec:12, ingBO:30, descartado:148, ganado:0} },
+    portal:{ compradores:{nuevo:0, asigEjec:10, ingBO:58, descartado:96, ganado:0}, arrendatarios:{nuevo:1, asigEjec:6, ingBO:45, descartado:195, ganado:1} },
+    campanas:{ compradores:{nuevo:2, asigEjec:7, ingBO:30, descartado:153, ganado:0}, arrendatarios:{nuevo:1, asigEjec:0, ingBO:0, descartado:1, ganado:0} } },
   '60d': { days:60, metaSpendUSD:2948.90,
-    portal:{nuevo:0, asigEjec:14, ingBO:48, descartado:84, ganado:0},
-    campanas:{nuevo:2, asigEjec:12, ingBO:29, descartado:145, ganado:0} },
+    portal:{ compradores:{nuevo:0, asigEjec:10, ingBO:49, descartado:87, ganado:0}, arrendatarios:{nuevo:0, asigEjec:6, ingBO:33, descartado:122, ganado:0} },
+    campanas:{ compradores:{nuevo:2, asigEjec:7, ingBO:29, descartado:150, ganado:0}, arrendatarios:{nuevo:1, asigEjec:0, ingBO:0, descartado:1, ganado:0} } },
   '30d': { days:30, metaSpendUSD:1474.91,
-    portal:{nuevo:0, asigEjec:14, ingBO:28, descartado:40, ganado:0},
-    campanas:{nuevo:1, asigEjec:12, ingBO:16, descartado:101, ganado:0} },
+    portal:{ compradores:{nuevo:0, asigEjec:10, ingBO:29, descartado:43, ganado:0}, arrendatarios:{nuevo:0, asigEjec:6, ingBO:14, descartado:49, ganado:0} },
+    campanas:{ compradores:{nuevo:1, asigEjec:7, ingBO:16, descartado:106, ganado:0}, arrendatarios:{nuevo:0, asigEjec:0, ingBO:0, descartado:0, ganado:0} } },
   '14d': { days:14, metaSpendUSD:745.80,
-    portal:{nuevo:0, asigEjec:14, ingBO:12, descartado:7, ganado:0},
-    campanas:{nuevo:1, asigEjec:12, ingBO:5, descartado:47, ganado:0} },
+    portal:{ compradores:{nuevo:0, asigEjec:10, ingBO:13, descartado:10, ganado:0}, arrendatarios:{nuevo:0, asigEjec:6, ingBO:8, descartado:12, ganado:0} },
+    campanas:{ compradores:{nuevo:1, asigEjec:7, ingBO:5, descartado:54, ganado:0}, arrendatarios:{nuevo:0, asigEjec:0, ingBO:0, descartado:0, ganado:0} } },
   'ayer': { days:1, metaSpendUSD:67.66,
-    portal:{nuevo:0, asigEjec:1, ingBO:0, descartado:0, ganado:0},
-    campanas:{nuevo:0, asigEjec:1, ingBO:0, descartado:6, ganado:0} },
+    portal:{ compradores:{nuevo:0, asigEjec:1, ingBO:0, descartado:0, ganado:0}, arrendatarios:{nuevo:0, asigEjec:2, ingBO:0, descartado:0, ganado:0} },
+    campanas:{ compradores:{nuevo:0, asigEjec:1, ingBO:0, descartado:6, ganado:0}, arrendatarios:{nuevo:0, asigEjec:0, ingBO:0, descartado:0, ganado:0} } },
   'todo': { days:73, metaSpendUSD:3299.97,
-    portal:{nuevo:0, asigEjec:14, ingBO:57, descartado:93, ganado:0},
-    campanas:{nuevo:2, asigEjec:12, ingBO:30, descartado:148, ganado:0} },
+    portal:{ compradores:{nuevo:0, asigEjec:10, ingBO:58, descartado:96, ganado:0}, arrendatarios:{nuevo:1, asigEjec:6, ingBO:44, descartado:191, ganado:1} },
+    campanas:{ compradores:{nuevo:2, asigEjec:7, ingBO:30, descartado:153, ganado:0}, arrendatarios:{nuevo:1, asigEjec:0, ingBO:0, descartado:1, ganado:0} } },
 };
-// Refrescado 17/ago/2026 (catch-up 16/ago) — conteos "open" de Compradores vía subagente (363
-// oportunidades open paginadas y validadas contra meta.total), metaSpendUSD = pull Meta Ads a nivel
-// cuenta (sin filtrar campaña) por ventana exacta. Cross-validado: ayer (Portal=1, Campañas=7)
-// coincide exacto con el pull directo de Compradores para 16/ago (1 PORTALINMOBILIARIO + 7 META-TOUR).
+// Refrescado 17/ago/2026 (rediseño Hallazgo 16) — conteos "open" de Compradores (366 total, vs
+// meta.total) y Arrendatarios (251 total, vs meta.total) vía 2 subagentes paginando completo,
+// clasificados por fuente (Portal si source contiene "portal", si no Campañas) y por etapa actual,
+// bucketeados por fecha de creación (hora Chile) en las 6 ventanas. metaSpendUSD sin cambios (no se
+// reparte entre pipelines, ver nota arriba). 16 oportunidades open (de 617 totales) quedan fuera de
+// la ventana "todo" por ser anteriores al 05/jun/2026 o del mismo 17/ago (fuera de todas las
+// ventanas, que cierran en 16/ago="ayer") — esperado, no es un error.
 const fmtCLP = n => '$'+Math.round(n).toLocaleString('es-CL');
 
 function renderBackoffice(key){
@@ -1126,32 +1132,43 @@ function renderBackoffice(key){
   const portalCost = PORTAL_MONTHLY_CLP * d.days/30;
   const campCost = d.metaSpendUSD * CLP_USD_RATE;
   const STAGES = ['nuevo','asigEjec','ingBO','descartado','ganado'];
-  const rows=[
-    {label:'Portalinmobiliario', s:d.portal, cost:portalCost},
-    {label:'Campañas', s:d.campanas, cost:campCost},
+  const sumStages = (a,b)=>{ const r={}; STAGES.forEach(st=>r[st]=(a[st]||0)+(b[st]||0)); return r; };
+  const rowTotal = s => STAGES.reduce((a,st)=>a+s[st],0);
+  const groups=[
+    {label:'PORTALINMOBILIARIO', cost:portalCost, pipelines:d.portal},
+    {label:'CAMPAÑAS', cost:campCost, pipelines:d.campanas},
   ];
-  rows.forEach(r=>{
-    const rowTotal = STAGES.reduce((a,st)=>a+r.s[st],0);
-    const costoConv = rowTotal>0 ? r.cost/rowTotal : null;
-    const costoBO = r.s.ingBO>0 ? r.cost/r.s.ingBO : null;
-    tb.insertAdjacentHTML('beforeend',`<tr>
-      <td>${r.label}</td>
-      <td>${r.s.nuevo}</td><td>${r.s.asigEjec}</td><td>${r.s.ingBO}</td><td>${r.s.descartado}</td><td>${r.s.ganado}</td>
-      <td>${rowTotal}</td>
-      <td>${fmtCLP(r.cost)}</td><td>${costoConv!=null?fmtCLP(costoConv):'—'}</td><td>${costoBO!=null?fmtCLP(costoBO):'—'}</td></tr>`);
+  const grand = {}; STAGES.forEach(st=>grand[st]=0);
+  let grandCost = 0;
+  groups.forEach(g=>{
+    const sub = sumStages(g.pipelines.compradores, g.pipelines.arrendatarios);
+    const gTotal = rowTotal(sub);
+    const costoConv = gTotal>0 ? g.cost/gTotal : null;
+    const costoBO = sub.ingBO>0 ? g.cost/sub.ingBO : null;
+    tb.insertAdjacentHTML('beforeend',`<tr class="grp">
+      <td style="text-align:left">${g.label}</td>
+      <td>${sub.nuevo}</td><td>${sub.asigEjec}</td><td>${sub.ingBO}</td><td>${sub.descartado}</td><td>${sub.ganado}</td>
+      <td>${gTotal}</td>
+      <td>${fmtCLP(g.cost)}</td><td>${costoConv!=null?fmtCLP(costoConv):'—'}</td><td>${costoBO!=null?fmtCLP(costoBO):'—'}</td></tr>`);
+    [['Compradores','compradores'],['Arrendatarios','arrendatarios']].forEach(([lbl,pk])=>{
+      const s = g.pipelines[pk];
+      tb.insertAdjacentHTML('beforeend',`<tr class="sub">
+        <td style="text-align:left;padding-left:22px">${lbl}</td>
+        <td>${s.nuevo}</td><td>${s.asigEjec}</td><td>${s.ingBO}</td><td>${s.descartado}</td><td>${s.ganado}</td>
+        <td>${rowTotal(s)}</td>
+        <td>—</td><td>—</td><td>—</td></tr>`);
+    });
+    STAGES.forEach(st=>grand[st]+=sub[st]);
+    grandCost += g.cost;
   });
-  const totals = {};
-  STAGES.forEach(st=>{ totals[st] = rows.reduce((a,r)=>a+r.s[st],0); });
-  const totRowTotal = STAGES.reduce((a,st)=>a+totals[st],0);
-  const totCost=rows.reduce((a,r)=>a+r.cost,0);
-  const totCostoConv = totRowTotal>0 ? totCost/totRowTotal : null;
-  const totCostoBO = totals.ingBO>0 ? totCost/totals.ingBO : null;
-  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td>TOTAL</td><td>${totals.nuevo}</td><td>${totals.asigEjec}</td><td>${totals.ingBO}</td><td>${totals.descartado}</td><td>${totals.ganado}</td><td>${totRowTotal}</td><td>${fmtCLP(totCost)}</td><td>${totCostoConv!=null?fmtCLP(totCostoConv):'—'}</td><td>${totCostoBO!=null?fmtCLP(totCostoBO):'—'}</td></tr>`);
-  const withBo = rows.filter(r=>r.s.ingBO>0);
+  const grandTotal = rowTotal(grand);
+  const grandCostoConv = grandTotal>0 ? grandCost/grandTotal : null;
+  const grandCostoBO = grand.ingBO>0 ? grandCost/grand.ingBO : null;
+  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td style="text-align:left">TOTAL</td><td>${grand.nuevo}</td><td>${grand.asigEjec}</td><td>${grand.ingBO}</td><td>${grand.descartado}</td><td>${grand.ganado}</td><td>${grandTotal}</td><td>${fmtCLP(grandCost)}</td><td>${grandCostoConv!=null?fmtCLP(grandCostoConv):'—'}</td><td>${grandCostoBO!=null?fmtCLP(grandCostoBO):'—'}</td></tr>`);
+  const withBo = groups.map(g=>({label:g.label,cost:g.cost,s:sumStages(g.pipelines.compradores,g.pipelines.arrendatarios)})).filter(r=>r.s.ingBO>0);
   const best = withBo.length ? withBo.reduce((a,r)=>(r.cost/r.s.ingBO)<(a.cost/a.s.ingBO)?r:a) : null;
-  const totCreadas = totRowTotal;
   document.getElementById('ins-backoffice').innerHTML = best
-    ? `<strong>${best.label}</strong> tiene el mejor Costo/BO (${fmtCLP(best.cost/best.s.ingBO)}) en este período. Total: <strong>${totals.ingBO} de ${totCreadas}</strong> oportunidades en etapa Ingresado BO.`
+    ? `<strong>${best.label}</strong> tiene el mejor Costo/BO (${fmtCLP(best.cost/best.s.ingBO)}) en este período. Total: <strong>${grand.ingBO} de ${grandTotal}</strong> oportunidades en etapa Ingresado BO (Compradores + Arrendatarios).`
     : `Sin oportunidades en etapa "Ingresado Back Office" en este período.`;
 }
 
