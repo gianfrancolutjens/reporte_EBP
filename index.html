@@ -492,9 +492,9 @@ const PERIODOS = {
       {name:'Top 3 Subir de Nivel',cls:'c2',bp:'Upgrader Familiar',color:'#639922',impr:0,reach:0,clicks:0,spend:0,ctr:0,cpm:0,cpc:0,leads:0,ghlLeads:0,ghlBO:0,v3s:0,v50:0,v75:0},
       {name:'VSL Operación Espejo',cls:'c3',bp:'Upgrader Familiar',color:'#8B44B8',impr:0,reach:0,clicks:0,spend:0,ctr:0,cpm:0,cpc:0,leads:0,ghlLeads:0,ghlBO:0,v3s:0,v50:0,v75:0},
     ],
-    dailyLabels:['03/09'], dailyL1:[L1[L1.length-1]],dailyL2:[L2[L2.length-1]],dailyL3:[L3[L3.length-1]],
+    dailyLabels:['05/09'], dailyL1:[L1[L1.length-1]],dailyL2:[L2[L2.length-1]],dailyL3:[L3[L3.length-1]],
     dailyS1:[S1[S1.length-1]],dailyS2:[S2[S2.length-1]],dailyS3:[S3[S3.length-1]],
-    ghlDays:['03/09'], ghlSrc:GHL28.src.map(s=>({...s,data:[s.data[s.data.length-1]]})), ghlSrc2:GHL_TOTAL.src.map(s=>({...s,data:[s.data[s.data.length-1]]}))
+    ghlDays:['05/09'], ghlSrc:GHL28.src.map(s=>({...s,data:[s.data[s.data.length-1]]})), ghlSrc2:GHL_TOTAL.src.map(s=>({...s,data:[s.data[s.data.length-1]]}))
   },
 };
 // ghlLeads de TODAS las ventanas (14d/30d/60d/90d) = conteo GHL real y confirmado (pipeline Lead
@@ -1421,7 +1421,7 @@ const VCH_DATA = {
     ft:{hook:LM1_HOOK.slice(IDX14), v50p:LM1_V50P.slice(IDX14), v50r:LM1_V50R.slice(IDX14), bars:L1.slice(IDX14)},
     uf:{hook:LM2_HOOK.slice(IDX14), v50p:LM2_V50P.slice(IDX14), v50r:LM2_V50R.slice(IDX14), bars:L2.slice(IDX14)},
     cs:{hook:LM3_HOOK.slice(IDX14), v50p:LM3_V50P.slice(IDX14), v50r:LM3_V50R.slice(IDX14), bars:L3.slice(IDX14)} },
-  'ayer': { labels:['03/09'],
+  'ayer': { labels:['05/09'],
     ft:{hook:[null], v50p:[null], v50r:[0], bars:[0]},
     uf:{hook:[null], v50p:[null], v50r:[0], bars:[0]},
     cs:{hook:[null], v50p:[null], v50r:[0], bars:[0]} },
@@ -1501,7 +1501,7 @@ const ENG_DATA={
   '60d':{labels:VCH_LABELS.slice(IDX60), ft:{hook:ENG_FT_HOOK.slice(IDX60),v50p:ENG_FT_V50P.slice(IDX60),v50r:ENG_FT_V50R.slice(IDX60)}, uf:{hook:ENG_UF_HOOK.slice(IDX60),v50p:ENG_UF_V50P.slice(IDX60),v50r:ENG_UF_V50R.slice(IDX60)}, cs:{hook:ENG_CS_HOOK.slice(IDX60),v50p:ENG_CS_V50P.slice(IDX60),v50r:ENG_CS_V50R.slice(IDX60)}},
   '30d':{labels:VCH_LABELS.slice(IDX30), ft:{hook:ENG_FT_HOOK.slice(IDX30),v50p:ENG_FT_V50P.slice(IDX30),v50r:ENG_FT_V50R.slice(IDX30)}, uf:{hook:ENG_UF_HOOK.slice(IDX30),v50p:ENG_UF_V50P.slice(IDX30),v50r:ENG_UF_V50R.slice(IDX30)}, cs:{hook:ENG_CS_HOOK.slice(IDX30),v50p:ENG_CS_V50P.slice(IDX30),v50r:ENG_CS_V50R.slice(IDX30)}},
   '14d':{labels:VCH_LABELS.slice(IDX14), ft:{hook:ENG_FT_HOOK.slice(IDX14),v50p:ENG_FT_V50P.slice(IDX14),v50r:ENG_FT_V50R.slice(IDX14)}, uf:{hook:ENG_UF_HOOK.slice(IDX14),v50p:ENG_UF_V50P.slice(IDX14),v50r:ENG_UF_V50R.slice(IDX14)}, cs:{hook:ENG_CS_HOOK.slice(IDX14),v50p:ENG_CS_V50P.slice(IDX14),v50r:ENG_CS_V50R.slice(IDX14)}},
-  'ayer':{labels:['03/09'], ft:{hook:[null],v50p:[null],v50r:[0]}, uf:{hook:[null],v50p:[null],v50r:[0]}, cs:{hook:[null],v50p:[null],v50r:[0]}},
+  'ayer':{labels:['05/09'], ft:{hook:[null],v50p:[null],v50r:[0]}, uf:{hook:[null],v50p:[null],v50r:[0]}, cs:{hook:[null],v50p:[null],v50r:[0]}},
 };
 
 // ── INSTANCIAS LM CHARTS ──────────────────────────────────────────────────────
@@ -1787,7 +1787,7 @@ function renderOrgSpend(key){
     labels=LABELS28.slice(IDX90); sFT=ORG_FT_S.slice(IDX90); sUF=ORG_UF_S.slice(IDX90); sCS=ORG_CS_S.slice(IDX90);
     vFT=ENG_FT_V50R.slice(IDX90); vUF=ENG_UF_V50R.slice(IDX90); vCS=ENG_CS_V50R.slice(IDX90);
   } else {
-    labels=['03/09']; sFT=[null]; sUF=[null]; sCS=[null];
+    labels=['05/09']; sFT=[null]; sUF=[null]; sCS=[null];
     vFT=[0]; vUF=[0]; vCS=[0];
   }
   const ctEl=document.getElementById('ct-org-spend');
